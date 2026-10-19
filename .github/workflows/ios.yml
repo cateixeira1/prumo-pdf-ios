@@ -1,0 +1,103 @@
+name: iOS - compilar, testar e gerar o app
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ios-build
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-26
+    timeout-minutes: 75
+    env:
+      OUT: ${{ github.workspace }}/ci-output
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Preparar
+        id: prep
+        run: |
+          mkdir -p "$OUT/screenshots" "$OUT/logs"
+          echo "commit=${GITHUB_SHA}" > "$OUT/STATUS.txt"
+          XCODE=$(ls -d /Applications/Xcode_*.app 2>/dev/null | grep -vi beta | sort -V | tail -1)
+          [ -z "$XCODE" ] && XCODE=$(ls -d /Applications/Xcode*.app | sort -V | tail -1)
+          sudo xcode-select -s "$XCODE"
+          xcodebuild -version | tee "$OUT/logs/xcode-version.txt"
+          brew install xcodegen >/dev/null
+          xcodegen generate
+          SIM_ID=$(scripts/pick_simulator.sh)
+          echo "SIM_ID=$SIM_ID" >> "$GITHUB_ENV"
+          xcrun simctl list devices available > "$OUT/logs/simulators.txt"
+          echo "simulator=$SIM_ID" >> "$OUT/STATUS.txt"
+
+      - name: Compilar e rodar os testes no simulador
+        id: test
+        run: |
+          set +e
+          xcodebuild test \
+            -project PrumoPDF.xcodeproj -scheme PrumoPDF \
+            -destination "id=$SIM_ID" \
+            -derivedDataPath build \
+            -resultBundlePath TestResults.xcresult \
+            CODE_SIGNING_ALLOWED=NO > "$OUT/logs/test.log" 2>&1
+          rc=$?
+          grep -E "error:|Test Case .*(passed|failed)|Executed|TEST (SUCCEEDED|FAILED)|\*\* " "$OUT/logs/test.log" | tail -200
+          exit $rc
+
+      - name: Resumo dos testes
+        if: always()
+        run: |
+          grep -E "error:" "$OUT/logs/test.log" | sort -u > "$OUT/logs/errors.txt" || true
+          grep -E "Test Case .*(passed|failed)|Executed .* tests|error: -\[|XCTAssert|Texto reconhecido|Tamanho|Confiança" "$OUT/logs/test.log" > "$OUT/logs/test-summary.txt" || true
+          if [ -d TestResults.xcresult ]; then
+            xcrun xcresulttool get test-results summary --path TestResults.xcresult --compact > "$OUT/logs/xcresult-summary.json" 2>/dev/null || true
+            xcrun xcresulttool get test-results tests --path TestResults.xcresult --compact > "$OUT/logs/xcresult-tests.json" 2>/dev/null || true
+          fi
+          echo "test=${{ steps.test.outcome }}" >> "$OUT/STATUS.txt"
+
+      - name: Capturas de tela
+        id: shots
+        if: always() && steps.prep.outcome == 'success'
+        run: scripts/screenshots.sh "$SIM_ID" "$OUT/screenshots" 2>&1 | tee "$OUT/logs/screenshots.log"
+
+      - name: Gerar o IPA (sem assinatura, para instalar com Sideloadly)
+        id: ipa
+        if: always() && steps.prep.outcome == 'success'
+        run: |
+          set +e
+          scripts/build_ipa.sh "$OUT" > "$OUT/logs/ipa.log" 2>&1
+          rc=$?
+          grep -E "error:|\*\* |PrumoPDF.ipa" "$OUT/logs/ipa.log" | tail -100
+          exit $rc
+
+      - name: Publicar resultados (branch ci-output)
+        if: always()
+        run: |
+          echo "screenshots=${{ steps.shots.outcome }}" >> "$OUT/STATUS.txt"
+          echo "ipa=${{ steps.ipa.outcome }}" >> "$OUT/STATUS.txt"
+          date -u >> "$OUT/STATUS.txt"
+          cd "$OUT"
+          git init -q -b ci-output
+          git config user.name "ci"
+          git config user.email "ci@users.noreply.github.com"
+          git add -A
+          git commit -qm "CI ${GITHUB_SHA}"
+          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" ci-output
+
+      - name: Publicar o app na página de versões
+        if: steps.ipa.outcome == 'success' && steps.test.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release delete ultima-versao -y --cleanup-tag 2>/dev/null || true
+          gh release create ultima-versao "$OUT/PrumoPDF.ipa" \
+            --title "Prumo PDF para iPhone (última versão)" \
+            --notes "Baixe o arquivo PrumoPDF.ipa e instale com o Sideloadly. Veja o LEIA-ME do repositório. Versão gerada do commit ${GITHUB_SHA::7}." \
+            --latest
