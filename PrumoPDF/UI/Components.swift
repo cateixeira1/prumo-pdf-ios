@@ -138,6 +138,11 @@ struct DocTile: View {
         .contextMenu {
             if selection == nil {
                 Button { flow.open(.reader(item.id)) } label: { Label("Ler", systemImage: "book") }
+                if item.meta.isOCRResult || item.meta.ocrCopyID.flatMap({ library.item(id: $0) }) != nil {
+                    Button { flow.open(.reader(item.id, mode: .text)) } label: {
+                        Label("Modo leitor", systemImage: "text.alignleft")
+                    }
+                }
                 ShareLink(item: item.url) { Label("Compartilhar", systemImage: "square.and.arrow.up") }
                 if library.needsOCRAttention(item) {
                     Button { jobs.startOCR(item) } label: { Label("Fazer OCR", systemImage: "text.viewfinder") }

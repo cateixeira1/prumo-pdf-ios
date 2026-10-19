@@ -7,6 +7,7 @@ Aplicativo de PDF que roda inteiramente no iPhone, sem servidor e sem custo por 
 - **Incluir páginas** escaneando, de outro PDF da biblioteca ou do app Arquivos: dá para escolher páginas individuais, trechos como `5-15` e `10-fim`, ou todas.
 - **Organizar páginas**: segure uma página, arraste e solte. A tela rola sozinha perto das bordas, e a pinça muda o tamanho das miniaturas. Também dá para girar e excluir páginas.
 - **Remover**, **extrair**, **combinar** e **dividir em partes iguais**. Na divisão, o app pergunta em quantas partes. Um PDF de 200 páginas em 4 partes vira “Nome - Parte 1” a “Parte 4”, com 50 páginas cada. Se a conta não fechar, as primeiras partes ficam com uma página a mais.
+- **Modo leitor**: em PDFs com OCR, “Ler” pergunta se você quer ver o documento como foi escaneado ou só o texto, em fundo branco, como uma nota. Dentro da leitura, o botão Original/Texto alterna entre os dois na mesma página. No modo leitor dá para aumentar a letra, escolher fonte e fundo (branco, sépia ou escuro), buscar, copiar e compartilhar o texto. Páginas com baixa confiança no OCR aparecem marcadas.
 - **Pastas**, favoritos, busca pelo nome e pelo texto dos PDFs.
 - **Compartilhar** por e-mail, WhatsApp, Arquivos ou AirDrop.
 - **Desfazer** a última alteração de páginas de cada PDF.

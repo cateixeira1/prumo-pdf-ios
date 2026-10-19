@@ -110,6 +110,24 @@ enum DemoSeeder {
             }
         case "search":
             pendingSearch = "sepse"
+        case "readertext", "readchoice":
+            // Faz um OCR de verdade para mostrar o modo leitor com texto reconhecido.
+            guard let proc = library.items.first(where: { $0.name == "Procuração assinada" }) else { break }
+            let out = library.newTempURL()
+            let input = proc.url
+            Task { @MainActor in
+                let report = try? await Task.detached {
+                    try await OCRService().run(input: input, output: out) { _, _ in }
+                }.value
+                guard let report, let result = try? library.adopt(fileAt: out, name: "\(proc.name) - OCR", folder: proc.folder) else { return }
+                library.updateAfterOCR(original: proc, result: result, report: report)
+                if screen == "readertext" {
+                    flow.path = [.document(result.id), .reader(result.id, mode: .text)]
+                } else {
+                    pendingDetailAction = "readchoice"
+                    flow.path = [.document(result.id)]
+                }
+            }
         case "picker":
             if let p = prontuario, let source = peticao {
                 pendingDetailAction = "picker"

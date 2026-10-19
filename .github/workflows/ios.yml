@@ -55,7 +55,7 @@ jobs:
         if: always()
         run: |
           grep -E "error:" "$OUT/logs/test.log" | sort -u > "$OUT/logs/errors.txt" || true
-          grep -E "Test Case .*(passed|failed)|Executed .* tests|error: -\[|XCTAssert|Texto reconhecido|Tamanho|Confiança|Busca:" "$OUT/logs/test.log" > "$OUT/logs/test-summary.txt" || true
+          grep -E "Test Case .*(passed|failed)|Executed .* tests|error: -\[|XCTAssert|Texto reconhecido|Tamanho|Confiança|Busca:|Modo leitor" "$OUT/logs/test.log" > "$OUT/logs/test-summary.txt" || true
           if [ -d TestResults.xcresult ]; then
             xcrun xcresulttool get test-results summary --path TestResults.xcresult --compact > "$OUT/logs/xcresult-summary.json" 2>/dev/null || true
             xcrun xcresulttool get test-results tests --path TestResults.xcresult --compact > "$OUT/logs/xcresult-tests.json" 2>/dev/null || true

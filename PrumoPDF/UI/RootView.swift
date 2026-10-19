@@ -66,8 +66,8 @@ struct RootView: View {
             DocumentDetailScreen(itemID: id)
         case .organize(let id):
             PageOrganizerScreen(itemID: id)
-        case .reader(let id):
-            PDFReaderScreen(itemID: id)
+        case .reader(let id, let mode):
+            PDFReaderScreen(itemID: id, initialMode: mode)
         case .settings:
             SettingsScreen()
         case .merge:

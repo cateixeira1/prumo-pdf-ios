@@ -43,6 +43,8 @@ shot 11-combinar merge
 shot 12-ajustes settings
 shot 17-busca-no-texto search 8
 shot 18-incluir-de-outro-pdf picker 9
+shot 19-escolha-de-leitura readchoice 22
+shot 20-modo-leitor readertext 22
 # OCR de verdade no simulador: barra de progresso e, depois, o aviso de concluído.
 xcrun simctl terminate "$SIM" "$BUNDLE" 2>/dev/null || true
 xcrun simctl launch "$SIM" "$BUNDLE" -demo -screen ocr >/dev/null

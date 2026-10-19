@@ -9,7 +9,7 @@ enum Route: Hashable {
     case folder(String)
     case document(String)
     case organize(String)
-    case reader(String)
+    case reader(String, mode: ReaderMode = .original)
     case settings
     case merge
 }

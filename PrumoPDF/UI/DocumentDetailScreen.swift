@@ -25,6 +25,7 @@ struct DocumentDetailScreen: View {
     @State private var pickerRequest: PagePickerRequest?
     @State private var showSplit = false
     @State private var confirmUndo = false
+    @State private var showReadChoice = false
 
     private var item: PDFItem? { library.item(id: itemID) }
 
@@ -60,9 +61,14 @@ struct DocumentDetailScreen: View {
                 }
             }
             TileGrid {
-                Tile(title: "Ler", systemImage: "book.fill", color: Theme.blue) {
+                Tile(title: "Ler", systemImage: "book.fill", color: Theme.blue,
+                     subtitle: hasOCRText(item) ? "Original ou modo leitor" : nil) {
                     library.markOpened(item)
-                    flow.open(.reader(item.id))
+                    if hasOCRText(item) {
+                        showReadChoice = true
+                    } else {
+                        flow.open(.reader(item.id))
+                    }
                 }
                 ShareLink(item: item.url) {
                     TileLabel(title: "Compartilhar", systemImage: "square.and.arrow.up", color: Theme.green,
@@ -128,6 +134,13 @@ struct DocumentDetailScreen: View {
             Button("Do app Arquivos") { showFileImporter = true }
             Button("Cancelar", role: .cancel) {}
         }
+        .confirmationDialog("Como você quer ler?", isPresented: $showReadChoice, titleVisibility: .visible) {
+            Button("Como foi escaneado") { flow.open(.reader(item.id, mode: .original)) }
+            Button("Modo leitor (só o texto)") { flow.open(.reader(item.id, mode: .text)) }
+            Button("Cancelar", role: .cancel) {}
+        } message: {
+            Text("O modo leitor mostra o texto reconhecido pelo OCR em fundo branco, como uma nota. Dá para alternar entre os dois a qualquer momento.")
+        }
         .confirmationDialog("Desfazer a última alteração?", isPresented: $confirmUndo, titleVisibility: .visible) {
             Button("Desfazer") {
                 do {
@@ -168,6 +181,7 @@ struct DocumentDetailScreen: View {
             switch DemoSeeder.consumeDetailAction() {
             case "split"?: showSplit = true
             case "picker"?: showLibraryInsert = true
+            case "readchoice"?: showReadChoice = true
             default: break
             }
         }
@@ -245,6 +259,13 @@ struct DocumentDetailScreen: View {
         }
         .padding(14)
         .background(RoundedRectangle(cornerRadius: Theme.tileRadius, style: .continuous).fill(Theme.tile))
+    }
+
+    /// PDF com texto vindo do OCR (o próprio arquivo com OCR, ou o escaneado que já tem cópia com OCR).
+    private func hasOCRText(_ item: PDFItem) -> Bool {
+        if item.meta.isOCRResult { return true }
+        if let copyID = item.meta.ocrCopyID, library.item(id: copyID) != nil { return true }
+        return false
     }
 
     private func ocrCount(_ item: PDFItem) -> String? {
