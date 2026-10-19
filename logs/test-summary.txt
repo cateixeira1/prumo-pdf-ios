@@ -1,0 +1,45 @@
+Test Case '-[PrumoPDFTests.LibraryTests testBackupPreference]' passed (0.040 seconds).
+Test Case '-[PrumoPDFTests.LibraryTests testImportFoldersRenameMoveDelete]' passed (0.025 seconds).
+Test Case '-[PrumoPDFTests.LibraryTests testMetadataSurvivesRestart]' passed (0.007 seconds).
+Test Case '-[PrumoPDFTests.LibraryTests testModifyAndUndo]' passed (0.016 seconds).
+Test Case '-[PrumoPDFTests.LibraryTests testSaveNewDocumentAndSplitNames]' passed (0.022 seconds).
+Busca: analisado=true isAnalyzing=false status=Optional(PrumoPDF.TextStatus.digital) texto direto=marcador-a-1 este e um texto digital com bastante conteudo para a pagina 1. marc
+Test Case '-[PrumoPDFTests.LibraryTests testSearchFindsAccentInsensitiveText]' passed (1.133 seconds).
+	 Executed 6 tests, with 0 failures (0 unexpected) in 1.244 (1.428) seconds
+Test Case '-[PrumoPDFTests.OCRTests testCancellation]' passed (0.167 seconds).
+Test Case '-[PrumoPDFTests.OCRTests testDigitalOnlyDocumentReportsNothingToDo]' passed (0.007 seconds).
+Test Case '-[PrumoPDFTests.OCRTests testDigitalPagesAreUntouched]' passed (3.443 seconds).
+Texto reconhecido (página 1): excelentissimo senhor doutor juiz de direito a autora propoe a presente acao de indenizacao por danos materiais e morais em face do hospital reu. o prontuario demonstra a demora no diagnostico. valor da causa: r$ 150.000,00 em 12 de marco de 2025.
+Tamanho: original 100768 bytes, com OCR 112970 bytes
+Confiança média: 1.0; revisar: []
+Test Case '-[PrumoPDFTests.OCRTests testScannedPagesGetSearchableText]' passed (5.170 seconds).
+Test Case '-[PrumoPDFTests.OCRTests testScannedPageWithDigitalStampKeepsStampOnce]' passed (1.954 seconds).
+	 Executed 5 tests, with 0 failures (0 unexpected) in 10.742 (10.745) seconds
+Test Case '-[PrumoPDFTests.PDFOpsTests testAnalyzerClassifiesPages]' passed (0.032 seconds).
+Test Case '-[PrumoPDFTests.PDFOpsTests testArrangementReorderRotateDelete]' passed (0.009 seconds).
+Test Case '-[PrumoPDFTests.PDFOpsTests testInsertAllAtStartAndEnd]' passed (0.006 seconds).
+Test Case '-[PrumoPDFTests.PDFOpsTests testInsertSelectedPagesAfterPosition]' passed (0.024 seconds).
+Test Case '-[PrumoPDFTests.PDFOpsTests testRemoveKeepsAtLeastOnePage]' passed (0.005 seconds).
+Test Case '-[PrumoPDFTests.PDFOpsTests testSplitAndExtractAndMerge]' passed (0.007 seconds).
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.083 (0.085) seconds
+Test Case '-[PrumoPDFTests.PageSelectionTests testFormat]' passed (0.001 seconds).
+Test Case '-[PrumoPDFTests.PageSelectionTests testParsesNumbersRangesAndEnd]' passed (0.027 seconds).
+Test Case '-[PrumoPDFTests.PageSelectionTests testRejectsInvalidInput]' passed (0.001 seconds).
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.029 (0.030) seconds
+Modo leitor, página 1: ["EXCELENTÍSSIMO SENHOR DOUTOR JUIZ DE DIREITO", "A autora propõe a presente ação de indenização por danos materiais e morais em face do hospital réu. O prontuário demonstra a demora no diagnóstico. Valor da causa: R$ 150.000,00 em 12 de março de 2025."]
+Test Case '-[PrumoPDFTests.ReaderTextTests testReaderTextFromOCRResult]' passed (5.192 seconds).
+Test Case '-[PrumoPDFTests.ReaderTextTests testReflowJoinsLinesAndSplitsParagraphs]' passed (0.001 seconds).
+Test Case '-[PrumoPDFTests.ReaderTextTests testReflowWithoutPositions]' passed (0.000 seconds).
+Test Case '-[PrumoPDFTests.ReaderTextTests testScannedPDFWithoutOCRHasNoText]' passed (0.013 seconds).
+	 Executed 4 tests, with 0 failures (0 unexpected) in 5.206 (5.207) seconds
+Test Case '-[PrumoPDFTests.ScanServiceTests testDefaultName]' passed (0.001 seconds).
+Tamanho do PDF escaneado de teste: 189372 bytes
+Test Case '-[PrumoPDFTests.ScanServiceTests testMakesOnePagePerImageWithPhotoProportions]' passed (0.023 seconds).
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.024 (0.025) seconds
+Test Case '-[PrumoPDFTests.SplitPlanTests testEqualParts]' passed (0.001 seconds).
+Test Case '-[PrumoPDFTests.SplitPlanTests testInvalidParts]' passed (0.001 seconds).
+Test Case '-[PrumoPDFTests.SplitPlanTests testRemainderGoesToFirstParts]' passed (0.001 seconds).
+Test Case '-[PrumoPDFTests.SplitPlanTests testSummary]' passed (0.001 seconds).
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.003 (0.004) seconds
+	 Executed 30 tests, with 0 failures (0 unexpected) in 17.330 (17.526) seconds
+	 Executed 30 tests, with 0 failures (0 unexpected) in 17.330 (17.527) seconds

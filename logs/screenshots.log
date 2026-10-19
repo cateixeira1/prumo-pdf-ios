@@ -1,0 +1,24 @@
+App: build/Build/Products/Debug-iphonesimulator/PrumoPDF.app
+Monitoring boot status for iPhone 17 (10B884BF-749F-4E8B-AFCD-26AB8F1DBD01).
+Device already booted, nothing to do.
+
+ok: 01-inicio
+ok: 02-todos
+ok: 03-pastas
+ok: 04-pasta
+ok: 05-documento
+ok: 06-organizar
+ok: 07-dividir
+ok: 08-leitor
+ok: 09-aguardando-ocr
+ok: 10-pergunta-ocr
+ok: 11-combinar
+ok: 12-ajustes
+ok: 17-busca-no-texto
+ok: 18-incluir-de-outro-pdf
+ok: 19-escolha-de-leitura
+ok: 20-modo-leitor
+ok: 13
+ok: 14
+ok: 15-inicio-escuro
+ok: 16-documento-escuro

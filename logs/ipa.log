@@ -1,0 +1,44 @@
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:108:91: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func finishScan(_ scan: VNDocumentCameraScan, target: ScanTarget, library: Library = .shared) {
+                                                                                          ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:98:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:131:51: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func answerOCR(now: Bool, library: Library = .shared, jobs: JobCenter = .shared) {
+                                                  ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:98:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:131:78: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func answerOCR(now: Bool, library: Library = .shared, jobs: JobCenter = .shared) {
+                                                                             ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/JobCenter.swift:7:16: note: static property declared here
+    static let shared = JobCenter()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:145:108: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func insertScannedPages(_ pending: PendingScanInsert, at position: InsertPosition, library: Library = .shared) {
+                                                                                                           ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:98:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:169:55: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func handleIncoming(url: URL, library: Library = .shared) {
+                                                      ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:98:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/JobCenter.swift:26:56: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func startOCR(_ item: PDFItem, library: Library = .shared, flow: AppFlow = .shared) {
+                                                       ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:98:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/JobCenter.swift:26:81: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func startOCR(_ item: PDFItem, library: Library = .shared, flow: AppFlow = .shared) {
+                                                                                ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:47:16: note: static property declared here
+    static let shared = AppFlow()
+               ^
+note: Using codesigning identity override: 
+-rw-r--r--  1 runner  staff  840418 Oct 19 05:28 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/ci-output/PrumoPDF.ipa
