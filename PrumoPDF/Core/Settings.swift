@@ -37,6 +37,8 @@ enum BackupPolicy {
     }
 
     static func isExcluded(_ url: URL) -> Bool {
-        (try? url.resourceValues(forKeys: [.isExcludedFromBackupKey]))?.isExcludedFromBackup ?? false
+        // URL guarda os valores lidos em cache; uma URL nova lê o valor atual do disco.
+        let fresh = URL(fileURLWithPath: url.path)
+        return (try? fresh.resourceValues(forKeys: [.isExcludedFromBackupKey]))?.isExcludedFromBackup ?? false
     }
 }

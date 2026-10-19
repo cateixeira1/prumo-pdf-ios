@@ -120,7 +120,7 @@ struct HomeView: View {
                     }
                 }
                 WideTile(title: "Pastas", systemImage: "folder.fill", color: Theme.indigo,
-                         count: "\(library.folders.count)") {
+                         count: "\(library.topLevelFolders.count)") {
                     flow.open(.folders)
                 }
             } else {
@@ -133,6 +133,9 @@ struct HomeView: View {
                 Button { flow.open(.settings) } label: { Image(systemName: "gearshape") }
                     .accessibilityLabel("Ajustes")
             }
+        }
+        .onAppear {
+            if let demo = DemoSeeder.consumeSearch() { query = demo }
         }
         .task(id: query) {
             try? await Task.sleep(nanoseconds: 200_000_000)

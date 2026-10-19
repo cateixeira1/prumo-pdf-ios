@@ -90,7 +90,7 @@ struct PageOrganizerScreen: View {
             }
         }
         .background(Theme.background.ignoresSafeArea())
-        .navigationTitle("Organizar páginas")
+        .navigationTitle(model.entries.isEmpty ? "Organizar páginas" : "Organizar \(model.entries.count) páginas")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(model.hasChanges || saving)
         .toolbar {
@@ -180,10 +180,6 @@ struct PageOrganizerScreen: View {
                 .accessibilityLabel("Excluir páginas selecionadas")
         } else {
             Button("Selecionar") { model.selecting = true }
-            Spacer()
-            Text("\(model.entries.count) página\(model.entries.count == 1 ? "" : "s")")
-                .font(.footnote)
-                .foregroundStyle(Theme.secondaryText)
             Spacer()
             Menu {
                 Picker("Páginas por linha", selection: $model.columns) {

@@ -20,6 +20,18 @@ enum DemoSeeder {
     }
 
     private static var pendingDetailAction: String?
+    private static var pendingSearch: String?
+    private static var pendingPickerSource: String?
+
+    static func consumeSearch() -> String? {
+        defer { pendingSearch = nil }
+        return pendingSearch
+    }
+
+    static func consumePickerSource() -> String? {
+        defer { pendingPickerSource = nil }
+        return pendingPickerSource
+    }
 
     /// Ação a executar quando a tela do documento abrir (ex.: abrir "Dividir").
     static func consumeDetailAction() -> String? {
@@ -97,7 +109,13 @@ enum DemoSeeder {
                 jobs.startOCR(p, library: library, flow: flow)
             }
         case "search":
-            break
+            pendingSearch = "sepse"
+        case "picker":
+            if let p = prontuario, let source = peticao {
+                pendingDetailAction = "picker"
+                pendingPickerSource = source.id
+                flow.path = [.document(p.id)]
+            }
         default:
             break
         }

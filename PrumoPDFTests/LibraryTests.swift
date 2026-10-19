@@ -104,12 +104,19 @@ final class LibraryTests: XCTestCase {
 
     func testSearchFindsAccentInsensitiveText() async throws {
         fresh()
-        _ = library.importFiles([externalPDF("Contrato.pdf")])
-        // Espera a análise em segundo plano terminar.
-        for _ in 0..<50 where library.isAnalyzing {
+        let item = try XCTUnwrap(library.importFiles([externalPDF("Contrato.pdf")]).first)
+        // O texto é extraído em segundo plano; espera até 20 s.
+        var analyzed = false
+        for _ in 0..<200 {
+            if library.item(id: item.id)?.meta.textStatus != nil {
+                analyzed = true
+                break
+            }
             try await Task.sleep(nanoseconds: 100_000_000)
         }
-        try await Task.sleep(nanoseconds: 300_000_000)
+        let direct = Analyzer.analyze(url: item.url)
+        print("Busca: analisado=\(analyzed) isAnalyzing=\(library.isAnalyzing) status=\(String(describing: library.item(id: item.id)?.meta.textStatus)) texto direto=\(Library.fold(direct?.text ?? "").prefix(80))")
+        XCTAssertTrue(analyzed, "a análise em segundo plano não terminou")
         XCTAssertEqual(library.search("contrato").count, 1)
         XCTAssertEqual(library.search("CONTEUDO PARA A PAGINA").count, 1, "busca no texto, sem acentos")
         XCTAssertEqual(library.search("inexistente").count, 0)

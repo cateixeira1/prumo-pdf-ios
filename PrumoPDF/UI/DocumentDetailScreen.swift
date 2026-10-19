@@ -138,7 +138,7 @@ struct DocumentDetailScreen: View {
             Button("Cancelar", role: .cancel) {}
         }
         .sheet(isPresented: $showLibraryInsert) {
-            InsertFromLibrarySheet(target: item)
+            InsertFromLibrarySheet(target: item, initialSourceID: DemoSeeder.consumePickerSource())
                 .appEnvironment()
         }
         .sheet(item: $pickerRequest) { request in
@@ -165,7 +165,11 @@ struct DocumentDetailScreen: View {
             }
         }
         .onAppear {
-            if let action = DemoSeeder.consumeDetailAction(), action == "split" { showSplit = true }
+            switch DemoSeeder.consumeDetailAction() {
+            case "split"?: showSplit = true
+            case "picker"?: showLibraryInsert = true
+            default: break
+            }
         }
     }
 
@@ -244,6 +248,7 @@ struct DocumentDetailScreen: View {
     }
 
     private func ocrCount(_ item: PDFItem) -> String? {
+        if let copyID = item.meta.ocrCopyID, library.item(id: copyID) != nil { return nil }
         guard let n = item.meta.ocrPages?.count, n > 0, !item.meta.isOCRResult else { return nil }
         return "\(n)"
     }
@@ -275,6 +280,7 @@ struct DocumentDetailScreen: View {
 /// Incluir páginas de outro PDF da biblioteca: escolher o PDF e depois as páginas.
 struct InsertFromLibrarySheet: View {
     let target: PDFItem
+    var initialSourceID: String? = nil
     @EnvironmentObject private var library: Library
     @EnvironmentObject private var flow: AppFlow
     @Environment(\.dismiss) private var dismiss
@@ -285,11 +291,15 @@ struct InsertFromLibrarySheet: View {
             DocumentChooser(title: "De qual PDF?", excluding: [target.id],
                             onDone: { items in if let first = items.first { path.append(first.id) } },
                             onCancel: { dismiss() })
+                .onAppear {
+                    if let initialSourceID, path.isEmpty { path = [initialSourceID] }
+                }
                 .navigationDestination(for: String.self) { sourceID in
                     if let source = library.item(id: sourceID) {
                         PagePickerScreen(mode: .insert(targetPageCount: target.pageCount ?? 0),
                                          sourceURL: source.url, sourceVersion: source.version,
                                          sourceTitle: source.name,
+                                         initialSelection: initialSourceID == nil ? nil : "2, 5-9",
                                          dismissAll: { dismiss() }) { pages, position in
                             let src = source.url
                             try await library.modify(target) { doc in

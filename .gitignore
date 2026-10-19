@@ -1,0 +1,8 @@
+*.xcodeproj/
+build/
+build-device/
+DerivedData/
+*.xcresult
+Payload/
+ci-output/
+.DS_Store

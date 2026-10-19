@@ -14,6 +14,7 @@ struct PagePickerScreen: View {
     let sourceURL: URL
     let sourceVersion: String
     let sourceTitle: String
+    var initialSelection: String? = nil
     var dismissAll: (() -> Void)? = nil
     let onConfirm: (_ pages: [Int], _ position: InsertPosition) async throws -> Void
 
@@ -264,6 +265,9 @@ struct PagePickerScreen: View {
         if let count, count > 0 {
             pageCount = count
             if case .insert(let targetCount) = mode { afterPage = max(1, targetCount) }
+            if let initialSelection, let pages = try? PageSelection.parse(initialSelection, pageCount: count) {
+                setSelection(Set(pages))
+            }
         } else {
             loadError = "O PDF pode estar protegido por senha ou corrompido."
         }

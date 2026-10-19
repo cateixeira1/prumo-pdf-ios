@@ -110,7 +110,7 @@ struct TileLabel: View {
                         .font(.system(size: 24, weight: .bold, design: .rounded))
                         .foregroundStyle(highlighted ? Color.white : Theme.text)
                         .lineLimit(1)
-                        .minimumScaleFactor(0.6)
+                        .fixedSize()
                 }
             }
             Spacer(minLength: 6)

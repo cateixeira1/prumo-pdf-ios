@@ -74,7 +74,7 @@ struct PDFKitView: UIViewRepresentable {
         model.pdfView = view
         NotificationCenter.default.addObserver(context.coordinator, selector: #selector(Coordinator.pageChanged),
                                                name: .PDFViewPageChanged, object: view)
-        DispatchQueue.main.async { model.pageChanged() }
+        Task { @MainActor in model.pageChanged() }
         return view
     }
 
