@@ -106,6 +106,11 @@ enum DemoSeeder {
         case "settings": flow.path = [.settings]
         case "tools": pendingHomeTool = "organize"
         case "convert": pendingHomeTool = "convert"
+        case "dewarp":
+            if let p = prontuario {
+                pendingDetailAction = "dewarp"
+                flow.path = [.document(p.id)]
+            }
         case "addfolder":
             flow.pendingAddToFolder = "Contratos"
             flow.path = [.folders, .folder("Contratos")]

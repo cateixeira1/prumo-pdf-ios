@@ -70,7 +70,11 @@ enum Converter {
         let renderer = UIGraphicsPDFRenderer(bounds: a4)
         return renderer.pdfData { ctx in
             for original in images {
-                let img = prepared(original)
+                var source = original
+                if AppSettings.dewarpPhotos, Dewarp.isAvailable, let fixed = try? Dewarp.unwarp(original) {
+                    source = fixed   // foto de livro ou papel ondulado: texto reto
+                }
+                let img = prepared(source)
                 let landscape = img.size.width > img.size.height
                 let page = landscape ? CGRect(x: 0, y: 0, width: a4.height, height: a4.width) : a4
                 ctx.beginPage(withBounds: page, pageInfo: [:])

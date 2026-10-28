@@ -26,7 +26,11 @@ enum ScanService {
         return renderer.pdfData { ctx in
             for i in 0..<count {
                 autoreleasepool {
-                    guard let prepared = prepare(image(i)) else { return }
+                    var source = image(i)
+                    if AppSettings.dewarpPhotos, Dewarp.isAvailable, let fixed = try? Dewarp.unwarp(source) {
+                        source = fixed   // página curva (livro, papel ondulado) fica reta
+                    }
+                    guard let prepared = prepare(source) else { return }
                     let size = prepared.size
                     let pageWidth = size.width > size.height ? landscapeWidth : portraitWidth
                     let pageHeight = pageWidth * size.height / size.width

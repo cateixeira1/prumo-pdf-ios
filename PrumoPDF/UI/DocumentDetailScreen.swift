@@ -26,6 +26,7 @@ struct DocumentDetailScreen: View {
     @State private var showSplit = false
     @State private var confirmUndo = false
     @State private var showReadChoice = false
+    @State private var showDewarp = false
 
     private var item: PDFItem? { library.item(id: itemID) }
 
@@ -94,6 +95,10 @@ struct DocumentDetailScreen: View {
                 Tile(title: "Dividir em partes", systemImage: "scissors", color: Theme.pink) {
                     showSplit = true
                 }
+                Tile(title: "Corrigir páginas curvas", systemImage: "book.pages", color: Theme.teal, shape: .rounded,
+                     subtitle: "Fotos de livros, papel ondulado") {
+                    showDewarp = true
+                }
                 Tile(title: "Extrair páginas", systemImage: "doc.badge.plus", color: Theme.indigo) {
                     pickerRequest = PagePickerRequest(kind: .extract, sourceURL: item.url,
                                                       sourceVersion: item.version, sourceTitle: item.name)
@@ -160,6 +165,10 @@ struct DocumentDetailScreen: View {
             }
             .appEnvironment()
         }
+        .sheet(isPresented: $showDewarp) {
+            DewarpSheet(item: item)
+                .appEnvironment()
+        }
         .sheet(isPresented: $showSplit) {
             SplitSheet(item: item)
                 .appEnvironment()
@@ -183,6 +192,7 @@ struct DocumentDetailScreen: View {
             case "split"?: showSplit = true
             case "picker"?: showLibraryInsert = true
             case "readchoice"?: showReadChoice = true
+            case "dewarp"?: showDewarp = true
             case "insert"?: showInsertMenu = true
             case "remove"?:
                 pickerRequest = PagePickerRequest(kind: .remove, sourceURL: item.url,

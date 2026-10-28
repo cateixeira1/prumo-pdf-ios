@@ -3,6 +3,10 @@ import Foundation
 enum AppSettings {
     static let includeInBackupKey = "includeInBackup"
     static let ocrLanguageKey = "ocrLanguage"
+    static let dewarpPhotosKey = "dewarpPhotos"
+
+    /// Corrigir páginas curvas ao escanear e ao converter fotos (desligado por padrão).
+    static var dewarpPhotos: Bool { UserDefaults.standard.bool(forKey: dewarpPhotosKey) }
 
     /// Padrão: os PDFs entram no backup do iCloud (escolha feita no app, em Ajustes).
     static var includeInBackup: Bool {
