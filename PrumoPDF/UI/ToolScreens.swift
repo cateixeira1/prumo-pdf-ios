@@ -241,6 +241,8 @@ struct SettingsScreen: View {
     @AppStorage(AppSettings.ocrLanguageKey) private var ocrLanguage = "por"
     @AppStorage("lastBackup") private var lastBackup: Double = 0
     @AppStorage(AppSettings.dewarpPhotosKey) private var dewarpPhotos = false
+    @AppStorage(AppLock.enabledKey) private var lockEnabled = false
+    @State private var lockToggle = false
     @State private var exportDocument: LibraryFolderDocument?
     @State private var showExporter = false
     @State private var showRestore = false
@@ -303,6 +305,29 @@ struct SettingsScreen: View {
                         .foregroundStyle(Theme.secondaryText)
                 }
             }
+            SectionTitle(text: "Segurança")
+            TileCard {
+                VStack(alignment: .leading, spacing: 8) {
+                    Toggle(isOn: $lockToggle) {
+                        Text("Pedir \(AppLock.methodName) para abrir")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundStyle(Theme.text)
+                    }
+                    .onChange(of: lockToggle) { _, on in
+                        guard on != lockEnabled else { return }
+                        Task {
+                            let ok = await AppLock.shared.setEnabled(on)
+                            if !ok {
+                                lockToggle = lockEnabled
+                                if let e = AppLock.shared.lastError { flow.toast(e) }
+                            }
+                        }
+                    }
+                    Text("O Prumo trava ao sair do app e pede \(AppLock.methodName) (ou o código do iPhone) ao voltar. Para proteger um PDF em si, por exemplo antes de enviar, use “Proteger com senha” na tela dele: a senha vai junto com o arquivo e vale em qualquer leitor de PDF.")
+                        .font(.system(size: 13))
+                        .foregroundStyle(Theme.secondaryText)
+                }
+            }
             SectionTitle(text: "OCR")
             TileCard {
                 VStack(alignment: .leading, spacing: 8) {
@@ -336,6 +361,7 @@ struct SettingsScreen: View {
             }
         }
         .navigationTitle("Ajustes")
+        .onAppear { lockToggle = lockEnabled }
         .onChange(of: includeInBackup) { _, _ in library.applyBackupPreference() }
         .fileExporter(isPresented: $showExporter, document: exportDocument, contentType: .folder,
                       defaultFilename: Library.backupName()) { result in
@@ -479,6 +505,62 @@ struct DewarpSheet: View {
                 working = false
                 flow.show(error: error)
             }
+        }
+    }
+}
+
+/// Proteger com senha: cópia do PDF que só abre com a senha, em qualquer leitor de PDF.
+struct ProtectSheet: View {
+    let item: PDFItem
+    @EnvironmentObject private var library: Library
+    @EnvironmentObject private var flow: AppFlow
+    @Environment(\.dismiss) private var dismiss
+    @State private var pw1 = ""
+    @State private var pw2 = ""
+    @State private var deleteOriginal = true
+
+    private var problem: String? {
+        if !pw1.isEmpty && pw1.count < 4 { return "Use pelo menos 4 caracteres." }
+        if !pw2.isEmpty && pw1 != pw2 { return "As senhas não são iguais." }
+        return nil
+    }
+
+    private var ready: Bool { pw1.count >= 4 && pw1 == pw2 }
+
+    var body: some View {
+        NavigationStack {
+            Screen {
+                TileCard {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("“\(item.name)”").font(.system(size: 15, weight: .semibold)).foregroundStyle(Theme.text)
+                        Text("A cópia protegida só abre com a senha, em qualquer leitor de PDF (iPhone, Adobe, Edge, Chrome).")
+                            .font(.system(size: 13)).foregroundStyle(Theme.secondaryText)
+                        SecureField("Senha", text: $pw1).textFieldStyle(.roundedBorder)
+                        SecureField("Repita a senha", text: $pw2).textFieldStyle(.roundedBorder)
+                        if let problem { Text(problem).font(.system(size: 13, weight: .medium)).foregroundStyle(Theme.red) }
+                        Toggle("Apagar o original (sem senha)", isOn: $deleteOriginal)
+                            .font(.system(size: 15))
+                        Text("Importante: se você esquecer a senha, não há como abrir o PDF, nem pelo Prumo. Guarde a senha num lugar seguro. Evite acentos e “ç” na senha: alguns leitores de PDF não os entendem.")
+                            .font(.system(size: 13, weight: .medium)).foregroundStyle(Theme.orange)
+                    }
+                }
+                PrimaryButton(title: "Proteger", color: Theme.purple, enabled: ready) { run() }
+            }
+            .navigationTitle("Proteger com senha")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Cancelar") { dismiss() } } }
+        }
+    }
+
+    private func run() {
+        do {
+            let new = try library.protect(item, password: pw1)
+            if deleteOriginal, let original = library.item(id: item.id) { try library.delete([original]) }
+            dismiss()
+            if deleteOriginal { flow.popToRoot() }
+            flow.toast("PDF protegido: \(new.name)", actionTitle: "Abrir") { flow.open(.document(new.id)) }
+        } catch {
+            flow.show(error: error)
         }
     }
 }

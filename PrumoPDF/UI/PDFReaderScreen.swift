@@ -62,6 +62,7 @@ final class ReaderModel: ObservableObject {
 struct PDFKitView: UIViewRepresentable {
     let url: URL
     let model: ReaderModel
+    var password: String? = nil
 
     func makeUIView(context: Context) -> PDFView {
         let view = PDFView()
@@ -70,7 +71,9 @@ struct PDFKitView: UIViewRepresentable {
         view.autoScales = true
         view.pageShadowsEnabled = true
         view.backgroundColor = Theme.backgroundUI
-        view.document = PDFDocument(url: url)
+        let doc = PDFDocument(url: url)
+        if let password, doc?.isLocked == true { _ = doc?.unlock(withPassword: password) }
+        view.document = doc
         model.pdfView = view
         NotificationCenter.default.addObserver(context.coordinator, selector: #selector(Coordinator.pageChanged),
                                                name: .PDFViewPageChanged, object: view)
@@ -102,6 +105,10 @@ struct PDFReaderScreen: View {
     @State private var query = ""
     @State private var askPage = false
     @State private var pageText = ""
+    @State private var password: String?
+    @State private var askPassword = false
+    @State private var passwordText = ""
+    @State private var wrongPassword = false
 
     private var item: PDFItem? { library.item(id: itemID) }
 
@@ -173,8 +180,33 @@ struct PDFReaderScreen: View {
     private var shownPage: Int { mode == .original ? model.currentPage : textModel.currentPage }
 
     @ViewBuilder private var originalPane: some View {
-        if let item {
-            PDFKitView(url: item.url, model: model)
+        if let item, item.meta.locked == true, password == nil {
+            VStack(spacing: 14) {
+                Image(systemName: "lock.fill").font(.system(size: 40)).foregroundStyle(Theme.purple)
+                Text("Este PDF tem senha").font(.system(size: 18, weight: .semibold)).foregroundStyle(Theme.text)
+                PrimaryButton(title: "Digitar a senha", color: Theme.blue) { askPassword = true }
+                    .padding(.horizontal, 60)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .onAppear { askPassword = true }
+            .alert(wrongPassword ? "Senha incorreta" : "Senha do PDF", isPresented: $askPassword) {
+                SecureField("Senha", text: $passwordText)
+                Button("Cancelar", role: .cancel) {}
+                Button("Abrir") {
+                    if Library.checkPassword(item.url, passwordText) {
+                        password = passwordText
+                        wrongPassword = false
+                    } else {
+                        wrongPassword = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { askPassword = true }
+                    }
+                    passwordText = ""
+                }
+            } message: {
+                Text(wrongPassword ? "Tente de novo (maiúsculas e minúsculas fazem diferença)." : "Digite a senha para abrir.")
+            }
+        } else if let item {
+            PDFKitView(url: item.url, model: model, password: password)
                 .ignoresSafeArea(edges: .bottom)
                 .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .automatic),
                             prompt: "Buscar no documento")

@@ -20,6 +20,7 @@ struct DocMeta: Codable, Hashable {
     var lastOpened: Date?
     var hasUndo = false
     var added: Date?
+    var locked: Bool?                // PDF protegido por senha
 
     init(id: String = UUID().uuidString, path: String, added: Date? = Date()) {
         self.id = id
@@ -46,6 +47,7 @@ struct DocMeta: Codable, Hashable {
         lastOpened = try c.decodeIfPresent(Date.self, forKey: .lastOpened)
         hasUndo = try c.decodeIfPresent(Bool.self, forKey: .hasUndo) ?? false
         added = try c.decodeIfPresent(Date.self, forKey: .added)
+        locked = try c.decodeIfPresent(Bool.self, forKey: .locked)
     }
 }
 
@@ -210,6 +212,7 @@ final class Library: ObservableObject {
     var topLevelFolders: [FolderItem] { subfolders(of: "") }
 
     func needsOCRAttention(_ item: PDFItem) -> Bool {
+        if item.meta.locked == true { return false }
         let m = item.meta
         if m.isOCRResult { return false }
         if let copy = m.ocrCopyID, metas[copy] != nil { return false }
@@ -293,6 +296,7 @@ final class Library: ObservableObject {
         meta.pageCount = analysis?.pageCount
         meta.textStatus = analysis?.status
         meta.ocrPages = analysis?.ocrPages
+        meta.locked = analysis?.locked == true ? true : nil
         metas[id] = meta
         texts[id] = folded
         if let i = items.firstIndex(where: { $0.id == id }) {

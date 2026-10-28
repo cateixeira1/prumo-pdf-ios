@@ -34,6 +34,7 @@ struct DocumentAnalysis {
     var status: TextStatus
     var ocrPages: [Int]       // páginas (começando em 1) que precisam de OCR
     var text: String          // texto de todas as páginas, para a busca
+    var locked = false        // protegido por senha
 }
 
 enum Analyzer {
@@ -47,7 +48,7 @@ enum Analyzer {
     static func analyze(url: URL) -> DocumentAnalysis? {
         guard let doc = PDFDocument(url: url) else { return nil }
         if doc.isLocked {
-            return DocumentAnalysis(pageCount: doc.pageCount, status: .digital, ocrPages: [], text: "")
+            return DocumentAnalysis(pageCount: doc.pageCount, status: .digital, ocrPages: [], text: "", locked: true)
         }
         return analyze(doc)
     }

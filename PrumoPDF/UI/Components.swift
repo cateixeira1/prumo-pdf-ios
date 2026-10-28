@@ -58,6 +58,10 @@ struct DocTileLabel: View {
                     Image(systemName: selection ? "checkmark.circle.fill" : "circle")
                         .font(.system(size: 22))
                         .foregroundStyle(selection ? Theme.blue : Theme.secondaryText)
+                } else if item.meta.locked == true {
+                    Image(systemName: "lock.fill")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(highlighted ? Color.white : Theme.purple)
                 } else if let n = item.pageCount {
                     VStack(alignment: .trailing, spacing: -2) {
                         Text("\(n)")
@@ -93,8 +97,10 @@ struct DocTileLabel: View {
 
     @ViewBuilder private var badges: some View {
         let review = !(item.meta.reviewPages ?? []).isEmpty
-        if (item.meta.favorite && !reserveActions) || item.meta.isOCRResult || needsOCR || review || showFolder {
+        if (item.meta.favorite && !reserveActions) || item.meta.isOCRResult || needsOCR || review || showFolder
+            || item.meta.locked == true {
             HStack(spacing: 4) {
+                if item.meta.locked == true { Badge(text: "Com senha", color: Theme.purple, inverted: highlighted) }
                 if item.meta.favorite && !reserveActions {
                     Image(systemName: "star.fill").font(.system(size: 10)).foregroundStyle(highlighted ? Color.white : Theme.yellow)
                 }

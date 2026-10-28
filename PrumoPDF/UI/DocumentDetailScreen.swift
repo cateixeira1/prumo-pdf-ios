@@ -27,6 +27,9 @@ struct DocumentDetailScreen: View {
     @State private var confirmUndo = false
     @State private var showReadChoice = false
     @State private var showDewarp = false
+    @State private var showProtect = false
+    @State private var askUnprotect = false
+    @State private var unprotectText = ""
 
     private var item: PDFItem? { library.item(id: itemID) }
 
@@ -113,6 +116,17 @@ struct DocumentDetailScreen: View {
                      color: Theme.yellow, shape: .rounded, selected: item.meta.favorite) {
                     library.setFavorite(item, !item.meta.favorite)
                 }
+                if item.meta.locked == true {
+                    Tile(title: "Remover senha", systemImage: "lock.open.fill", color: Theme.purple, shape: .rounded,
+                         subtitle: "Cria uma cópia sem senha") {
+                        askUnprotect = true
+                    }
+                } else {
+                    Tile(title: "Proteger com senha", systemImage: "lock.fill", color: Theme.purple, shape: .rounded,
+                         subtitle: "Criptografia padrão de PDF") {
+                        showProtect = true
+                    }
+                }
                 Tile(title: "Duplicar", systemImage: "plus.square.on.square", color: Theme.gray, shape: .rounded) {
                     do {
                         if let copy = try library.duplicate(item) {
@@ -164,6 +178,23 @@ struct DocumentDetailScreen: View {
                 pagePicker(for: request, target: item)
             }
             .appEnvironment()
+        }
+        .sheet(isPresented: $showProtect) {
+            ProtectSheet(item: item)
+                .appEnvironment()
+        }
+        .alert("Remover a senha", isPresented: $askUnprotect) {
+            SecureField("Senha atual", text: $unprotectText)
+            Button("Cancelar", role: .cancel) { unprotectText = "" }
+            Button("Remover") {
+                do {
+                    let new = try library.unprotect(item, password: unprotectText)
+                    flow.toast("Cópia sem senha: \(new.name)", actionTitle: "Abrir") { flow.open(.document(new.id)) }
+                } catch { flow.show(error: error) }
+                unprotectText = ""
+            }
+        } message: {
+            Text("Cria uma cópia sem senha, para fazer OCR, organizar ou dividir. O PDF com senha continua guardado.")
         }
         .sheet(isPresented: $showDewarp) {
             DewarpSheet(item: item)
