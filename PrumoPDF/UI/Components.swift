@@ -119,6 +119,8 @@ struct Badge: View {
     var body: some View {
         Text(text)
             .font(.system(size: 10, weight: .bold))
+            .lineLimit(1)
+            .fixedSize()   // o selo nunca quebra em duas linhas; quem encolhe é o nome da pasta
             .foregroundStyle(inverted ? color : Color.white)
             .padding(.horizontal, 5)
             .padding(.vertical, 1.5)
