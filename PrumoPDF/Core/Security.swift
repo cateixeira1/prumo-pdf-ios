@@ -141,6 +141,10 @@ struct LockView: View {
             .padding(.horizontal, 40)
             Spacer()
             Spacer()
+            Text("Color Software")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(Theme.secondaryText)
+                .padding(.bottom, 16)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Theme.background.ignoresSafeArea())

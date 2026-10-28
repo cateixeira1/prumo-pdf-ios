@@ -144,7 +144,7 @@ struct HomeView: View {
                          count: "\(library.count(for: .ocr))") {
                         flow.open(.list(.ocr))
                     }
-                    Tile(title: "Favoritos", systemImage: "star.fill", color: Theme.pink,
+                    Tile(title: "Favoritos", systemImage: "star.fill", color: Theme.yellow,
                          count: "\(library.count(for: .favorites))", shape: .rounded) {
                         flow.open(.list(.favorites))
                     }
@@ -177,6 +177,11 @@ struct HomeView: View {
                          color: Theme.teal, subtitle: "Fotos, imagens, Word, Excel, PowerPoint, Pages, texto") {
                     showConvertMenu = true
                 }
+                Text("Color Software")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(Theme.secondaryText)
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 18)
             } else {
                 SearchResultsView(results: results, query: query)
             }

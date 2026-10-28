@@ -246,6 +246,7 @@ struct SettingsScreen: View {
     @State private var exportDocument: LibraryFolderDocument?
     @State private var showExporter = false
     @State private var showRestore = false
+    @State private var showCloud = false
 
     private var lastBackupText: String {
         guard lastBackup > 0 else { return "Nenhuma cópia feita ainda." }
@@ -257,19 +258,48 @@ struct SettingsScreen: View {
 
     var body: some View {
         Screen {
-            SectionTitle(text: "Backup")
+            SectionTitle(text: "Backup e sincronização")
             TileCard {
-                VStack(alignment: .leading, spacing: 8) {
-                    Toggle(isOn: $includeInBackup) {
-                        Text("Incluir os PDFs no backup do iCloud")
+                VStack(alignment: .leading, spacing: 10) {
+                    if let cloud = library.cloudName {
+                        Label("Backup e sincronização no \(cloud)", systemImage: "checkmark.icloud.fill")
                             .font(.system(size: 16, weight: .semibold))
-                            .foregroundStyle(Theme.text)
+                            .foregroundStyle(Theme.green)
+                        Text("Os PDFs ficam na pasta “\(library.root.lastPathComponent)” do \(cloud). O que você salva aqui aparece no Prumo do Windows (e em outros iPhones) que usam a mesma pasta, e vice-versa.")
+                            .font(.system(size: 13))
+                            .foregroundStyle(Theme.secondaryText)
+                        if library.downloadingCount > 0 {
+                            Label("Baixando \(library.downloadingCount) PDF\(library.downloadingCount == 1 ? "" : "s") da nuvem…",
+                                  systemImage: "icloud.and.arrow.down")
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundStyle(Theme.blue)
+                        }
+                    } else {
+                        Label("Só neste iPhone", systemImage: "iphone")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundStyle(Theme.orange)
+                        Text("Para ver os mesmos PDFs no iPhone e no Windows, escolha uma nuvem.")
+                            .font(.system(size: 13))
+                            .foregroundStyle(Theme.secondaryText)
                     }
-                    Text(includeInBackup
-                         ? "Os PDFs entram no backup do iPhone no iCloud, se ele estiver ligado nos Ajustes do iPhone. Se você trocar ou perder o aparelho, eles voltam com o backup."
-                         : "Os PDFs ficam só neste iPhone e não entram em nenhum backup. Se o aparelho for perdido ou apagado, os PDFs se perdem junto.")
-                        .font(.system(size: 13))
-                        .foregroundStyle(Theme.secondaryText)
+                    if let problem = library.cloudProblem {
+                        Text(problem).font(.system(size: 13, weight: .semibold)).foregroundStyle(Theme.red)
+                    }
+                    PrimaryButton(title: library.isLocal ? "Escolher nuvem…" : "Trocar de nuvem…", color: Theme.blue) {
+                        showCloud = true
+                    }
+                    if library.isLocal {
+                        Toggle(isOn: $includeInBackup) {
+                            Text("Incluir os PDFs no backup do iCloud")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundStyle(Theme.text)
+                        }
+                        Text(includeInBackup
+                             ? "Os PDFs entram no backup do iPhone no iCloud, se ele estiver ligado nos Ajustes do iPhone. Se você trocar ou perder o aparelho, eles voltam com o backup (mas não aparecem no Windows)."
+                             : "Os PDFs ficam só neste iPhone e não entram em nenhum backup. Se o aparelho for perdido ou apagado, os PDFs se perdem junto.")
+                            .font(.system(size: 13))
+                            .foregroundStyle(Theme.secondaryText)
+                    }
                 }
             }
             SectionTitle(text: "Cópia de segurança")
@@ -351,8 +381,13 @@ struct SettingsScreen: View {
                           systemImage: "lock.shield.fill")
                         .font(.system(size: 14))
                         .foregroundStyle(Theme.text)
-                    Label("Os PDFs ficam no app Arquivos, em No meu iPhone › Prumo PDF.", systemImage: "folder.fill")
+                    Label(library.isLocal ? "Os PDFs ficam no app Arquivos, em No meu iPhone › Prumo PDF."
+                                          : "Os PDFs ficam no app Arquivos, em \(library.cloudName ?? "nuvem") › \(library.root.lastPathComponent).",
+                          systemImage: "folder.fill")
                         .font(.system(size: 14))
+                        .foregroundStyle(Theme.text)
+                    Text("Desenvolvido por Color Software")
+                        .font(.system(size: 14, weight: .semibold))
                         .foregroundStyle(Theme.text)
                     Text("Prumo PDF \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "")")
                         .font(.system(size: 12))
@@ -374,6 +409,7 @@ struct SettingsScreen: View {
             }
             exportDocument = nil
         }
+        .sheet(isPresented: $showCloud) { CloudChooserSheet() }
         .fileImporter(isPresented: $showRestore, allowedContentTypes: [.folder]) { result in
             guard case .success(let url) = result else { return }
             do {
@@ -383,6 +419,129 @@ struct SettingsScreen: View {
                 flow.toast(msg + ".")
             } catch { flow.show(error: error) }
         }
+    }
+}
+
+/// Escolher a nuvem do backup e da sincronização. A biblioteca passa a ficar numa pasta da nuvem,
+/// escolhida no app Arquivos; o Prumo do Windows usa a mesma pasta.
+struct CloudChooserSheet: View {
+    @EnvironmentObject private var library: Library
+    @EnvironmentObject private var flow: AppFlow
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
+    @State private var pickFolder = false
+    @State private var picked: URL?
+    @State private var askBring = false
+    @State private var askLocal = false
+
+    /// Apps oficiais na App Store (ids conferidos na busca da Apple em 28/10/2026). Entrar na conta
+    /// é feito no app de cada nuvem; o iCloud usa a conta Apple dos Ajustes do iPhone.
+    private struct CloudApp: Identifiable {
+        let name: String
+        let appStore: String
+        let note: String
+        var id: String { name }
+    }
+    private let others = [
+        CloudApp(name: "Dropbox", appStore: "https://apps.apple.com/br/app/id327630330",
+                 note: "Funciona se o app do Dropbox deixar escolher a pasta no app Arquivos. No Windows, instale o Dropbox para computador."),
+        CloudApp(name: "Google Drive", appStore: "https://apps.apple.com/br/app/id507874739",
+                 note: "No iPhone, o app do Google Drive não deixa outros apps usarem uma pasta dele (só arquivos avulsos). Para sincronizar com o iPhone, prefira o iCloud Drive."),
+        CloudApp(name: "OneDrive", appStore: "https://apps.apple.com/br/app/id477537958",
+                 note: "No iPhone, o app do OneDrive não deixa outros apps usarem uma pasta dele (só arquivos avulsos). Para sincronizar com o iPhone, prefira o iCloud Drive."),
+    ]
+
+    var body: some View {
+        NavigationStack {
+            Screen {
+                TileCard {
+                    Text("Os PDFs passam a ficar numa pasta “Prumo PDF” na nuvem: é o backup e também a sincronização. No Windows, escolha a mesma nuvem no Prumo (Ajustes › Escolher nuvem) e os PDFs, as pastas e os favoritos aparecem nos dois.")
+                        .font(.system(size: 13.5))
+                        .foregroundStyle(Theme.text)
+                }
+                TileCard {
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text("iCloud Drive").font(.system(size: 17, weight: .semibold)).foregroundStyle(Theme.text)
+                            Spacer()
+                            Text("Recomendado").font(.system(size: 12, weight: .semibold)).foregroundStyle(Theme.green)
+                        }
+                        Text("Para entrar: Ajustes do iPhone › seu nome › iCloud › iCloud Drive (ligado). No Windows: instale o iCloud para Windows e entre com a mesma conta Apple.")
+                            .font(.system(size: 13))
+                            .foregroundStyle(Theme.secondaryText)
+                        PrimaryButton(title: "Usar o iCloud Drive…", color: Theme.blue) { pickFolder = true }
+                        Text("No seletor, toque em “iCloud Drive” e depois em “Abrir”. O Prumo cria a pasta “Prumo PDF” lá dentro.")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Theme.secondaryText)
+                    }
+                }
+                ForEach(others) { app in
+                    TileCard {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(app.name).font(.system(size: 17, weight: .semibold)).foregroundStyle(Theme.text)
+                            Text(app.note).font(.system(size: 13)).foregroundStyle(Theme.secondaryText)
+                            HStack(spacing: 10) {
+                                Button("Entrar ou instalar o app") {
+                                    if let url = URL(string: app.appStore) { openURL(url) }
+                                }
+                                .buttonStyle(.bordered)
+                                Button("Usar uma pasta…") { pickFolder = true }
+                                    .buttonStyle(.bordered)
+                            }
+                            .font(.system(size: 14, weight: .semibold))
+                        }
+                    }
+                }
+                if !library.isLocal {
+                    Button("Voltar a guardar só no iPhone") { askLocal = true }
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(Theme.red)
+                        .padding(.top, 4)
+                }
+            }
+            .navigationTitle("Escolher a nuvem")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Fechar") { dismiss() } } }
+        }
+        .fileImporter(isPresented: $pickFolder, allowedContentTypes: [.folder]) { result in
+            guard case .success(let url) = result else { return }
+            picked = url
+            if library.isLocal && !library.items.isEmpty { askBring = true } else { apply(bring: false) }
+        }
+        .confirmationDialog("Levar os PDFs deste iPhone para a nuvem?", isPresented: $askBring, titleVisibility: .visible) {
+            Button("Levar os PDFs") { apply(bring: true) }
+            Button("Não levar (ficam no iPhone)") { apply(bring: false) }
+            Button("Cancelar", role: .cancel) { picked = nil }
+        } message: {
+            Text("Os PDFs, as pastas e os favoritos vão para a pasta da nuvem, sem duplicar os que já estão lá, e saem do iPhone depois de copiados.")
+        }
+        .confirmationDialog("Voltar a guardar só no iPhone?", isPresented: $askLocal, titleVisibility: .visible) {
+            Button("Copiar os PDFs da nuvem para o iPhone") { backToLocal(bring: true) }
+            Button("Não copiar") { backToLocal(bring: false) }
+            Button("Cancelar", role: .cancel) {}
+        } message: {
+            Text("Os PDFs continuam na nuvem. O iPhone deixa de sincronizar com o Windows.")
+        }
+    }
+
+    private func apply(bring: Bool) {
+        guard let url = picked else { return }
+        picked = nil
+        do {
+            let r = try library.useCloudFolder(url, bringLocal: bring)
+            var msg = "Pronto: a biblioteca agora está no \(library.cloudName ?? "nuvem")"
+            if bring, r.added + r.skipped > 0 { msg += " (\(r.added) PDF\(r.added == 1 ? "" : "s") levado\(r.added == 1 ? "" : "s"))" }
+            flow.toast(msg + ".")
+            dismiss()
+        } catch { flow.show(error: error) }
+    }
+
+    private func backToLocal(bring: Bool) {
+        do {
+            let r = try library.useLocalStorage(bringCloud: bring)
+            flow.toast(bring ? "Pronto: \(r.added) PDF\(r.added == 1 ? "" : "s") copiado\(r.added == 1 ? "" : "s") para o iPhone." : "Pronto: os PDFs ficam só neste iPhone.")
+            dismiss()
+        } catch { flow.show(error: error) }
     }
 }
 

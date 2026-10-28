@@ -1,4 +1,5 @@
 import Combine
+import CryptoKit
 import Foundation
 import PDFKit
 
@@ -103,27 +104,40 @@ final class Library: ObservableObject {
     @Published private(set) var folders: [FolderItem] = []
     @Published private(set) var isAnalyzing = false
 
-    let root: URL
+    /// Pasta da biblioteca: Documentos (No meu iPhone › Prumo PDF) ou uma pasta escolhida na nuvem.
+    @Published private(set) var root: URL
+    let localRoot: URL
     let supportDir: URL
     let versionsDir: URL
     let textCacheDir: URL
     let tempDir: URL
-    private let metaURL: URL
+    private var metaURL: URL
+    /// Pasta da nuvem escolhida (com o acesso que o app Arquivos deu) e problemas ao abri-la.
+    private var cloudAccessURL: URL?
+    @Published private(set) var cloudProblem: String?
+    @Published private(set) var downloadingCount = 0
+    // Sincronização com outros aparelhos pelo .prumo/library.json (ver LibrarySync.swift).
+    var diskStamp: String?
+    var diskEntries: [String: [String: Any]] = [:]
+    var syncSnap: [String: SharedMeta] = [:]
+    var knownPaths = Set<String>()
+    private var inFlight = Set<String>()
+    private var downloadRetry: Task<Void, Never>?
     private var metas: [String: DocMeta] = [:]
     private var texts: [String: String] = [:]
     private var analysisTask: Task<Void, Never>?
     private let fm = FileManager.default
 
     /// `baseDirectory` existe para os testes; no app usa as pastas padrão do sistema.
-    init(baseDirectory: URL? = nil) {
+    init(baseDirectory: URL? = nil, libraryFolder: URL? = nil) {
         let fm = FileManager.default
         if let base = baseDirectory {
-            root = base.appendingPathComponent("Documents", isDirectory: true)
+            localRoot = base.appendingPathComponent("Documents", isDirectory: true)
             supportDir = base.appendingPathComponent("Support", isDirectory: true)
             textCacheDir = base.appendingPathComponent("Caches/Text", isDirectory: true)
             tempDir = base.appendingPathComponent("tmp", isDirectory: true)
         } else {
-            root = fm.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            localRoot = fm.urls(for: .documentDirectory, in: .userDomainMask)[0]
             supportDir = fm.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
                 .appendingPathComponent("PrumoPDF", isDirectory: true)
             textCacheDir = fm.urls(for: .cachesDirectory, in: .userDomainMask)[0]
@@ -131,27 +145,206 @@ final class Library: ObservableObject {
             tempDir = fm.temporaryDirectory.appendingPathComponent("PrumoPDF", isDirectory: true)
         }
         versionsDir = supportDir.appendingPathComponent("Versions", isDirectory: true)
+        root = localRoot
         metaURL = supportDir.appendingPathComponent("library.json")
-        for dir in [root, supportDir, versionsDir, textCacheDir, tempDir] {
+        for dir in [localRoot, supportDir, versionsDir, textCacheDir, tempDir] {
             try? fm.createDirectory(at: dir, withIntermediateDirectories: true)
+        }
+        if let folder = libraryFolder {
+            root = folder
+            metaURL = Self.metaURL(for: folder, supportDir: supportDir)
+            try? fm.createDirectory(at: folder, withIntermediateDirectories: true)
+        } else if baseDirectory == nil {
+            openSavedCloudFolder()
         }
         loadMeta()
         reload()
     }
 
+    var isLocal: Bool { root.standardizedFileURL == localRoot.standardizedFileURL }
+
+    nonisolated static func metaURL(for folder: URL, supportDir: URL) -> URL {
+        let hash = SHA256.hash(data: Data(folder.standardizedFileURL.path.utf8))
+            .prefix(6).map { String(format: "%02x", $0) }.joined()
+        return supportDir.appendingPathComponent("library-\(hash).json")
+    }
+
+    // MARK: - Biblioteca numa pasta da nuvem (iCloud Drive ou outra nuvem do app Arquivos)
+
+    static let cloudBookmarkKey = "libraryFolderBookmark"
+    static let cloudSubfolderKey = "libraryFolderSubfolder"
+
+    /// Nome da nuvem onde está a biblioteca, pelo caminho da pasta.
+    var cloudName: String? {
+        guard !isLocal else { return nil }
+        let p = root.path.lowercased()
+        if p.contains("com~apple~clouddocs") || p.contains("mobile documents") { return "iCloud Drive" }
+        if p.contains("dropbox") { return "Dropbox" }
+        if p.contains("google") { return "Google Drive" }
+        if p.contains("onedrive") || p.contains("skydrive") { return "OneDrive" }
+        return "nuvem"
+    }
+
+    private func openSavedCloudFolder() {
+        guard let data = UserDefaults.standard.data(forKey: Self.cloudBookmarkKey) else { return }
+        var stale = false
+        guard let url = try? URL(resolvingBookmarkData: data, bookmarkDataIsStale: &stale) else {
+            cloudProblem = "Não foi possível abrir a pasta da nuvem. Escolha a pasta de novo em Ajustes › Escolher nuvem."
+            return
+        }
+        guard url.startAccessingSecurityScopedResource() else {
+            cloudProblem = "O Prumo perdeu a permissão para a pasta da nuvem (Ajustes do iPhone › Privacidade › Arquivos e Pastas). Escolha a pasta de novo em Ajustes › Escolher nuvem."
+            return
+        }
+        cloudAccessURL = url
+        if stale, let fresh = try? url.bookmarkData(options: .minimalBookmark, includingResourceValuesForKeys: nil, relativeTo: nil) {
+            UserDefaults.standard.set(fresh, forKey: Self.cloudBookmarkKey)
+        }
+        let sub = UserDefaults.standard.string(forKey: Self.cloudSubfolderKey) ?? ""
+        let folder = sub.isEmpty ? url : url.appendingPathComponent(sub, isDirectory: true)
+        try? fm.createDirectory(at: folder, withIntermediateDirectories: true)
+        root = folder
+        metaURL = Self.metaURL(for: folder, supportDir: supportDir)
+    }
+
+    private func switchRoot(to folder: URL) {
+        analysisTask?.cancel()
+        isAnalyzing = false
+        root = folder
+        metaURL = folder.standardizedFileURL == localRoot.standardizedFileURL
+            ? supportDir.appendingPathComponent("library.json")
+            : Self.metaURL(for: folder, supportDir: supportDir)
+        metas = [:]
+        texts = [:]
+        diskStamp = nil
+        diskEntries = [:]
+        syncSnap = [:]
+        knownPaths = []
+        inFlight = []
+        loadMeta()
+        reload()
+    }
+
+    /// Passa a guardar a biblioteca na pasta escolhida no app Arquivos. Se ela não se chamar
+    /// "Prumo PDF", usa (ou cria) uma subpasta "Prumo PDF" dentro dela, igual ao Windows.
+    /// Com `bringLocal`, os PDFs deste iPhone vão para lá (sem duplicar) e saem do iPhone.
+    @discardableResult
+    func useCloudFolder(_ picked: URL, bringLocal: Bool) throws -> RestoreResult {
+        guard picked.startAccessingSecurityScopedResource() || fm.isReadableFile(atPath: picked.path) else {
+            throw UserFacingError("O app Arquivos não deu acesso a essa pasta. Escolha outra (por exemplo, no iCloud Drive).")
+        }
+        let sub = picked.lastPathComponent == "Prumo PDF" ? "" : "Prumo PDF"
+        let folder = sub.isEmpty ? picked : picked.appendingPathComponent(sub, isDirectory: true)
+        do {
+            try fm.createDirectory(at: folder, withIntermediateDirectories: true)
+            let probe = folder.appendingPathComponent(".prumo-teste")
+            try Data("ok".utf8).write(to: probe)
+            try? fm.removeItem(at: probe)
+        } catch {
+            picked.stopAccessingSecurityScopedResource()
+            throw UserFacingError("O Prumo não consegue gravar nessa pasta. Nem todo app de nuvem deixa outros apps usarem pastas dele; o iCloud Drive deixa.")
+        }
+        let bookmark = try picked.bookmarkData(options: .minimalBookmark, includingResourceValuesForKeys: nil, relativeTo: nil)
+        let previous = root
+        let wasLocal = isLocal
+        if let old = cloudAccessURL, old != picked { old.stopAccessingSecurityScopedResource() }
+        cloudAccessURL = picked
+        UserDefaults.standard.set(bookmark, forKey: Self.cloudBookmarkKey)
+        UserDefaults.standard.set(sub, forKey: Self.cloudSubfolderKey)
+        cloudProblem = nil
+        saveMeta()                      // grava o .prumo/library.json da pasta antiga (favoritos)
+        switchRoot(to: folder)
+        var result = RestoreResult()
+        if bringLocal, previous.standardizedFileURL != folder.standardizedFileURL {
+            result = try restore(from: previous)
+            if wasLocal { try removeCopiedFiles(from: previous) }
+        }
+        return result
+    }
+
+    /// Volta a guardar os PDFs só neste iPhone. Com `bringCloud`, copia para cá os PDFs da nuvem
+    /// (os da nuvem continuam lá).
+    @discardableResult
+    func useLocalStorage(bringCloud: Bool) throws -> RestoreResult {
+        let previous = root
+        switchRoot(to: localRoot)
+        var result = RestoreResult()
+        if bringCloud, previous.standardizedFileURL != localRoot.standardizedFileURL {
+            result = try restore(from: previous)
+        }
+        cloudAccessURL?.stopAccessingSecurityScopedResource()
+        cloudAccessURL = nil
+        UserDefaults.standard.removeObject(forKey: Self.cloudBookmarkKey)
+        UserDefaults.standard.removeObject(forKey: Self.cloudSubfolderKey)
+        cloudProblem = nil
+        return result
+    }
+
+    /// Apaga do iPhone os PDFs que já estão na biblioteca nova (conferindo o conteúdo de cada um).
+    private func removeCopiedFiles(from oldRoot: URL) throws {
+        guard let en = fm.enumerator(at: oldRoot, includingPropertiesForKeys: [.isRegularFileKey, .fileSizeKey],
+                                     options: [.skipsHiddenFiles]) else { return }
+        var bySize: [Int64: [URL]] = [:]
+        for item in items { bySize[item.size, default: []].append(item.url) }
+        var toDelete: [URL] = []
+        for case let url as URL in en where url.pathExtension.lowercased() == "pdf" {
+            let full = url.resolvingSymlinksInPath().standardizedFileURL.path
+            let base = oldRoot.resolvingSymlinksInPath().standardizedFileURL.path
+            if full.hasPrefix(base + "/Inbox/") { continue }
+            let size = Int64((try? url.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0)
+            let d = Self.digest(url)
+            guard let same = bySize[size], same.contains(where: { Self.digest($0) == d }) else {
+                throw UserFacingError("“\(url.lastPathComponent)” não chegou à nuvem. Nada foi apagado do iPhone.")
+            }
+            toDelete.append(url)
+        }
+        for url in toDelete { try? fm.removeItem(at: url) }
+        // Pastas que ficaram vazias.
+        if let dirs = try? fm.subpathsOfDirectory(atPath: oldRoot.path) {
+            for rel in dirs.sorted(by: { $0.count > $1.count }) where !rel.hasPrefix("Inbox") && !rel.hasPrefix(".") {
+                let u = oldRoot.appendingPathComponent(rel)
+                if (try? fm.contentsOfDirectory(atPath: u.path))?.allSatisfy({ $0.hasPrefix(".") }) == true,
+                   (try? u.resourceValues(forKeys: [.isDirectoryKey]).isDirectory) == true {
+                    try? fm.removeItem(at: u)
+                }
+            }
+        }
+    }
+
     // MARK: - Leitura
 
     func reload() {
+        syncFromDisk()
         var files: [(url: URL, rel: String, size: Int64, modified: Date)] = []
         var dirs: [String] = []
-        let keys: [URLResourceKey] = [.isDirectoryKey, .fileSizeKey, .contentModificationDateKey]
+        var downloading = Set<String>()
+        let keys: [URLResourceKey] = [.isDirectoryKey, .fileSizeKey, .contentModificationDateKey,
+                                      .ubiquitousItemDownloadingStatusKey]
         if let en = fm.enumerator(at: root, includingPropertiesForKeys: keys,
-                                  options: [.skipsHiddenFiles, .skipsPackageDescendants]) {
+                                  options: [.skipsPackageDescendants]) {
             for case let url as URL in en {
                 let rel = relativePath(of: url)
                 guard !rel.isEmpty else { continue }
+                let name = url.lastPathComponent
+                if name.hasPrefix(".") {
+                    // PDF do iCloud que ainda não veio para o aparelho: ".Nome.pdf.icloud".
+                    if name.hasSuffix(".pdf.icloud") {
+                        let real = url.deletingLastPathComponent()
+                            .appendingPathComponent(String(name.dropFirst().dropLast(".icloud".count)))
+                        try? fm.startDownloadingUbiquitousItem(at: real)
+                        downloading.insert(relativePath(of: real))
+                    }
+                    if (try? url.resourceValues(forKeys: [.isDirectoryKey]).isDirectory) == true { en.skipDescendants() }
+                    continue
+                }
                 let values = try? url.resourceValues(forKeys: Set(keys))
                 let isDir = values?.isDirectory ?? false
+                if !isDir, url.pathExtension.lowercased() == "pdf",
+                   let status = values?.ubiquitousItemDownloadingStatus, status != .current {
+                    try? fm.startDownloadingUbiquitousItem(at: url)
+                    downloading.insert(rel)
+                    continue
+                }
                 if rel == "Inbox" || rel.hasPrefix("Inbox/") {
                     if isDir { en.skipDescendants() }
                     continue
@@ -169,8 +362,11 @@ final class Library: ObservableObject {
         for m in metas.values { byPath[m.path] = m }
         var newMetas: [String: DocMeta] = [:]
         var newItems: [PDFItem] = []
+        var usedIDs = Set(metas.keys)
+        // PDFs que ainda estão vindo da nuvem: guardam os dados (favorito etc.) até chegarem.
+        for rel in downloading { if let m = byPath[rel] { newMetas[m.id] = m } }
         for f in files {
-            let meta = byPath[f.rel] ?? DocMeta(path: f.rel)
+            let meta = byPath[f.rel] ?? newSharedMeta(path: f.rel, usedIDs: &usedIDs)
             newMetas[meta.id] = meta
             newItems.append(PDFItem(id: meta.id, url: f.url, relativePath: f.rel, size: f.size,
                                     modified: f.modified, meta: meta))
@@ -184,6 +380,16 @@ final class Library: ObservableObject {
         let changed = newMetas != metas
         metas = newMetas
         items = newItems.sorted { $0.modified > $1.modified }
+        knownPaths.formUnion(newMetas.values.map { $0.path.lowercased() })
+        inFlight = downloading
+        downloadingCount = downloading.count
+        if !downloading.isEmpty, downloadRetry == nil {
+            downloadRetry = Task { [weak self] in
+                try? await Task.sleep(nanoseconds: 3_000_000_000)
+                self?.downloadRetry = nil
+                self?.reload()
+            }
+        }
 
         folders = dirs.sorted { $0.localizedStandardCompare($1) == .orderedAscending }.map { path in
             let prefix = path + "/"
@@ -318,11 +524,21 @@ final class Library: ObservableObject {
     }
 
     func saveMeta() {
+        if syncFromDisk() {
+            for i in items.indices { if let m = metas[items[i].id] { items[i].meta = m } }
+        }
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
         guard let data = try? encoder.encode(Array(metas.values)) else { return }
         try? data.write(to: metaURL, options: .atomic)
         BackupPolicy.apply(to: metaURL)
+        writeShared()
+    }
+
+    /// Para LibrarySync.swift (as metas são privadas).
+    var allMetas: [String: DocMeta] {
+        get { metas }
+        set { metas = newValue }
     }
 
     private func updateMeta(_ id: String, _ change: (inout DocMeta) -> Void) {
@@ -599,7 +815,7 @@ final class Library: ObservableObject {
 
     /// Reaplica a escolha de backup a todos os arquivos.
     func applyBackupPreference() {
-        let roots = [root, supportDir]
+        let roots = isLocal ? [root, supportDir] : [supportDir]
         let include = AppSettings.includeInBackup
         Task.detached(priority: .utility) {
             BackupPolicy.applyAll(roots: roots, include: include)
