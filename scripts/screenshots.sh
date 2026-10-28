@@ -23,6 +23,7 @@ xcrun simctl install "$SIM" "$APP"
 
 shot() {
   local name="$1"; local screen="$2"; local wait="${3:-6}"
+  wait=$((wait + ${EXTRA_WAIT:-0}))
   xcrun simctl terminate "$SIM" "$BUNDLE" 2>/dev/null || true
   xcrun simctl launch "$SIM" "$BUNDLE" -demo -screen "$screen" >/dev/null
   sleep "$wait"

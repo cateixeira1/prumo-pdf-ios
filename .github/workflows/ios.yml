@@ -66,7 +66,7 @@ jobs:
       - name: Capturas de tela
         id: shots
         if: always() && steps.prep.outcome == 'success'
-        run: scripts/screenshots.sh "$SIM_ID" "$OUT/screenshots" 2>&1 | tee "$OUT/logs/screenshots.log"
+        run: EXTRA_WAIT=10 scripts/screenshots.sh "$SIM_ID" "$OUT/screenshots" 2>&1 | tee "$OUT/logs/screenshots.log"
 
       - name: Gerar o IPA (sem assinatura, para instalar com Sideloadly)
         id: ipa
