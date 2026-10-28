@@ -144,4 +144,34 @@ final class LibraryTests: XCTestCase {
         library.setFavorite(try XCTUnwrap(library.item(id: item.id)), false)
         XCTAssertTrue(library.items(for: .favorites).isEmpty)
     }
+
+    func testBackupFolderAndRestoreWithoutDuplicates() throws {
+        fresh()
+        try library.createFolder(named: "Clientes")
+        let proc = try XCTUnwrap(library.importFiles([externalPDF("Procuração.pdf", pages: 2)], into: "Clientes").first)
+        _ = library.importFiles([externalPDF("Petição.pdf", pages: 4)])
+        library.setFavorite(proc, true)
+
+        // "Salvar uma cópia em…": a pasta gravada tem os PDFs e os favoritos
+        let copy = base.appendingPathComponent("Cópia")
+        try library.backupWrapper().write(to: copy, options: .atomic, originalContentsURL: nil)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: copy.appendingPathComponent("Clientes/Procuração.pdf").path))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: copy.appendingPathComponent(".prumo/library.json").path))
+
+        // Restaurar noutro aparelho (biblioteca vazia)
+        let otherBase = TestPDF.tempDir()
+        let other = Library(baseDirectory: otherBase)
+        let r = try other.restore(from: copy)
+        XCTAssertEqual(r.added, 2)
+        XCTAssertEqual(r.favorites, 1)
+        let restored = try XCTUnwrap(other.items.first { $0.name == "Procuração" })
+        XCTAssertEqual(restored.folder, "Clientes")
+        XCTAssertTrue(restored.meta.favorite)
+
+        // Restaurar de novo não duplica
+        let again = try other.restore(from: copy)
+        XCTAssertEqual(again.added, 0)
+        XCTAssertEqual(again.skipped, 2)
+        XCTAssertEqual(other.items.count, 2)
+    }
 }

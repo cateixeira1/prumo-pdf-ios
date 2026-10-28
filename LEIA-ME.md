@@ -17,6 +17,8 @@ Aplicativo de PDF que roda inteiramente no iPhone, sem servidor e sem custo por 
 
 Os arquivos ficam no app Arquivos, em **No meu iPhone › Prumo PDF**. Em Ajustes (ícone de engrenagem) você escolhe se os PDFs entram no backup do iCloud. Por padrão, entram.
 
+**Cópia de segurança na nuvem que você escolher:** em Ajustes, “Salvar uma cópia em…” grava a biblioteca inteira (PDFs, pastas e favoritos) como uma pasta comum onde você quiser: iCloud Drive, Google Drive, OneDrive, pendrive. “Restaurar…” traz os PDFs de volta sem duplicar. A cópia usa o mesmo formato da versão para Windows: dá para fazer a cópia num aparelho e restaurar no outro.
+
 ## Como instalar no iPhone (pelo Windows, sem Mac)
 
 O app é compilado automaticamente no GitHub a cada mudança. O arquivo pronto fica na página **Releases** deste repositório (“Prumo PDF para iPhone (última versão)”), com o nome `PrumoPDF.ipa`.

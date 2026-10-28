@@ -236,8 +236,21 @@ struct MergeScreen: View {
 
 struct SettingsScreen: View {
     @EnvironmentObject private var library: Library
+    @EnvironmentObject private var flow: AppFlow
     @AppStorage(AppSettings.includeInBackupKey) private var includeInBackup = true
     @AppStorage(AppSettings.ocrLanguageKey) private var ocrLanguage = "por"
+    @AppStorage("lastBackup") private var lastBackup: Double = 0
+    @State private var exportDocument: LibraryFolderDocument?
+    @State private var showExporter = false
+    @State private var showRestore = false
+
+    private var lastBackupText: String {
+        guard lastBackup > 0 else { return "Nenhuma cópia feita ainda." }
+        let f = DateFormatter()
+        f.locale = Locale(identifier: "pt_BR")
+        f.dateFormat = "dd/MM/yyyy, HH:mm"
+        return "Última cópia: \(f.string(from: Date(timeIntervalSince1970: lastBackup)))."
+    }
 
     var body: some View {
         Screen {
@@ -254,6 +267,26 @@ struct SettingsScreen: View {
                          : "Os PDFs ficam só neste iPhone e não entram em nenhum backup. Se o aparelho for perdido ou apagado, os PDFs se perdem junto.")
                         .font(.system(size: 13))
                         .foregroundStyle(Theme.secondaryText)
+                }
+            }
+            SectionTitle(text: "Cópia de segurança")
+            TileCard {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Uma cópia completa (PDFs, pastas e favoritos) numa pasta comum, onde você escolher: iCloud Drive, Google Drive, OneDrive, pendrive… A cópia abre também no Prumo para Windows. \(lastBackupText)")
+                        .font(.system(size: 13.5))
+                        .foregroundStyle(Theme.text)
+                    HStack(spacing: 10) {
+                        Button("Salvar uma cópia em…") {
+                            do {
+                                exportDocument = LibraryFolderDocument(wrapper: try library.backupWrapper())
+                                showExporter = true
+                            } catch { flow.show(error: error) }
+                        }
+                        .buttonStyle(.bordered)
+                        Button("Restaurar…") { showRestore = true }
+                            .buttonStyle(.bordered)
+                    }
+                    .font(.system(size: 15, weight: .semibold))
                 }
             }
             SectionTitle(text: "OCR")
@@ -290,5 +323,25 @@ struct SettingsScreen: View {
         }
         .navigationTitle("Ajustes")
         .onChange(of: includeInBackup) { _, _ in library.applyBackupPreference() }
+        .fileExporter(isPresented: $showExporter, document: exportDocument, contentType: .folder,
+                      defaultFilename: Library.backupName()) { result in
+            switch result {
+            case .success:
+                lastBackup = Date().timeIntervalSince1970
+                flow.toast("Cópia salva: \(library.items.count) PDF\(library.items.count == 1 ? "" : "s").")
+            case .failure(let error):
+                flow.show(error: error)
+            }
+            exportDocument = nil
+        }
+        .fileImporter(isPresented: $showRestore, allowedContentTypes: [.folder]) { result in
+            guard case .success(let url) = result else { return }
+            do {
+                let r = try library.restore(from: url)
+                var msg = "\(r.added) PDF\(r.added == 1 ? "" : "s") restaurado\(r.added == 1 ? "" : "s")"
+                if r.skipped > 0 { msg += "; \(r.skipped) já estava\(r.skipped == 1 ? "" : "m") aqui" }
+                flow.toast(msg + ".")
+            } catch { flow.show(error: error) }
+        }
     }
 }
