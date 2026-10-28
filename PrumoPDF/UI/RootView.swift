@@ -76,12 +76,32 @@ struct RootView: View {
     }
 }
 
+/// Ferramentas da tela inicial: cada uma pergunta o PDF (do app Arquivos ou do Prumo).
+enum HomeTool: String, Identifiable, CaseIterable {
+    case read, ocr, organize, insert, remove, extract, split
+    var id: String { rawValue }
+
+    var question: String {
+        switch self {
+        case .read: return "Ler qual PDF?"
+        case .ocr: return "OCR de quais PDFs?"
+        case .organize: return "Organizar qual PDF?"
+        case .insert: return "Incluir páginas em qual PDF?"
+        case .remove: return "Remover páginas de qual?"
+        case .extract: return "Extrair páginas de qual?"
+        case .split: return "Dividir qual PDF?"
+        }
+    }
+}
+
 struct HomeView: View {
     @EnvironmentObject private var library: Library
     @EnvironmentObject private var flow: AppFlow
+    @EnvironmentObject private var jobs: JobCenter
     @State private var query = ""
     @State private var results: [PDFItem] = []
     @State private var showImporter = false
+    @State private var tool: HomeTool?
 
     var body: some View {
         Screen {
@@ -114,14 +134,30 @@ struct HomeView: View {
                          count: "\(library.count(for: .favorites))", shape: .rounded) {
                         flow.open(.list(.favorites))
                     }
+                    Tile(title: "Pastas", systemImage: "folder.fill", color: Theme.indigo,
+                         count: "\(library.topLevelFolders.count)") {
+                        flow.open(.folders)
+                    }
+                }
+                SectionTitle(text: "Ferramentas")
+                TileGrid {
+                    Tile(title: "Ler", systemImage: "book.fill", color: Theme.blue) { tool = .read }
+                    Tile(title: "Fazer OCR", systemImage: "text.viewfinder", color: Theme.orange, shape: .rounded) {
+                        tool = .ocr
+                    }
+                    Tile(title: "Organizar páginas", systemImage: "rectangle.grid.2x2.fill", color: Theme.purple,
+                         shape: .rounded) { tool = .organize }
+                    Tile(title: "Incluir páginas", systemImage: "plus.rectangle.on.rectangle", color: Theme.teal,
+                         shape: .rounded) { tool = .insert }
+                    Tile(title: "Remover páginas", systemImage: "minus.rectangle", color: Theme.red, shape: .rounded) {
+                        tool = .remove
+                    }
+                    Tile(title: "Extrair páginas", systemImage: "doc.badge.plus", color: Theme.indigo) { tool = .extract }
+                    Tile(title: "Dividir em partes", systemImage: "scissors", color: Theme.pink) { tool = .split }
                     Tile(title: "Combinar PDFs", systemImage: "square.stack.3d.down.right.fill", color: Theme.purple,
                          shape: .rounded) {
                         flow.open(.merge)
                     }
-                }
-                WideTile(title: "Pastas", systemImage: "folder.fill", color: Theme.indigo,
-                         count: "\(library.topLevelFolders.count)") {
-                    flow.open(.folders)
                 }
             } else {
                 SearchResultsView(results: results, query: query)
@@ -136,11 +172,25 @@ struct HomeView: View {
         }
         .onAppear {
             if let demo = DemoSeeder.consumeSearch() { query = demo }
+            if let demo = DemoSeeder.consumeHomeTool() { tool = HomeTool(rawValue: demo) }
         }
         .task(id: query) {
             try? await Task.sleep(nanoseconds: 200_000_000)
             guard !Task.isCancelled else { return }
             results = library.search(query)
+        }
+        .sheet(item: $tool) { t in
+            NavigationStack {
+                DocumentChooser(title: t.question, multiple: t == .ocr, allowImport: true,
+                                filter: chooserFilter(t),
+                                onDone: { items in
+                                    tool = nil
+                                    // espera a folha fechar antes de navegar
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) { run(t, items) }
+                                },
+                                onCancel: { tool = nil })
+            }
+            .appEnvironment()
         }
         .fileImporter(isPresented: $showImporter, allowedContentTypes: [UTType.pdf],
                       allowsMultipleSelection: true) { result in
@@ -153,6 +203,38 @@ struct HomeView: View {
             } else if !imported.isEmpty {
                 flow.toast("\(imported.count) PDFs importados.")
             }
+        }
+    }
+
+    private func chooserFilter(_ t: HomeTool) -> ((PDFItem) -> Bool)? {
+        guard t == .ocr else { return nil }
+        let lib = library
+        return { item in lib.needsOCRAttention(item) }
+    }
+
+    private func run(_ t: HomeTool, _ items: [PDFItem]) {
+        guard let item = items.first else { return }
+        switch t {
+        case .ocr:
+            let todo = items.filter { library.needsOCRAttention($0) }
+            for i in todo { jobs.startOCR(i, library: library, flow: flow) }
+            if todo.isEmpty {
+                flow.toast("Esses PDFs já têm texto selecionável. O OCR não é necessário.")
+            } else if todo.count > 1 {
+                flow.toast("\(todo.count) PDFs na fila do OCR.")
+            }
+        case .organize:
+            flow.open(.organize(item.id))
+        case .read:
+            flow.openTool("read", on: item)
+        case .insert:
+            flow.openTool("insert", on: item)
+        case .remove:
+            flow.openTool("remove", on: item)
+        case .extract:
+            flow.openTool("extract", on: item)
+        case .split:
+            flow.openTool("split", on: item)
         }
     }
 }

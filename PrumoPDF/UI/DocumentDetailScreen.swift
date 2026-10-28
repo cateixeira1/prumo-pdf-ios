@@ -178,10 +178,21 @@ struct DocumentDetailScreen: View {
             }
         }
         .onAppear {
-            switch DemoSeeder.consumeDetailAction() {
+            // Ferramenta pedida na tela inicial (ou captura de tela de demonstração).
+            switch flow.consumeTool(for: item.id) ?? DemoSeeder.consumeDetailAction() {
             case "split"?: showSplit = true
             case "picker"?: showLibraryInsert = true
             case "readchoice"?: showReadChoice = true
+            case "insert"?: showInsertMenu = true
+            case "remove"?:
+                pickerRequest = PagePickerRequest(kind: .remove, sourceURL: item.url,
+                                                  sourceVersion: item.version, sourceTitle: item.name)
+            case "extract"?:
+                pickerRequest = PagePickerRequest(kind: .extract, sourceURL: item.url,
+                                                  sourceVersion: item.version, sourceTitle: item.name)
+            case "read"?:
+                library.markOpened(item)
+                if hasOCRText(item) { showReadChoice = true } else { flow.open(.reader(item.id)) }
             default: break
             }
         }

@@ -453,6 +453,19 @@ final class Library: ObservableObject {
         return register(dest) { _ in }
     }
 
+    /// Copia PDFs da biblioteca para outra pasta (o original continua onde estava).
+    @discardableResult
+    func copy(_ items: [PDFItem], toFolder folder: String) throws -> [PDFItem] {
+        var out: [PDFItem] = []
+        for item in items {
+            let dest = uniqueURL(folder: folder, baseName: item.name)
+            try fm.copyItem(at: item.url, to: dest)
+            let isOCR = item.meta.isOCRResult
+            if let copy = register(dest, configure: { $0.isOCRResult = isOCR }) { out.append(copy) }
+        }
+        return out
+    }
+
     /// Copia PDFs de fora do app (app Arquivos, "Abrir em…", outros apps) para a biblioteca.
     @discardableResult
     func importFiles(_ urls: [URL], into folder: String = "") -> [PDFItem] {

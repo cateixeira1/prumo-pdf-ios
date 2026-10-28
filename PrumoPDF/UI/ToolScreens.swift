@@ -187,7 +187,7 @@ struct MergeScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showChooser) {
             NavigationStack {
-                DocumentChooser(title: "Escolher PDFs", multiple: true, excluding: Set(chosen),
+                DocumentChooser(title: "Escolher PDFs", multiple: true, excluding: Set(chosen), allowImport: true,
                                 onDone: { items in
                                     chosen.append(contentsOf: items.map(\.id))
                                     showChooser = false

@@ -40,6 +40,8 @@ struct DocTileLabel: View {
     var needsOCR = false
     var showFolder = false
     var selection: Bool? = nil   // nil = fora do modo de seleção
+    /// Deixa espaço, no canto inferior direito, para a estrela e os três pontos (desenhados por cima).
+    var reserveActions = false
     @Environment(\.tileHighlighted) private var highlighted
 
     var body: some View {
@@ -76,8 +78,13 @@ struct DocTileLabel: View {
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
                 .fixedSize(horizontal: false, vertical: true)
-            badges
-                .padding(.top, 4)
+            HStack(spacing: 0) {
+                badges
+                Spacer(minLength: 0)
+            }
+            .padding(.top, 4)
+            .padding(.trailing, reserveActions ? 70 : 0)
+            .frame(minHeight: reserveActions ? 26 : 0)
         }
         .padding(12)
         .frame(maxWidth: .infinity, minHeight: 118, alignment: .leading)
@@ -86,9 +93,9 @@ struct DocTileLabel: View {
 
     @ViewBuilder private var badges: some View {
         let review = !(item.meta.reviewPages ?? []).isEmpty
-        if item.meta.favorite || item.meta.isOCRResult || needsOCR || review || showFolder {
+        if (item.meta.favorite && !reserveActions) || item.meta.isOCRResult || needsOCR || review || showFolder {
             HStack(spacing: 4) {
-                if item.meta.favorite {
+                if item.meta.favorite && !reserveActions {
                     Image(systemName: "star.fill").font(.system(size: 10)).foregroundStyle(highlighted ? Color.white : Theme.yellow)
                 }
                 if item.meta.isOCRResult { Badge(text: "OCR", color: Theme.green, inverted: highlighted) }
@@ -119,44 +126,87 @@ struct Badge: View {
     }
 }
 
-/// Cartão de documento com toque (abrir ou selecionar) e menu de contexto.
+/// Cartão de documento com toque (abrir ou selecionar), menu de contexto (toque longo) e,
+/// no canto inferior direito, a estrela de favorito e os três pontos que abrem as opções.
 struct DocTile: View {
     let item: PDFItem
     var showFolder = false
     var selection: Bool? = nil
     var actions: ItemActions? = nil
+    /// Mostra a estrela e os três pontos (fica desligado nas telas de escolher PDF).
+    var showActions = true
     let onTap: () -> Void
     @EnvironmentObject private var library: Library
     @EnvironmentObject private var flow: AppFlow
     @EnvironmentObject private var jobs: JobCenter
 
+    private var actionsVisible: Bool { showActions && selection == nil }
+
     var body: some View {
         Button(action: onTap) {
-            DocTileLabel(item: item, needsOCR: library.needsOCRAttention(item), showFolder: showFolder, selection: selection)
+            DocTileLabel(item: item, needsOCR: library.needsOCRAttention(item), showFolder: showFolder,
+                         selection: selection, reserveActions: actionsVisible)
         }
         .buttonStyle(TileButtonStyle(color: Theme.blue, selected: selection == true))
         .contextMenu {
-            if selection == nil {
-                Button { flow.open(.reader(item.id)) } label: { Label("Ler", systemImage: "book") }
-                if item.meta.isOCRResult || item.meta.ocrCopyID.flatMap({ library.item(id: $0) }) != nil {
-                    Button { flow.open(.reader(item.id, mode: .text)) } label: {
-                        Label("Modo leitor", systemImage: "text.alignleft")
+            if selection == nil { menuItems }
+        }
+        .overlay(alignment: .bottomTrailing) {
+            if actionsVisible {
+                HStack(spacing: 0) {
+                    Button { toggleFavorite() } label: {
+                        Image(systemName: item.meta.favorite ? "star.fill" : "star")
+                            .font(.system(size: 17, weight: .medium))
+                            .foregroundStyle(item.meta.favorite ? Theme.yellow : Theme.secondaryText)
+                            .frame(width: 36, height: 36)
+                            .contentShape(Rectangle())
                     }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(item.meta.favorite ? "Remover dos favoritos" : "Favoritar")
+                    Menu { menuItems } label: {
+                        Image(systemName: "ellipsis")
+                            .font(.system(size: 17, weight: .bold))
+                            .rotationEffect(.degrees(90))
+                            .foregroundStyle(Theme.secondaryText)
+                            .frame(width: 34, height: 36)
+                            .contentShape(Rectangle())
+                    }
+                    .accessibilityLabel("Opções")
                 }
-                ShareLink(item: item.url) { Label("Compartilhar", systemImage: "square.and.arrow.up") }
-                if library.needsOCRAttention(item) {
-                    Button { jobs.startOCR(item) } label: { Label("Fazer OCR", systemImage: "text.viewfinder") }
-                }
-                Button { library.setFavorite(item, !item.meta.favorite) } label: {
-                    Label(item.meta.favorite ? "Remover dos favoritos" : "Favoritar",
-                          systemImage: item.meta.favorite ? "star.slash" : "star")
-                }
-                if let actions {
-                    Button { actions.rename(item) } label: { Label("Renomear", systemImage: "pencil") }
-                    Button { actions.move([item]) } label: { Label("Mover para pasta", systemImage: "folder") }
-                    Button(role: .destructive) { actions.delete([item]) } label: { Label("Excluir", systemImage: "trash") }
-                }
+                .padding(.trailing, 4)
+                .padding(.bottom, 3)
             }
+        }
+    }
+
+    private func toggleFavorite() {
+        let on = !item.meta.favorite
+        library.setFavorite(item, on)
+        flow.toast(on ? "Adicionado aos Favoritos." : "Removido dos Favoritos.")
+    }
+
+    @ViewBuilder private var menuItems: some View {
+        Button { flow.open(.reader(item.id)) } label: { Label("Ler", systemImage: "book") }
+        if item.meta.isOCRResult || item.meta.ocrCopyID.flatMap({ library.item(id: $0) }) != nil {
+            Button { flow.open(.reader(item.id, mode: .text)) } label: {
+                Label("Modo leitor", systemImage: "text.alignleft")
+            }
+        }
+        ShareLink(item: item.url) { Label("Compartilhar", systemImage: "square.and.arrow.up") }
+        if library.needsOCRAttention(item) {
+            Button { jobs.startOCR(item) } label: { Label("Fazer OCR", systemImage: "text.viewfinder") }
+        }
+        Button { flow.open(.organize(item.id)) } label: {
+            Label("Organizar páginas", systemImage: "rectangle.grid.2x2")
+        }
+        Button { toggleFavorite() } label: {
+            Label(item.meta.favorite ? "Remover dos favoritos" : "Favoritar",
+                  systemImage: item.meta.favorite ? "star.slash" : "star")
+        }
+        if let actions {
+            Button { actions.rename(item) } label: { Label("Renomear", systemImage: "pencil") }
+            Button { actions.move([item]) } label: { Label("Mover para pasta", systemImage: "folder") }
+            Button(role: .destructive) { actions.delete([item]) } label: { Label("Excluir", systemImage: "trash") }
         }
     }
 }
@@ -290,7 +340,11 @@ struct FolderActionsModifier: ViewModifier {
                 TextField("Nome da pasta", text: $actions.newName)
                 Button("Cancelar", role: .cancel) {}
                 Button("Criar") {
-                    do { try library.createFolder(named: actions.newName, in: parent) } catch { flow.show(error: error) }
+                    do {
+                        let path = try library.createFolder(named: actions.newName, in: parent)
+                        flow.pendingAddToFolder = path
+                        flow.open(.folder(path))
+                    } catch { flow.show(error: error) }
                 }
             }
             .alert("Renomear pasta", isPresented: Binding(get: { actions.renaming != nil },

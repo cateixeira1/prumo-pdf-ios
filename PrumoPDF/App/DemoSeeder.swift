@@ -22,6 +22,12 @@ enum DemoSeeder {
     private static var pendingDetailAction: String?
     private static var pendingSearch: String?
     private static var pendingPickerSource: String?
+    private static var pendingHomeTool: String?
+
+    static func consumeHomeTool() -> String? {
+        defer { pendingHomeTool = nil }
+        return pendingHomeTool
+    }
 
     static func consumeSearch() -> String? {
         defer { pendingSearch = nil }
@@ -98,6 +104,10 @@ enum DemoSeeder {
         case "reader":
             if let p = peticao { flow.path = [.document(p.id), .reader(p.id)] }
         case "settings": flow.path = [.settings]
+        case "tools": pendingHomeTool = "organize"
+        case "addfolder":
+            flow.pendingAddToFolder = "Contratos"
+            flow.path = [.folders, .folder("Contratos")]
         case "merge":
             flow.mergePreselection = library.items.filter { $0.folder.hasPrefix("Processos") }.map(\.id)
             flow.path = [.merge]

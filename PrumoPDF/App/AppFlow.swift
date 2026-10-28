@@ -54,6 +54,22 @@ final class AppFlow: ObservableObject {
     @Published var busyMessage: String?
     /// PDFs já escolhidos ao abrir "Combinar" a partir de uma seleção.
     var mergePreselection: [String] = []
+    /// Pasta recém-criada: ao abrir, já mostra "Adicionar PDFs".
+    var pendingAddToFolder: String?
+    /// Ferramenta escolhida na tela inicial, executada quando a tela do PDF abrir.
+    private var pendingTool: (itemID: String, action: String)?
+
+    /// Abre a tela do PDF já com uma ferramenta acionada ("insert", "remove", "extract", "split", "read").
+    func openTool(_ action: String, on item: PDFItem) {
+        pendingTool = (item.id, action)
+        open(.document(item.id))
+    }
+
+    func consumeTool(for itemID: String) -> String? {
+        guard let p = pendingTool, p.itemID == itemID else { return nil }
+        pendingTool = nil
+        return p.action
+    }
 
     private var toastAction: (() -> Void)?
     private var toastTask: Task<Void, Never>?

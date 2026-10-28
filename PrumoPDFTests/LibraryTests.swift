@@ -121,4 +121,27 @@ final class LibraryTests: XCTestCase {
         XCTAssertEqual(library.search("CONTEUDO PARA A PAGINA").count, 1, "busca no texto, sem acentos")
         XCTAssertEqual(library.search("inexistente").count, 0)
     }
+
+    func testCopyIntoFolderKeepsOriginal() throws {
+        fresh()
+        let item = try XCTUnwrap(library.importFiles([externalPDF("Laudo.pdf", pages: 4)]).first)
+        try library.createFolder(named: "Cliente A")
+        let copies = try library.copy([item], toFolder: "Cliente A")
+        XCTAssertEqual(copies.count, 1)
+        XCTAssertEqual(copies.first?.relativePath, "Cliente A/Laudo.pdf")
+        XCTAssertNotEqual(copies.first?.id, item.id, "a cópia é um PDF novo")
+        XCTAssertEqual(library.item(id: item.id)?.relativePath, "Laudo.pdf", "o original continua onde estava")
+        XCTAssertEqual(library.items.count, 2)
+        XCTAssertEqual(PDFDocument(url: try XCTUnwrap(copies.first).url)?.pageCount, 4)
+    }
+
+    func testFavoriteStarFeedsFavoritesList() throws {
+        fresh()
+        let item = try XCTUnwrap(library.importFiles([externalPDF("Contrato.pdf")]).first)
+        XCTAssertTrue(library.items(for: .favorites).isEmpty)
+        library.setFavorite(item, true)
+        XCTAssertEqual(library.items(for: .favorites).map(\.id), [item.id])
+        library.setFavorite(try XCTUnwrap(library.item(id: item.id)), false)
+        XCTAssertTrue(library.items(for: .favorites).isEmpty)
+    }
 }
