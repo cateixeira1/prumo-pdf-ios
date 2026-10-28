@@ -47,6 +47,7 @@ shot 19-escolha-de-leitura readchoice 22
 shot 20-modo-leitor readertext 22
 shot 21-ferramenta-escolher-pdf tools 8
 shot 22-adicionar-a-pasta addfolder 9
+shot 23-converter-em-pdf convert 8
 # OCR de verdade no simulador: barra de progresso e, depois, o aviso de concluído.
 xcrun simctl terminate "$SIM" "$BUNDLE" 2>/dev/null || true
 xcrun simctl launch "$SIM" "$BUNDLE" -demo -screen ocr >/dev/null

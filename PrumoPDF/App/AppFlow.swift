@@ -26,6 +26,14 @@ enum ScanTarget: Identifiable, Equatable {
     }
 }
 
+/// Arquivos esperando a resposta "um PDF só ou um para cada" (quando há várias imagens).
+struct PendingConversion: Identifiable {
+    let id = UUID()
+    let urls: [URL]
+    let folder: String
+    let imageCount: Int
+}
+
 /// Páginas escaneadas esperando a escolha de onde entrar no documento.
 struct PendingScanInsert: Identifiable {
     let id = UUID()
@@ -50,6 +58,7 @@ final class AppFlow: ObservableObject {
     @Published var scanTarget: ScanTarget?
     @Published var askOCRItemID: String?
     @Published var pendingScanInsert: PendingScanInsert?
+    @Published var pendingConversion: PendingConversion?
     @Published var toastMessage: ToastMessage?
     @Published var busyMessage: String?
     /// PDFs já escolhidos ao abrir "Combinar" a partir de uma seleção.
@@ -191,5 +200,89 @@ final class AppFlow: ObservableObject {
         } else {
             toast("Não foi possível importar o arquivo.")
         }
+    }
+
+    // MARK: - Converter outros arquivos em PDF
+
+    /// Copia os arquivos escolhidos (app Arquivos, Fotos) para uma pasta temporária do app.
+    func copyForConversion(_ urls: [URL]) -> [URL] {
+        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("conv-\(UUID().uuidString)")
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        var out: [URL] = []
+        for url in urls {
+            let access = url.startAccessingSecurityScopedResource()
+            defer { if access { url.stopAccessingSecurityScopedResource() } }
+            let dest = dir.appendingPathComponent(url.lastPathComponent)
+            if (try? FileManager.default.copyItem(at: url, to: dest)) != nil { out.append(dest) }
+        }
+        return out
+    }
+
+    /// Começa a conversão: com várias imagens, pergunta antes se viram um PDF só.
+    func startConversion(_ urls: [URL], folder: String = "", alreadyLocal: Bool = false) {
+        let local = alreadyLocal ? urls : copyForConversion(urls)
+        guard !local.isEmpty else {
+            toast("Não foi possível ler os arquivos escolhidos.")
+            return
+        }
+        let images = local.filter { Converter.kind(of: $0) == .image }.count
+        if images > 1 {
+            pendingConversion = PendingConversion(urls: local, folder: folder, imageCount: images)
+        } else {
+            Task { await runConversion(local, folder: folder, combine: false) }
+        }
+    }
+
+    func answerConversion(combine: Bool) {
+        guard let p = pendingConversion else { return }
+        pendingConversion = nil
+        Task { await runConversion(p.urls, folder: p.folder, combine: combine) }
+    }
+
+    /// Converte e guarda na biblioteca. Fotos: pergunta "Usar OCR agora?" (ou deixam aguardando OCR).
+    @discardableResult
+    func runConversion(_ urls: [URL], folder: String, combine: Bool, askOCR: Bool = true,
+                       library: Library = .shared) async -> [PDFItem] {
+        busyMessage = "Convertendo em PDF…"
+        let f = DateFormatter()
+        f.locale = Locale(identifier: "pt_BR")
+        f.dateFormat = "dd-MM-yyyy HH'h'mm"
+        let result = await Converter.convert(urls: urls, combineImages: combine,
+                                             combinedName: "Imagens \(f.string(from: Date()))")
+        busyMessage = nil
+        var failed = result.failed
+        var items: [PDFItem] = []
+        var imageItems: [PDFItem] = []
+        for out in result.outputs {
+            do {
+                let item = try library.save(newData: out.data, name: out.name, folder: folder)
+                items.append(item)
+                if out.fromImages { imageItems.append(item) }
+            } catch {
+                failed.append((out.name, error.localizedDescription))
+            }
+        }
+        if let dir = urls.first?.deletingLastPathComponent(), dir.lastPathComponent.hasPrefix("conv-") {
+            try? FileManager.default.removeItem(at: dir)
+        }
+        if items.isEmpty {
+            if let first = failed.first { toast("Não foi possível converter “\(first.0)”: \(first.1)") }
+            return []
+        }
+        if askOCR && items.count == 1 && imageItems.count == 1 {
+            askOCRItemID = imageItems[0].id   // a pergunta abre o PDF depois da resposta
+        } else {
+            for item in imageItems { library.setPendingOCR(item, true) }
+            var msg = items.count == 1 ? "PDF criado: \(items[0].name)" : "\(items.count) PDFs criados"
+            if !imageItems.isEmpty && askOCR { msg += ". Os de fotos estão em Aguardando OCR." }
+            if !failed.isEmpty { msg += " \(failed.count) não \(failed.count == 1 ? "foi convertido" : "foram convertidos")." }
+            let first = items[0]
+            if items.count == 1 {
+                toast(msg, actionTitle: "Abrir") { [weak self] in self?.open(.document(first.id)) }
+            } else {
+                toast(msg)
+            }
+        }
+        return items
     }
 }

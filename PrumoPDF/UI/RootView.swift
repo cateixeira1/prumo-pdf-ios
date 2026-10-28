@@ -1,3 +1,4 @@
+import PhotosUI
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -36,6 +37,16 @@ struct RootView: View {
                 .keyboardShortcut(.defaultAction)
         } message: {
             Text("O OCR cria um novo PDF com o texto pesquisável, com “OCR” no nome. O arquivo escaneado continua salvo.")
+        }
+        .confirmationDialog(flow.pendingConversion.map { "\($0.imageCount) imagens" } ?? "",
+                            isPresented: Binding(get: { flow.pendingConversion != nil },
+                                                 set: { if !$0 { flow.pendingConversion = nil } }),
+                            titleVisibility: .visible) {
+            Button("Um PDF só") { flow.answerConversion(combine: true) }
+            Button("Um PDF para cada imagem") { flow.answerConversion(combine: false) }
+            Button("Cancelar", role: .cancel) { flow.pendingConversion = nil }
+        } message: {
+            Text("Juntar as imagens num PDF só (uma por página, na ordem escolhida) ou criar um PDF para cada?")
         }
         .sheet(item: $flow.pendingScanInsert) { pending in
             InsertPositionSheet(pending: pending,
@@ -102,6 +113,9 @@ struct HomeView: View {
     @State private var results: [PDFItem] = []
     @State private var showImporter = false
     @State private var tool: HomeTool?
+    @State private var showConvertMenu = false
+    @State private var showPhotos = false
+    @State private var photoItems: [PhotosPickerItem] = []
 
     var body: some View {
         Screen {
@@ -159,6 +173,10 @@ struct HomeView: View {
                         flow.open(.merge)
                     }
                 }
+                WideTile(title: "Converter em PDF", systemImage: "arrow.triangle.2.circlepath.doc.on.clipboard",
+                         color: Theme.teal, subtitle: "Fotos, imagens, Word, Excel, PowerPoint, Pages, texto") {
+                    showConvertMenu = true
+                }
             } else {
                 SearchResultsView(results: results, query: query)
             }
@@ -172,7 +190,9 @@ struct HomeView: View {
         }
         .onAppear {
             if let demo = DemoSeeder.consumeSearch() { query = demo }
-            if let demo = DemoSeeder.consumeHomeTool() { tool = HomeTool(rawValue: demo) }
+            if let demo = DemoSeeder.consumeHomeTool() {
+                if demo == "convert" { showConvertMenu = true } else { tool = HomeTool(rawValue: demo) }
+            }
         }
         .task(id: query) {
             try? await Task.sleep(nanoseconds: 200_000_000)
@@ -192,9 +212,26 @@ struct HomeView: View {
             }
             .appEnvironment()
         }
-        .fileImporter(isPresented: $showImporter, allowedContentTypes: [UTType.pdf],
+        .confirmationDialog("Converter em PDF", isPresented: $showConvertMenu, titleVisibility: .visible) {
+            Button("Fotos da galeria") { showPhotos = true }
+            Button("Arquivos (Word, Excel, imagens, texto…)") { showImporter = true }
+            Button("Cancelar", role: .cancel) {}
+        } message: {
+            Text("Fotos e imagens viram páginas A4. Documentos do Office, Pages, RTF, texto e HTML são paginados em A4.")
+        }
+        .photosPicker(isPresented: $showPhotos, selection: $photoItems, maxSelectionCount: 50, matching: .images)
+        .onChange(of: photoItems) { _, items in
+            guard !items.isEmpty else { return }
+            photoItems = []
+            Task { await convertPhotos(items) }
+        }
+        .fileImporter(isPresented: $showImporter, allowedContentTypes: Converter.importTypes,
                       allowsMultipleSelection: true) { result in
-            guard case .success(let urls) = result else { return }
+            guard case .success(let all) = result else { return }
+            let others = all.filter { Converter.kind(of: $0) != .pdf }
+            if !others.isEmpty { flow.startConversion(others) }
+            let urls = all.filter { Converter.kind(of: $0) == .pdf }
+            guard !urls.isEmpty else { return }
             let imported = library.importFiles(urls)
             if imported.count == 1 {
                 flow.toast("PDF importado: \(imported[0].name)", actionTitle: "Abrir") {
@@ -203,6 +240,25 @@ struct HomeView: View {
             } else if !imported.isEmpty {
                 flow.toast("\(imported.count) PDFs importados.")
             }
+        }
+    }
+
+    /// Fotos da galeria: grava cada uma numa pasta temporária e converte.
+    private func convertPhotos(_ items: [PhotosPickerItem]) async {
+        flow.busyMessage = "Preparando as fotos…"
+        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("conv-\(UUID().uuidString)")
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        var urls: [URL] = []
+        for (i, item) in items.enumerated() {
+            guard let data = try? await item.loadTransferable(type: Data.self) else { continue }
+            let url = dir.appendingPathComponent(String(format: "Foto %02d.jpg", i + 1))
+            if (try? data.write(to: url)) != nil { urls.append(url) }
+        }
+        flow.busyMessage = nil
+        if urls.isEmpty {
+            flow.toast("Não foi possível ler as fotos escolhidas.")
+        } else {
+            flow.startConversion(urls, alreadyLocal: true)
         }
     }
 

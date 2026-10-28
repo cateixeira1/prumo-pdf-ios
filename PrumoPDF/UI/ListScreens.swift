@@ -126,9 +126,13 @@ struct DocumentGridScreen: View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { showAddPDFs = true }
             }
         }
-        .fileImporter(isPresented: $showImporter, allowedContentTypes: [UTType.pdf],
+        .fileImporter(isPresented: $showImporter, allowedContentTypes: Converter.importTypes,
                       allowsMultipleSelection: true) { result in
-            guard case .success(let urls) = result else { return }
+            guard case .success(let all) = result else { return }
+            let others = all.filter { Converter.kind(of: $0) != .pdf }
+            if !others.isEmpty { flow.startConversion(others, folder: folderPath ?? "") }
+            let urls = all.filter { Converter.kind(of: $0) == .pdf }
+            guard !urls.isEmpty else { return }
             let imported = library.importFiles(urls, into: folderPath ?? "")
             if !imported.isEmpty { flow.toast("\(imported.count) PDF\(imported.count == 1 ? "" : "s") importado\(imported.count == 1 ? "" : "s").") }
         }
@@ -158,7 +162,7 @@ struct DocumentGridScreen: View {
                             Label("Adicionar PDFs…", systemImage: "plus")
                         }
                         Button { showImporter = true } label: {
-                            Label("Importar do app Arquivos", systemImage: "square.and.arrow.down")
+                            Label("Importar ou converter do app Arquivos", systemImage: "square.and.arrow.down")
                         }
                         if !path.isEmpty {
                             Button { folderActions.create(in: path) } label: {
@@ -325,7 +329,7 @@ struct DocumentChooser: View {
         Screen {
             if allowImport {
                 WideTile(title: "Do app Arquivos…", systemImage: "folder.badge.plus", color: Theme.blue,
-                         subtitle: "iCloud Drive, No meu iPhone, Downloads, Google Drive…") {
+                         subtitle: "PDF, foto, Word, Excel… (o que não for PDF é convertido na hora)") {
                     showImporter = true
                 }
                 SectionTitle(text: "Ou escolha no Prumo")
@@ -379,14 +383,22 @@ struct DocumentChooser: View {
                 }
             }
         }
-        .fileImporter(isPresented: $showImporter, allowedContentTypes: [UTType.pdf],
+        .fileImporter(isPresented: $showImporter, allowedContentTypes: Converter.importTypes,
                       allowsMultipleSelection: multiple) { result in
-            guard case .success(let urls) = result else { return }
-            let imported = library.importFiles(urls, into: importFolder)
-            if imported.isEmpty {
-                flow.toast("Não foi possível importar o arquivo.")
-            } else {
-                onDone(imported)
+            guard case .success(let all) = result else { return }
+            let pdfs = all.filter { Converter.kind(of: $0) == .pdf }
+            let others = all.filter { Converter.kind(of: $0) != .pdf }
+            let imported = library.importFiles(pdfs, into: importFolder)
+            if others.isEmpty {
+                if imported.isEmpty { flow.toast("Não foi possível importar o arquivo.") } else { onDone(imported) }
+                return
+            }
+            // O que não é PDF vira PDF antes de seguir (cada arquivo vira um PDF).
+            let local = flow.copyForConversion(others)
+            Task {
+                let converted = await flow.runConversion(local, folder: importFolder, combine: false, askOCR: false)
+                let all = imported + converted
+                if !all.isEmpty { onDone(all) }
             }
         }
         .onAppear { if selected.isEmpty { selected = initialSelection } }
