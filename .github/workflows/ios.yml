@@ -14,7 +14,8 @@ concurrency:
 
 jobs:
   build:
-    runs-on: macos-26
+    # macos-26 (Apple Silicon) ficou sem máquina livre em 28/10/2026; a versão Intel tem o mesmo Xcode.
+    runs-on: macos-26-intel
     timeout-minutes: 75
     env:
       OUT: ${{ github.workspace }}/ci-output
