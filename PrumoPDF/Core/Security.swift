@@ -158,6 +158,6 @@ struct LockView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Theme.background.ignoresSafeArea())
-        .task { await lock.unlock() }
+        .task { if !DemoSeeder.isActive { await lock.unlock() } }
     }
 }

@@ -15,7 +15,7 @@ struct PrumoPDFApp: App {
                 .environmentObject(flow)
                 .environmentObject(jobs)
                 .overlay {
-                    if appLock.locked { LockView(lock: appLock).transition(.opacity) }
+                    if appLock.locked || (DemoSeeder.isActive && DemoSeeder.startScreen == "lock") { LockView(lock: appLock).transition(.opacity) }
                 }
                 .onOpenURL { url in
                     flow.handleIncoming(url: url, library: library)

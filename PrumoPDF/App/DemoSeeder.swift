@@ -103,6 +103,14 @@ enum DemoSeeder {
             }
         case "reader":
             if let p = peticao { flow.path = [.document(p.id), .reader(p.id)] }
+        case "readerthumbs":
+            UserDefaults.standard.set(true, forKey: "readerThumbs")
+            if let p = peticao { flow.path = [.document(p.id), .reader(p.id)] }
+        case "crop", "number":
+            if let p = peticao {
+                pendingDetailAction = screen
+                flow.path = [.document(p.id)]
+            }
         case "settings": flow.path = [.settings]
         case "tools": pendingHomeTool = "organize"
         case "convert": pendingHomeTool = "convert"
