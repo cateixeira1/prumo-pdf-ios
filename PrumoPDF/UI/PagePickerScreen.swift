@@ -47,8 +47,17 @@ struct PagePickerScreen: View {
                         LazyVGrid(columns: columns, spacing: 10) {
                             ForEach(1...pageCount, id: \.self) { n in
                                 pageCell(n)
+                                    .dragSelectItem(n)
                             }
                         }
+                        .dragSelect(enabled: true, order: Array(1...pageCount),
+                                    isSelected: { selected.contains($0) },
+                                    set: { n, on in
+                                        fieldFocused = false
+                                        var s = selected
+                                        if on { s.insert(n) } else { s.remove(n) }
+                                        setSelection(s)
+                                    })
                     }
                 }
                 .padding(.horizontal, Theme.margin)

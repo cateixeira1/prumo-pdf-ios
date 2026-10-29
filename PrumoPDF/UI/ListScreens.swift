@@ -95,8 +95,9 @@ struct DocumentGridScreen: View {
             if docs.isEmpty && subfolders.isEmpty {
                 emptyState
             } else {
+                let shown = docs
                 TileGrid {
-                    ForEach(docs) { item in
+                    ForEach(shown) { item in
                         DocTile(item: item,
                                 showFolder: folderPath == nil,
                                 selection: selecting ? selected.contains(item.id) : nil,
@@ -107,8 +108,15 @@ struct DocumentGridScreen: View {
                                 flow.open(.document(item.id))
                             }
                         }
+                        .dragSelectItem(item.id)
                     }
                 }
+                .dragSelect(enabled: selecting, order: shown.map(\.id),
+                            isSelected: { selected.contains($0) },
+                            set: { id, on in
+                                if on { if !selected.contains(id) { selected.append(id) } }
+                                else { selected.removeAll { $0 == id } }
+                            })
             }
         }
         .navigationTitle(title)
@@ -179,7 +187,7 @@ struct DocumentGridScreen: View {
 
     private var selectionBar: some View {
         HStack(spacing: 10) {
-            Text(selected.isEmpty ? "Toque nos PDFs" : "\(selected.count) selecionado\(selected.count == 1 ? "" : "s")")
+            Text(selected.isEmpty ? "Toque ou deslize o dedo nos PDFs" : "\(selected.count) selecionado\(selected.count == 1 ? "" : "s")")
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(Theme.text)
             Spacer()
@@ -353,8 +361,9 @@ struct DocumentChooser: View {
                                message: allowImport ? "Use “Do app Arquivos…” para escolher um arquivo de fora do Prumo."
                                                     : "Não há outros PDFs aqui.")
             } else {
+                let shown = docs
                 TileGrid {
-                    ForEach(docs) { item in
+                    ForEach(shown) { item in
                         DocTile(item: item, showFolder: true,
                                 selection: multiple ? selected.contains(item.id) : nil,
                                 showActions: false) {
@@ -364,8 +373,15 @@ struct DocumentChooser: View {
                                 onDone([item])
                             }
                         }
+                        .dragSelectItem(item.id)
                     }
                 }
+                .dragSelect(enabled: multiple, order: shown.map(\.id),
+                            isSelected: { selected.contains($0) },
+                            set: { id, on in
+                                if on { if !selected.contains(id) { selected.append(id) } }
+                                else { selected.removeAll { $0 == id } }
+                            })
             }
         }
         .navigationTitle(title)

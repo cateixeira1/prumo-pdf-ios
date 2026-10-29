@@ -245,7 +245,8 @@ struct PageGridRepresentable: UIViewControllerRepresentable {
 }
 
 final class PageGridViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate,
-                                    UICollectionViewDragDelegate, UICollectionViewDropDelegate {
+                                    UICollectionViewDragDelegate, UICollectionViewDropDelegate,
+                                    UIGestureRecognizerDelegate {
     let model: OrganizerModel
     let url: URL
     let version: String
@@ -255,6 +256,12 @@ final class PageGridViewController: UIViewController, UICollectionViewDataSource
     private var currentSelecting = false
     private var pinchStartColumns = 3
     private var isDropping = false
+    // Seleção deslizando o dedo (no modo de seleção), como no app Fotos.
+    private var selectPan: UIPanGestureRecognizer!
+    private var panStart: Int?
+    private var panMode = true
+    private var panOriginal: [Int: Bool] = [:]
+    private var scrollLink: CADisplayLink?
 
     init(model: OrganizerModel, url: URL, version: String) {
         self.model = model
@@ -287,6 +294,13 @@ final class PageGridViewController: UIViewController, UICollectionViewDataSource
 
         let pinch = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
         cv.addGestureRecognizer(pinch)
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(handleSelectPan(_:)))
+        pan.maximumNumberOfTouches = 1
+        pan.delegate = self
+        cv.addGestureRecognizer(pan)
+        // A rolagem espera o arraste decidir: ele só começa na horizontal e no modo de seleção.
+        cv.panGestureRecognizer.require(toFail: pan)
+        selectPan = pan
         sync()
     }
 
@@ -430,6 +444,94 @@ final class PageGridViewController: UIViewController, UICollectionViewDataSource
         })
         coordinator.drop(dropItem.dragItem, toItemAt: destination)
         UISelectionFeedbackGenerator().selectionChanged()
+    }
+
+    // MARK: Selecionar deslizando o dedo
+
+    func gestureRecognizerShouldBegin(_ g: UIGestureRecognizer) -> Bool {
+        guard g === selectPan else { return true }
+        guard model.selecting, let cv = collectionView else { return false }
+        let v = selectPan.velocity(in: cv)
+        guard abs(v.x) > abs(v.y) else { return false }
+        let p = selectPan.location(in: cv)
+        let t = selectPan.translation(in: cv)
+        return cv.indexPathForItem(at: CGPoint(x: p.x - t.x, y: p.y - t.y)) != nil
+    }
+
+    @objc private func handleSelectPan(_ g: UIPanGestureRecognizer) {
+        guard let cv = collectionView else { return }
+        let p = g.location(in: cv)
+        switch g.state {
+        case .began:
+            let t = g.translation(in: cv)
+            guard let ip = cv.indexPathForItem(at: CGPoint(x: p.x - t.x, y: p.y - t.y)),
+                  model.entries.indices.contains(ip.item) else { return }
+            panStart = ip.item
+            panMode = !model.selected.contains(model.entries[ip.item].id)
+            panOriginal = [:]
+            applyPan(to: ip.item)
+            if let cur = cv.indexPathForItem(at: p) { applyPan(to: cur.item) }
+            UISelectionFeedbackGenerator().selectionChanged()
+            startAutoScroll()
+        case .changed:
+            if let ip = cv.indexPathForItem(at: p) { applyPan(to: ip.item) }
+        default:
+            panStart = nil
+            panOriginal = [:]
+            stopAutoScroll()
+        }
+    }
+
+    private func applyPan(to current: Int) {
+        guard let s = panStart else { return }
+        let range = min(s, current)...max(s, current)
+        for (k, was) in panOriginal where !range.contains(k) {
+            setSelected(k, was)
+            panOriginal[k] = nil
+        }
+        for k in range where model.entries.indices.contains(k) {
+            if panOriginal[k] == nil { panOriginal[k] = model.selected.contains(model.entries[k].id) }
+            setSelected(k, panMode)
+        }
+    }
+
+    private func setSelected(_ k: Int, _ on: Bool) {
+        guard model.entries.indices.contains(k) else { return }
+        let id = model.entries[k].id
+        guard on != model.selected.contains(id) else { return }
+        if on { model.selected.insert(id) } else { model.selected.remove(id) }
+        if let cell = collectionView.cellForItem(at: IndexPath(item: k, section: 0)) as? PageGridCell {
+            cell.setSelectionState(selecting: true, selected: on)
+        }
+    }
+
+    private func startAutoScroll() {
+        stopAutoScroll()
+        let link = CADisplayLink(target: self, selector: #selector(autoScrollTick))
+        link.add(to: .main, forMode: .common)
+        scrollLink = link
+    }
+
+    private func stopAutoScroll() {
+        scrollLink?.invalidate()
+        scrollLink = nil
+    }
+
+    @objc private func autoScrollTick() {
+        guard let cv = collectionView, panStart != nil else { return }
+        let y = selectPan.location(in: cv).y - cv.bounds.minY
+        let h = cv.bounds.height
+        let edge: CGFloat = 70
+        var speed: CGFloat = 0
+        if y < edge { speed = -14 * min(1, (edge - y) / edge) }
+        if y > h - edge { speed = 14 * min(1, (y - (h - edge)) / edge) }
+        guard speed != 0 else { return }
+        let minY = -cv.adjustedContentInset.top
+        let maxY = max(minY, cv.contentSize.height - h + cv.adjustedContentInset.bottom)
+        let newY = min(maxY, max(minY, cv.contentOffset.y + speed))
+        guard newY != cv.contentOffset.y else { return }
+        cv.contentOffset.y = newY
+        if let ip = cv.indexPathForItem(at: selectPan.location(in: cv)) { applyPan(to: ip.item) }
     }
 
     // MARK: Pinça
