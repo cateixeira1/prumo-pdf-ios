@@ -414,7 +414,8 @@ struct NumberSheet: View {
             .padding(.horizontal, 16)
             .frame(maxHeight: .infinity)
             Text(format.text(start, total: last))
-                .font(.system(size: max(5, CGFloat(size) * s * 1.3), weight: .semibold))
+                // fora de escala: no tamanho real, o número seria um ponto quase invisível na prévia
+                .font(.system(size: max(11, CGFloat(size) * s * 2.5), weight: .semibold))
                 .foregroundStyle(Color.black)
                 .frame(maxWidth: .infinity, alignment: position.horizontal < 0 ? .leading : (position.horizontal > 0 ? .trailing : .center))
                 .padding(.horizontal, m)
