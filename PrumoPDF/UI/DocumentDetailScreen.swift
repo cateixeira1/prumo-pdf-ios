@@ -30,6 +30,8 @@ struct DocumentDetailScreen: View {
     @State private var showProtect = false
     @State private var askUnprotect = false
     @State private var unprotectText = ""
+    @State private var showCrop = false
+    @State private var showNumber = false
 
     private var item: PDFItem? { library.item(id: itemID) }
 
@@ -105,6 +107,14 @@ struct DocumentDetailScreen: View {
                 Tile(title: "Extrair páginas", systemImage: "doc.badge.plus", color: Theme.indigo) {
                     pickerRequest = PagePickerRequest(kind: .extract, sourceURL: item.url,
                                                       sourceVersion: item.version, sourceTitle: item.name)
+                }
+                Tile(title: "Cortar e girar", systemImage: "crop.rotate", color: Theme.indigo, shape: .rounded,
+                     subtitle: "Margens e orientação") {
+                    if item.meta.locked == true { lockedToast() } else { showCrop = true }
+                }
+                Tile(title: "Numerar páginas", systemImage: "number", color: Theme.indigo,
+                     subtitle: "Posição e formato") {
+                    if item.meta.locked == true { lockedToast() } else { showNumber = true }
                 }
                 Tile(title: "Renomear", systemImage: "pencil", color: Theme.gray) {
                     actions.rename(item)
@@ -204,6 +214,14 @@ struct DocumentDetailScreen: View {
             SplitSheet(item: item)
                 .appEnvironment()
         }
+        .sheet(isPresented: $showCrop) {
+            CropSheet(item: item)
+                .appEnvironment()
+        }
+        .sheet(isPresented: $showNumber) {
+            NumberSheet(item: item)
+                .appEnvironment()
+        }
         .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [UTType.pdf]) { result in
             guard case .success(let url) = result else { return }
             let access = url.startAccessingSecurityScopedResource()
@@ -225,6 +243,11 @@ struct DocumentDetailScreen: View {
             case "readchoice"?: showReadChoice = true
             case "dewarp"?: showDewarp = true
             case "insert"?: showInsertMenu = true
+            case "insertLibrary"?: showLibraryInsert = true
+            case "insertFile"?: showFileImporter = true
+            case "crop"?: if item.meta.locked == true { lockedToast() } else { showCrop = true }
+            case "number"?: if item.meta.locked == true { lockedToast() } else { showNumber = true }
+            case "protect"?: showProtect = true
             case "remove"?:
                 pickerRequest = PagePickerRequest(kind: .remove, sourceURL: item.url,
                                                   sourceVersion: item.version, sourceTitle: item.name)
@@ -311,6 +334,10 @@ struct DocumentDetailScreen: View {
         }
         .padding(14)
         .background(RoundedRectangle(cornerRadius: Theme.tileRadius, style: .continuous).fill(Theme.tile))
+    }
+
+    private func lockedToast() {
+        flow.toast("Este PDF tem senha. Para cortar, girar ou numerar, crie antes uma cópia sem senha (“Remover senha”).")
     }
 
     /// PDF com texto vindo do OCR (o próprio arquivo com OCR, ou o escaneado que já tem cópia com OCR).

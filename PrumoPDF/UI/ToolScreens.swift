@@ -677,6 +677,7 @@ struct ProtectSheet: View {
     @State private var pw1 = ""
     @State private var pw2 = ""
     @State private var deleteOriginal = true
+    @State private var showPassword = false
 
     private var problem: String? {
         if !pw1.isEmpty && pw1.count < 4 { return "Use pelo menos 4 caracteres." }
@@ -692,10 +693,26 @@ struct ProtectSheet: View {
                 TileCard {
                     VStack(alignment: .leading, spacing: 10) {
                         Text("“\(item.name)”").font(.system(size: 15, weight: .semibold)).foregroundStyle(Theme.text)
-                        Text("A cópia protegida só abre com a senha, em qualquer leitor de PDF (iPhone, Adobe, Edge, Chrome).")
+                        Text("A cópia protegida só abre com a senha, em qualquer leitor de PDF (iPhone, Adobe, Edge, Chrome). A senha pode ter letras, números e símbolos; maiúsculas e minúsculas fazem diferença.")
                             .font(.system(size: 13)).foregroundStyle(Theme.secondaryText)
-                        SecureField("Senha", text: $pw1).textFieldStyle(.roundedBorder)
-                        SecureField("Repita a senha", text: $pw2).textFieldStyle(.roundedBorder)
+                        Group {
+                            if showPassword {
+                                TextField("Senha (letras, números e símbolos)", text: $pw1)
+                                TextField("Repita a senha", text: $pw2)
+                            } else {
+                                SecureField("Senha (letras, números e símbolos)", text: $pw1)
+                                SecureField("Repita a senha", text: $pw2)
+                            }
+                        }
+                        .textFieldStyle(.roundedBorder)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                        .keyboardType(.asciiCapable)
+                        Toggle("Mostrar a senha", isOn: $showPassword)
+                            .font(.system(size: 15))
+                        Text(PasswordStrength.label(pw1))
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(PasswordStrength.color(pw1))
                         if let problem { Text(problem).font(.system(size: 13, weight: .medium)).foregroundStyle(Theme.red) }
                         Toggle("Apagar o original (sem senha)", isOn: $deleteOriginal)
                             .font(.system(size: 15))
@@ -721,5 +738,30 @@ struct ProtectSheet: View {
         } catch {
             flow.show(error: error)
         }
+    }
+}
+
+/// Força da senha, para orientar: letras maiúsculas e minúsculas, números e símbolos.
+enum PasswordStrength {
+    static func score(_ pw: String) -> Int {
+        let kinds = [pw.contains { $0.isLowercase }, pw.contains { $0.isUppercase },
+                     pw.contains { $0.isNumber }, pw.contains { !$0.isLetter && !$0.isNumber }].filter { $0 }.count
+        return kinds + (pw.count >= 8 ? 1 : 0) + (pw.count >= 12 ? 1 : 0)
+    }
+
+    static func label(_ pw: String) -> String {
+        if pw.isEmpty { return "Dica: misture letras, números e símbolos (ex.: Caso2026!Ana)." }
+        let s = score(pw)
+        if pw.count < 6 || s <= 2 { return "Senha fraca: use 8 ou mais caracteres, com letras e números." }
+        if s <= 4 { return "Senha média. Fica mais forte com mais caracteres, números e símbolos." }
+        return "Senha forte."
+    }
+
+    static func color(_ pw: String) -> Color {
+        if pw.isEmpty { return Theme.secondaryText }
+        let s = score(pw)
+        if pw.count < 6 || s <= 2 { return Theme.red }
+        if s <= 4 { return Theme.orange }
+        return Theme.green
     }
 }

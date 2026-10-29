@@ -770,8 +770,9 @@ final class Library: ObservableObject {
     }
 
     /// Altera o próprio arquivo (incluir, remover, reorganizar páginas).
-    /// Antes, guarda a versão atual para o "Desfazer".
-    func modify(_ item: PDFItem, change: @escaping (PDFDocument) throws -> Void) async throws {
+    /// Antes, guarda a versão atual para o "Desfazer". `keepReview`: a mudança não mexe no texto
+    /// (destaques, corte, numeração), então o aviso de revisão do OCR continua valendo.
+    func modify(_ item: PDFItem, keepReview: Bool = false, change: @escaping (PDFDocument) throws -> Void) async throws {
         let url = item.url
         let backup = versionsDir.appendingPathComponent("\(item.id).pdf")
         try await Task.detached(priority: .userInitiated) {
@@ -782,14 +783,44 @@ final class Library: ObservableObject {
             try fm.copyItem(at: url, to: backup)
             try PDFOps.write(doc, to: url)
         }.value
-        BackupPolicy.apply(to: url)
+        finishModify(item, backup: backup, keepReview: keepReview)
+    }
+
+    /// Troca o conteúdo do arquivo por dados prontos (numerar páginas, resumo), com "Desfazer".
+    func replaceContents(_ item: PDFItem, with data: Data, keepReview: Bool = true) async throws {
+        let url = item.url
+        let backup = versionsDir.appendingPathComponent("\(item.id).pdf")
+        try await Task.detached(priority: .userInitiated) {
+            guard let check = PDFDocument(data: data), check.pageCount > 0 else {
+                throw UserFacingError("O PDF gerado não pôde ser conferido; nada foi alterado.")
+            }
+            let fm = FileManager.default
+            try? fm.removeItem(at: backup)
+            try fm.copyItem(at: url, to: backup)
+            let tmp = url.deletingLastPathComponent().appendingPathComponent(".\(UUID().uuidString).tmp.pdf")
+            try data.write(to: tmp)
+            _ = try fm.replaceItemAt(url, withItemAt: tmp)
+        }.value
+        finishModify(item, backup: backup, keepReview: keepReview)
+    }
+
+    /// Grava o documento aberto no leitor (com destaques novos), guardando a versão anterior.
+    func saveEdited(_ item: PDFItem, document: PDFDocument) async throws {
+        guard let data = document.dataRepresentation() else {
+            throw UserFacingError("Não foi possível salvar os destaques.")
+        }
+        try await replaceContents(item, with: data, keepReview: true)
+    }
+
+    private func finishModify(_ item: PDFItem, backup: URL, keepReview: Bool) {
+        BackupPolicy.apply(to: item.url)
         BackupPolicy.apply(to: backup)
-        ThumbnailCache.shared.invalidate(url: url)
+        ThumbnailCache.shared.invalidate(url: item.url)
         updateMeta(item.id) {
             $0.hasUndo = true
             $0.signature = nil
             // Depois de mudar as páginas, o relatório de revisão do OCR deixa de valer.
-            $0.reviewPages = nil
+            if !keepReview { $0.reviewPages = nil }
         }
         reload()
     }
