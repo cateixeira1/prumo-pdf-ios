@@ -375,7 +375,13 @@ struct PDFReaderScreen: View {
 
     private var summaryItem: PDFItem? { item.flatMap { Summary.find(in: library, for: $0) } }
 
+    // O corpo fica dividido em partes: numa expressão só, o compilador não dá conta de conferir os tipos.
     var body: some View {
+        lifecycle(dialogs(sheets(chrome)))
+    }
+
+    /// O leitor, a barra flutuante e as barras de cima e de baixo.
+    private var chrome: some View {
         ZStack(alignment: .bottom) {
             if mode == .original {
                 originalPane
@@ -394,117 +400,185 @@ struct PDFReaderScreen: View {
         .toolbar { ToolbarItemGroup(placement: .bottomBar) { bottomBar } }
         .toolbarBackground(.visible, for: .bottomBar)
         .modifier(ItemActionsModifier(actions: actions, onDeleted: { dismiss() }))
-        .alert("Ir para a página", isPresented: $askPage) {
-            TextField("Número da página", text: $pageText)
-                .keyboardType(.numberPad)
-            Button("Cancelar", role: .cancel) {}
-            Button("Ir") {
-                guard let n = Int(pageText) else { return }
-                if mode == .original { model.go(toPage: n) } else { textModel.scrollTo(page: n, animated: true) }
+    }
+
+    private var markDialogShown: Binding<Bool> {
+        Binding(get: { model.tappedMark != nil }, set: { if !$0 { model.tappedMark = nil } })
+    }
+
+    /// "Ir para a página", o toque num destaque, Ferramentas e as folhas das ferramentas.
+    private func sheets<V: View>(_ content: V) -> some View {
+        content
+            .alert("Ir para a página", isPresented: $askPage) {
+                TextField("Número da página", text: $pageText)
+                    .keyboardType(.numberPad)
+                Button("Cancelar", role: .cancel) {}
+                Button("Ir") { goToTypedPage() }
+            } message: {
+                Text("O documento tem \(totalPages.pagesText).")
             }
-        } message: {
-            Text("O documento tem \(totalPages.pagesText).")
-        }
-        .confirmationDialog("Destaque", isPresented: Binding(get: { model.tappedMark != nil },
-                                                             set: { if !$0 { model.tappedMark = nil } }),
-                            titleVisibility: .visible, presenting: model.tappedMark) { mark in
-            Button("Apagar o destaque", role: .destructive) { guardEditable { model.removeMark(mark) } }
-            ForEach(HighlightColor.allCases) { c in
-                Button("Mudar para \(c.label.lowercased())") { guardEditable { model.recolorMark(mark, c) } }
+            .confirmationDialog("Destaque", isPresented: markDialogShown, titleVisibility: .visible,
+                                presenting: model.tappedMark) { mark in
+                markActions(mark)
+            } message: { mark in
+                Text(markMessage(mark))
             }
-            Button("Cancelar", role: .cancel) {}
-        } message: { mark in
-            Text((mark.contents ?? "").isEmpty ? "Trecho destacado." : "“\((mark.contents ?? "").prefix(120))”")
-        }
-        .sheet(isPresented: $showTools, onDismiss: runPendingAction) {
-            ReaderToolsSheet(item: item, locked: locked, hasTextMode: textSource != nil,
-                             hasSummary: summaryItem != nil, canUndo: item.map { library.canUndo($0) } ?? false,
-                             onPick: { action in
-                                 pendingAction = action
-                                 showTools = false
-                             })
-                .appEnvironment()
-        }
-        .sheet(item: $sheetAction) { action in
-            if let item { actionSheet(action, item: item) }
-        }
-        .confirmationDialog("Desfazer a última alteração?", isPresented: $confirmUndo, titleVisibility: .visible) {
-            Button("Desfazer") {
-                guard let item else { return }
-                do {
-                    saveTask?.cancel()
-                    try library.undo(item)
-                    reloadDocument()
-                    flow.toast("Alteração desfeita.")
-                } catch { flow.show(error: error) }
+            .sheet(isPresented: $showTools, onDismiss: runPendingAction) { toolsSheet }
+            .sheet(item: $sheetAction) { action in
+                actionSheetIfPossible(action)
             }
-            Button("Cancelar", role: .cancel) {}
-        } message: {
-            Text("O PDF volta a ficar como estava antes da última mudança (páginas, destaques, corte ou numeração).")
+    }
+
+    @ViewBuilder private func actionSheetIfPossible(_ action: ReaderAction) -> some View {
+        if let item { actionSheet(action, item: item) }
+    }
+
+    @ViewBuilder private func markActions(_ mark: PDFAnnotation) -> some View {
+        Button("Apagar o destaque", role: .destructive) { guardEditable { model.removeMark(mark) } }
+        ForEach(HighlightColor.allCases) { c in
+            Button("Mudar para \(c.label.lowercased())") { guardEditable { model.recolorMark(mark, c) } }
         }
-        .alert("Remover a senha", isPresented: $askUnprotect) {
-            SecureField("Senha atual", text: $unprotectText)
-            Button("Cancelar", role: .cancel) { unprotectText = "" }
-            Button("Remover") {
-                guard let item else { return }
-                do {
-                    let new = try library.unprotect(item, password: unprotectText)
-                    flow.toast("Cópia sem senha: \(new.name)", actionTitle: "Abrir") { flow.open(.reader(new.id)) }
-                } catch { flow.show(error: error) }
-                unprotectText = ""
+        Button("Cancelar", role: .cancel) {}
+    }
+
+    private func markMessage(_ mark: PDFAnnotation) -> String {
+        let text = mark.contents ?? ""
+        return text.isEmpty ? "Trecho destacado." : "“\(text.prefix(120))”"
+    }
+
+    private var toolsSheet: some View {
+        ReaderToolsSheet(item: item, locked: locked, hasTextMode: textSource != nil,
+                         hasSummary: summaryItem != nil, canUndo: item.map { library.canUndo($0) } ?? false,
+                         onPick: { action in
+                             pendingAction = action
+                             showTools = false
+                         })
+            .appEnvironment()
+    }
+
+    private func goToTypedPage() {
+        guard let n = Int(pageText) else { return }
+        if mode == .original {
+            model.go(toPage: n)
+        } else {
+            textModel.scrollTo(page: n, animated: true)
+        }
+    }
+
+    /// Desfazer, remover a senha e incluir páginas.
+    private func dialogs<V: View>(_ content: V) -> some View {
+        content
+            .confirmationDialog("Desfazer a última alteração?", isPresented: $confirmUndo, titleVisibility: .visible) {
+                Button("Desfazer") { undoLastChange() }
+                Button("Cancelar", role: .cancel) {}
+            } message: {
+                Text("O PDF volta a ficar como estava antes da última mudança (páginas, destaques, corte ou numeração).")
             }
-        } message: {
-            Text("Cria uma cópia sem senha, para destacar, fazer OCR, organizar ou dividir. O PDF com senha continua guardado.")
-        }
-        .confirmationDialog("Incluir páginas", isPresented: $showInsertMenu, titleVisibility: .visible) {
-            Button("Escanear páginas") { if let item { flow.startScan(.insert(itemID: item.id)) } }
-            Button("De outro PDF da biblioteca") { if let item { flow.openTool("insertLibrary", on: item) } }
-            Button("Do app Arquivos") { if let item { flow.openTool("insertFile", on: item) } }
-            Button("Cancelar", role: .cancel) {}
-        }
-        .onAppear {
-            if let item {
-                library.markOpened(item)
-                if expectedVersion == nil { expectedVersion = item.version }
+            .alert("Remover a senha", isPresented: $askUnprotect) {
+                SecureField("Senha atual", text: $unprotectText)
+                Button("Cancelar", role: .cancel) { unprotectText = "" }
+                Button("Remover") { removePassword() }
+            } message: {
+                Text("Cria uma cópia sem senha, para destacar, fazer OCR, organizar ou dividir. O PDF com senha continua guardado.")
             }
-            if !didSetMode {
-                didSetMode = true
-                mode = (initialMode == .text && textSource != nil) ? .text : .original
-                if let saved = UserDefaults.standard.object(forKey: "readerThumbs") as? Bool {
-                    showThumbs = saved
-                } else {
-                    showThumbs = sizeClass == .regular   // iPad: miniaturas à mostra; iPhone: escondidas
-                }
+            .confirmationDialog("Incluir páginas", isPresented: $showInsertMenu, titleVisibility: .visible) {
+                Button("Escanear páginas") { insertPages("scan") }
+                Button("De outro PDF da biblioteca") { insertPages("insertLibrary") }
+                Button("Do app Arquivos") { insertPages("insertFile") }
+                Button("Cancelar", role: .cancel) {}
             }
-            model.onChange = { scheduleSave() }
+    }
+
+    private func insertPages(_ source: String) {
+        guard let item else { return }
+        if source == "scan" {
+            flow.startScan(.insert(itemID: item.id))
+        } else {
+            flow.openTool(source, on: item)
         }
-        .onDisappear { saveNow() }
-        .onChange(of: item?.version) { _, new in
-            // O arquivo mudou por outra ferramenta (organizar, remover, desfazer): lê de novo.
-            guard let new, !saving, saveTask == nil, new != expectedVersion else { return }
-            expectedVersion = new
+    }
+
+    private func undoLastChange() {
+        guard let item else { return }
+        do {
+            saveTask?.cancel()
+            saveTask = nil
+            try library.undo(item)
             reloadDocument()
+            flow.toast("Alteração desfeita.")
+        } catch {
+            flow.show(error: error)
         }
-        .task(id: mode) {
-            if mode == .text, let source = textSource {
-                await textModel.load(url: source.url, reviewPages: source.meta.reviewPages ?? [])
+    }
+
+    private func removePassword() {
+        guard let item else { return }
+        do {
+            let new = try library.unprotect(item, password: unprotectText)
+            flow.toast("Cópia sem senha: \(new.name)", actionTitle: "Abrir") { flow.open(.reader(new.id)) }
+        } catch {
+            flow.show(error: error)
+        }
+        unprotectText = ""
+    }
+
+    /// Ao abrir, ao sair, quando o arquivo muda e ao trocar entre original e texto.
+    private func lifecycle<V: View>(_ content: V) -> some View {
+        content
+            .onAppear { appeared() }
+            .onDisappear { saveNow() }
+            .onChange(of: item?.version) { _, new in versionChanged(new) }
+            .task(id: mode) { await loadTextIfNeeded() }
+            .onChange(of: mode) { old, new in modeChanged(from: old, to: new) }
+    }
+
+    private func appeared() {
+        if let item {
+            library.markOpened(item)
+            if expectedVersion == nil { expectedVersion = item.version }
+        }
+        if !didSetMode {
+            didSetMode = true
+            if initialMode == .text && textSource != nil {
+                mode = .text
+            } else {
+                mode = .original
+            }
+            if let saved = UserDefaults.standard.object(forKey: "readerThumbs") as? Bool {
+                showThumbs = saved
+            } else {
+                showThumbs = sizeClass == .regular   // iPad: miniaturas à mostra; iPhone: escondidas
             }
         }
-        .onChange(of: mode) { old, new in
-            // Mantém a mesma página ao trocar de modo.
-            if new == .text {
-                model.setMarking(false)
-                let page = model.currentPage
-                Task { @MainActor in
-                    try? await Task.sleep(nanoseconds: 150_000_000)
-                    textModel.scrollTo(page: page)
-                }
-            } else if old == .text {
-                let page = textModel.currentPage
-                Task { @MainActor in
-                    try? await Task.sleep(nanoseconds: 150_000_000)
-                    model.go(toPage: page)
-                }
+        model.onChange = { scheduleSave() }
+    }
+
+    /// O arquivo mudou por outra ferramenta (organizar, remover, desfazer): lê de novo.
+    private func versionChanged(_ new: String?) {
+        guard let new, !saving, saveTask == nil, new != expectedVersion else { return }
+        expectedVersion = new
+        reloadDocument()
+    }
+
+    private func loadTextIfNeeded() async {
+        guard mode == .text, let source = textSource else { return }
+        await textModel.load(url: source.url, reviewPages: source.meta.reviewPages ?? [])
+    }
+
+    /// Mantém a mesma página ao trocar de modo.
+    private func modeChanged(from old: ReaderMode, to new: ReaderMode) {
+        if new == .text {
+            model.setMarking(false)
+            let page = model.currentPage
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 150_000_000)
+                textModel.scrollTo(page: page)
+            }
+        } else if old == .text {
+            let page = textModel.currentPage
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 150_000_000)
+                model.go(toPage: page)
             }
         }
     }
