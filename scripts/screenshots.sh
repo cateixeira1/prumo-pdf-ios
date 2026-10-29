@@ -27,7 +27,21 @@ shot() {
   xcrun simctl terminate "$SIM" "$BUNDLE" 2>/dev/null || true
   xcrun simctl launch "$SIM" "$BUNDLE" -demo -screen "$screen" >/dev/null
   sleep "$wait"
-  xcrun simctl io "$SIM" screenshot "$OUT/$name.png" >/dev/null 2>&1 && echo "ok: $name"
+  # No simulador Intel o app às vezes ainda está abrindo: a tela de abertura (toda branca) dá um PNG
+  # pequeno. Nesse caso, espera mais e tira de novo; quando a tela aparece, espera as folhas abrirem.
+  local tries=0 size=0
+  while :; do
+    xcrun simctl io "$SIM" screenshot "$OUT/$name.png" >/dev/null 2>&1 || true
+    size=$(stat -f%z "$OUT/$name.png" 2>/dev/null || echo 0)
+    if [ "$size" -gt 100000 ] || [ "$tries" -ge 6 ]; then break; fi
+    tries=$((tries + 1))
+    sleep 6
+  done
+  if [ "$tries" -gt 0 ] && [ "$size" -gt 100000 ]; then
+    sleep 6
+    xcrun simctl io "$SIM" screenshot "$OUT/$name.png" >/dev/null 2>&1 || true
+  fi
+  echo "ok: $name (novas tentativas: $tries)"
 }
 
 shot 01-inicio home 7
