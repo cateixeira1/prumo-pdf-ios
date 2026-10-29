@@ -353,7 +353,7 @@ struct SettingsScreen: View {
                             }
                         }
                     }
-                    Text("O Prumo trava ao sair do app e pede \(AppLock.methodName) (ou o código do iPhone) ao voltar. Para proteger um PDF em si, por exemplo antes de enviar, use “Proteger com senha” na tela dele: a senha vai junto com o arquivo e vale em qualquer leitor de PDF.")
+                    Text("O Prumo bloqueia ao sair do app e pede \(AppLock.methodName) (ou o código do iPhone) ao voltar. Para proteger um PDF em si, por exemplo antes de enviar, use “Proteger com senha” na tela dele: a senha vai junto com o arquivo e vale em qualquer leitor de PDF.")
                         .font(.system(size: 13))
                         .foregroundStyle(Theme.secondaryText)
                 }

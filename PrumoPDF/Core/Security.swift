@@ -108,7 +108,7 @@ final class AppLock: ObservableObject {
             return false
         }
         do {
-            let reason = on ? "Ligar a trava do Prumo PDF" : "Desligar a trava do Prumo PDF"
+            let reason = on ? "Ligar o bloqueio do Prumo PDF" : "Desligar o bloqueio do Prumo PDF"
             guard try await ctx.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) else { return false }
         } catch {
             return false
@@ -125,13 +125,24 @@ struct LockView: View {
 
     var body: some View {
         VStack(spacing: 18) {
+            // Logo, cadeado e botão ficam abaixo do meio da tela (mais perto do polegar).
             Spacer()
+            Spacer()
+            Image("AppLogo")
+                .resizable()
+                .interpolation(.high)
+                .frame(width: 84, height: 84)
+                .clipShape(RoundedRectangle(cornerRadius: 19, style: .continuous))
+                .shadow(color: .black.opacity(0.18), radius: 6, y: 2)
+                .accessibilityLabel("Prumo PDF")
             Image(systemName: "lock.fill")
-                .font(.system(size: 44, weight: .semibold))
+                .font(.system(size: 34, weight: .semibold))
                 .foregroundStyle(Theme.purple)
-            Text("Prumo PDF está travado")
+                .accessibilityHidden(true)
+            Text("Prumo PDF está bloqueado")
                 .font(.system(size: 22, weight: .bold))
                 .foregroundStyle(Theme.text)
+                .multilineTextAlignment(.center)
             if let e = lock.lastError {
                 Text(e).font(.footnote).foregroundStyle(Theme.red).multilineTextAlignment(.center).padding(.horizontal)
             }
@@ -139,7 +150,6 @@ struct LockView: View {
                 Task { await lock.unlock() }
             }
             .padding(.horizontal, 40)
-            Spacer()
             Spacer()
             Text("Color Software")
                 .font(.system(size: 12, weight: .semibold))

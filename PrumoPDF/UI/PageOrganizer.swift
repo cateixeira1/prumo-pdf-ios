@@ -9,6 +9,8 @@ final class OrganizerModel: ObservableObject {
     @Published var selecting = false
     @Published var selected = Set<UUID>()
     @Published var columns = 3
+    /// Página aberta em tela cheia (toque numa página fora do modo de seleção).
+    @Published var preview: PagePreviewRequest?
     /// Muda quando a grade precisa ser recarregada por inteiro (girar, excluir, carregar).
     @Published private(set) var structureRevision = 0
     private(set) var originalCount = 0
@@ -66,6 +68,11 @@ final class OrganizerModel: ObservableObject {
     }
 }
 
+struct PagePreviewRequest: Identifiable {
+    let id = UUID()
+    let index: Int
+}
+
 struct PageOrganizerScreen: View {
     let itemID: String
     @EnvironmentObject private var library: Library
@@ -120,6 +127,11 @@ struct PageOrganizerScreen: View {
                 model.load(pageCount: count)
             }
         }
+        .fullScreenCover(item: $model.preview) { request in
+            if let item {
+                OrganizerPagePreview(url: item.url, entries: model.entries, start: request.index)
+            }
+        }
         .confirmationDialog("Descartar as alterações?", isPresented: $confirmDiscard, titleVisibility: .visible) {
             Button("Descartar", role: .destructive) {
                 model.reset()
@@ -145,7 +157,7 @@ struct PageOrganizerScreen: View {
             Image(systemName: "hand.point.up.left.fill")
                 .foregroundStyle(Theme.purple)
                 .font(.system(size: 18))
-            Text("Segure uma página até ela levantar e arraste. Perto da borda de cima ou de baixo, a tela rola sozinha. Use a pinça para mudar o tamanho das páginas.")
+            Text("Toque numa página para vê-la grande. Para mudar a ordem, segure a página até ela levantar e arraste; perto da borda de cima ou de baixo, a tela rola sozinha. Use a pinça para mudar o tamanho das páginas.")
                 .font(.system(size: 13))
                 .foregroundStyle(Theme.text)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -349,7 +361,12 @@ final class PageGridViewController: UIViewController, UICollectionViewDataSource
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: false)
-        guard model.selecting, model.entries.indices.contains(indexPath.item) else { return }
+        guard model.entries.indices.contains(indexPath.item) else { return }
+        guard model.selecting else {
+            // Fora do modo de seleção, tocar abre a página grande.
+            model.preview = PagePreviewRequest(index: indexPath.item)
+            return
+        }
         let entry = model.entries[indexPath.item]
         model.toggle(entry.id)
         UISelectionFeedbackGenerator().selectionChanged()
@@ -537,6 +554,111 @@ extension UIImage {
             ctx.cgContext.translateBy(x: newSize.width / 2, y: newSize.height / 2)
             ctx.cgContext.rotate(by: radians)
             draw(in: CGRect(x: -size.width / 2, y: -size.height / 2, width: size.width, height: size.height))
+        }
+    }
+}
+
+// MARK: - Página grande (na ordem e com o giro ainda não salvos)
+
+/// Mostra as páginas do Organizar em tela cheia: deslizar passa para a anterior ou a próxima,
+/// a pinça amplia. Monta um documento temporário com a ordem e os giros atuais.
+struct OrganizerPagePreview: View {
+    let url: URL
+    let entries: [PageArrangementEntry]
+    let start: Int
+    @Environment(\.dismiss) private var dismiss
+    @State private var document: PDFDocument?
+    @State private var current = 0
+    @State private var failed = false
+
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                Color(white: 0.1).ignoresSafeArea()
+                if let document {
+                    PagedPDFView(document: document, startIndex: start, current: $current)
+                        .ignoresSafeArea(edges: .bottom)
+                } else if failed {
+                    Text("Não foi possível abrir a página.")
+                        .foregroundStyle(Color.white)
+                } else {
+                    ProgressView().tint(.white)
+                }
+            }
+            .navigationTitle(title)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("OK") { dismiss() }.fontWeight(.semibold)
+                }
+            }
+        }
+        .task { await load() }
+    }
+
+    private var title: String {
+        guard entries.indices.contains(current) else { return "Página" }
+        let e = entries[current]
+        var t = "Página \(current + 1) de \(entries.count)"
+        if e.sourceIndex != current { t += " · era a \(e.sourceIndex + 1)" }
+        return t
+    }
+
+    private func load() async {
+        let entries = entries
+        let url = url
+        current = start
+        let doc = await Task.detached(priority: .userInitiated) { () -> PDFDocument? in
+            guard let source = try? PDFOps.open(url) else { return nil }
+            let out = PDFDocument()
+            for e in entries {
+                guard let page = source.page(at: e.sourceIndex)?.copy() as? PDFPage else { continue }
+                page.rotation = PDFOps.normalized(page.rotation + e.extraRotation)
+                out.insert(page, at: out.pageCount)
+            }
+            return out.pageCount > 0 ? out : nil
+        }.value
+        if let doc { document = doc } else { failed = true }
+    }
+}
+
+/// PDFView de uma página por vez, deslizando para o lado (como as Fotos), com pinça para ampliar.
+struct PagedPDFView: UIViewRepresentable {
+    let document: PDFDocument
+    let startIndex: Int
+    @Binding var current: Int
+
+    func makeUIView(context: Context) -> PDFView {
+        let view = PDFView()
+        view.backgroundColor = UIColor(white: 0.1, alpha: 1)
+        view.displayMode = .singlePage
+        view.displayDirection = .horizontal
+        view.usePageViewController(true, withViewOptions: nil)
+        view.autoScales = true
+        view.pageShadowsEnabled = true
+        view.document = document
+        if let page = document.page(at: max(0, min(startIndex, document.pageCount - 1))) {
+            view.go(to: page)
+        }
+        context.coordinator.view = view
+        NotificationCenter.default.addObserver(context.coordinator, selector: #selector(Coordinator.changed),
+                                               name: .PDFViewPageChanged, object: view)
+        return view
+    }
+
+    func updateUIView(_ view: PDFView, context: Context) {}
+
+    func makeCoordinator() -> Coordinator { Coordinator(current: $current) }
+
+    final class Coordinator: NSObject {
+        var current: Binding<Int>
+        weak var view: PDFView?
+        init(current: Binding<Int>) { self.current = current }
+        @objc func changed() {
+            guard let view, let page = view.currentPage, let doc = view.document else { return }
+            let index = doc.index(for: page)
+            DispatchQueue.main.async { self.current.wrappedValue = index }
         }
     }
 }
