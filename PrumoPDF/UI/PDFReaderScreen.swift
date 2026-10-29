@@ -2,7 +2,7 @@ import PDFKit
 import SwiftUI
 import UIKit
 
-/// Estado do leitor: página, busca, seleção de texto, marca-texto e destaques novos.
+/// Estado do leitor (modo Original): página, busca, seleção de texto, marca-texto e destaques.
 @MainActor
 final class ReaderModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
     weak var pdfView: PDFView?
@@ -12,17 +12,18 @@ final class ReaderModel: NSObject, ObservableObject, UIGestureRecognizerDelegate
     @Published var resultIndex = 0
     @Published var searched = false
     @Published var hasSelection = false
+    @Published var hasMarksInSelection = false
     /// Marca-texto ligado: um dedo destaca, dois dedos rolam (como a Marcação da Apple).
     @Published private(set) var marking = false
     @Published var color: HighlightColor = HighlightColor(rawValue: UserDefaults.standard.string(forKey: "readerColor") ?? "") ?? .yellow {
         didSet { UserDefaults.standard.set(color.rawValue, forKey: "readerColor") }
     }
-    @Published var canUndoMark = false
     /// Destaque tocado (para apagar ou mudar a cor).
     @Published var tappedMark: PDFAnnotation?
-    /// Chamado quando o documento muda (destaque novo, apagado...), para gravar.
-    var onChange: (() -> Void)?
-    private var sessionMarks: [[PDFAnnotation]] = []
+    /// Qual PDF está aberto (para o desfazer saber onde aplicar).
+    var docID = ""
+    /// Destaque feito, apagado ou recolorido (para o desfazer e para gravar).
+    var onEdit: ((String, ReaderHistory.Change) -> Void)?
     private var markPan: UIPanGestureRecognizer?
     private var markStart: (PDFPage, CGPoint)?
     private var markSelection: PDFSelection?
@@ -48,13 +49,24 @@ final class ReaderModel: NSObject, ObservableObject, UIGestureRecognizerDelegate
 
     func pageChanged() {
         guard let view = pdfView, let doc = view.document, let page = view.currentPage else { return }
-        currentPage = doc.index(for: page) + 1
-        pageCount = doc.pageCount
+        let n = doc.index(for: page) + 1
+        if n != currentPage { currentPage = n }
+        if doc.pageCount != pageCount { pageCount = doc.pageCount }
+    }
+
+    func selectionRanges() -> [(page: Int, range: NSRange)] {
+        guard let view = pdfView, let doc = view.document, let sel = view.currentSelection else { return [] }
+        return Highlights.ranges(of: sel, in: doc)
     }
 
     func selectionChanged() {
         let text = pdfView?.currentSelection?.string?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         hasSelection = !text.isEmpty && !marking
+        if hasSelection, let doc = pdfView?.document {
+            hasMarksInSelection = Highlights.hasMarks(selectionRanges(), in: doc)
+        } else {
+            hasMarksInSelection = false
+        }
     }
 
     // MARK: Busca
@@ -138,7 +150,7 @@ final class ReaderModel: NSObject, ObservableObject, UIGestureRecognizerDelegate
         case .ended:
             if let sel = markSelection,
                !(sel.string ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                apply(sel)
+                apply(sel, color: color)
             }
             fallthrough
         default:
@@ -157,42 +169,45 @@ final class ReaderModel: NSObject, ObservableObject, UIGestureRecognizerDelegate
         }
     }
 
-    private func apply(_ selection: PDFSelection) {
+    private func apply(_ selection: PDFSelection, color c: HighlightColor) {
         guard let doc = pdfView?.document else { return }
-        let added = Highlights.add(selection, color: color, in: doc)
+        let added = Highlights.add(selection, color: c, in: doc)
         guard !added.isEmpty else { return }
-        sessionMarks.append(added)
-        canUndoMark = true
-        onChange?()
+        let pairs = added.compactMap { a in a.page.map { (doc.index(for: $0), a) } }
+        onEdit?("Destaque", .marks(docID: docID, removed: [], added: pairs))
     }
 
     /// Destaca o texto selecionado (sem o marca-texto).
     func highlightSelection(_ c: HighlightColor) {
         guard let sel = pdfView?.currentSelection else { return }
         color = c
-        apply(sel)
+        apply(sel, color: c)
         pdfView?.clearSelection()
         selectionChanged()
     }
 
-    func undoMark() {
-        guard let last = sessionMarks.popLast() else { return }
-        for a in last { Highlights.remove(a) }
-        canUndoMark = !sessionMarks.isEmpty
-        onChange?()
+    /// Tira o destaque só do texto selecionado (o resto de cada destaque continua).
+    func unmarkSelection() {
+        guard let doc = pdfView?.document else { return }
+        let change = Highlights.unmark(selectionRanges(), in: doc)
+        guard !change.removed.isEmpty else { return }
+        onEdit?("Desfazer destaque", .marks(docID: docID, removed: change.removed, added: change.added))
+        pdfView?.clearSelection()
+        selectionChanged()
     }
 
     func removeMark(_ a: PDFAnnotation) {
+        guard let doc = pdfView?.document, let page = a.page else { return }
+        let p = doc.index(for: page)
         Highlights.remove(a)
-        for k in sessionMarks.indices { sessionMarks[k].removeAll { $0 === a } }
-        sessionMarks.removeAll { $0.isEmpty }
-        canUndoMark = !sessionMarks.isEmpty
-        onChange?()
+        onEdit?("Apagar destaque", .marks(docID: docID, removed: [(p, a)], added: []))
     }
 
     func recolorMark(_ a: PDFAnnotation, _ c: HighlightColor) {
+        guard let doc = pdfView?.document, let page = a.page else { return }
+        let from = a.color
         Highlights.recolor(a, c)
-        onChange?()
+        onEdit?("Cor do destaque", .recolor(docID: docID, page: doc.index(for: page), mark: a, from: from, to: c.uiColor))
     }
 
     func copySelection() -> Bool {
@@ -209,6 +224,21 @@ final class ReaderModel: NSObject, ObservableObject, UIGestureRecognizerDelegate
         let pages = sel.pages.map { doc.index(for: $0) + 1 }.sorted()
         return (pages, text)
     }
+
+    func clearSelection() {
+        pdfView?.clearSelection()
+        selectionChanged()
+    }
+
+    /// Só para a captura de tela: um trecho selecionado, com parte dele já destacada.
+    func demoSelection() {
+        guard let view = pdfView, let doc = view.document,
+              let phrase = doc.findString("danos materiais e morais", withOptions: [.caseInsensitive]).first,
+              let word = doc.findString("danos", withOptions: [.caseInsensitive]).first else { return }
+        Highlights.add(word, color: .yellow, in: doc)
+        view.setCurrentSelection(phrase, animate: false)
+        selectionChanged()
+    }
 }
 
 /// O PDFView e, à esquerda, a coluna de miniaturas (que aparece e some pela barra de baixo).
@@ -218,6 +248,9 @@ final class ReaderContainerView: UIView {
     private var leading: NSLayoutConstraint!
     private var widthConstraint: NSLayoutConstraint!
     static let thumbsWidth: CGFloat = 92
+    /// Depois da primeira medida, a primeira página começa no alto (sem cortar o cabeçalho).
+    var needsInitialPosition = true
+    private var lastWidth: CGFloat = 0
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -246,6 +279,30 @@ final class ReaderContainerView: UIView {
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) não é usado") }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let w = pdfView.bounds.width
+        guard w > 0, pdfView.document != nil else { return }
+        if abs(w - lastWidth) > 0.5 {
+            lastWidth = w
+            // zoom: de "página inteira na largura" até 5x; sem encolher além da largura
+            let fit = pdfView.scaleFactorForSizeToFit
+            if fit > 0 {
+                pdfView.minScaleFactor = fit
+                pdfView.maxScaleFactor = max(fit * 5, 4)
+                if pdfView.scaleFactor < fit { pdfView.scaleFactor = fit }
+            }
+        }
+        if needsInitialPosition {
+            needsInitialPosition = false
+            DispatchQueue.main.async { [weak self] in
+                guard let view = self?.pdfView, let page = view.document?.page(at: 0) else { return }
+                let b = page.bounds(for: view.displayBox)
+                view.go(to: CGRect(x: b.minX, y: b.maxY - 1, width: 1, height: 1), on: page)
+            }
+        }
+    }
 
     func showThumbnails(_ on: Bool) {
         guard thumbs.isHidden == on else { return }
@@ -299,6 +356,7 @@ struct PDFKitView: UIViewRepresentable {
             if let doc = container.pdfView.document, let p = doc.page(at: min(page, max(0, doc.pageCount - 1))) {
                 container.pdfView.go(to: p)
             }
+            container.setNeedsLayout()
             Task { @MainActor in model.pageChanged() }
         }
     }
@@ -320,7 +378,7 @@ struct PDFKitView: UIViewRepresentable {
 
 /// Ações do botão "Ferramentas" do leitor (todas as funções do app).
 enum ReaderAction: Identifiable {
-    case textMode, goToPage, crop, number, ocr, organize, insert, remove, extract, split, merge, dewarp,
+    case textMode, pageMode, goToPage, crop, number, sign, ocr, organize, insert, remove, extract, split, merge, dewarp,
          protect, unprotect, duplicate, favorite, rename, move, details, undo, delete, openSummary
     var id: String { "\(self)" }
 }
@@ -336,10 +394,12 @@ struct PDFReaderScreen: View {
     @StateObject private var model = ReaderModel()
     @StateObject private var textModel = TextReaderModel()
     @StateObject private var actions = ItemActions()
+    @StateObject private var history = ReaderHistory()
     @State private var mode: ReaderMode = .original
     @State private var didSetMode = false
     @State private var query = ""
     @State private var searchShown = false
+    @FocusState private var searchFocused: Bool
     @State private var askPage = false
     @State private var pageText = ""
     @State private var password: String?
@@ -352,13 +412,14 @@ struct PDFReaderScreen: View {
     @State private var sheetAction: ReaderAction?
     @State private var reloadToken = 0
     @State private var expectedVersion: String?
-    @State private var saveTask: Task<Void, Never>?
+    @State private var saveTasks: [String: Task<Void, Never>] = [:]
     @State private var saving = false
     @State private var confirmUndo = false
     @State private var askUnprotect = false
     @State private var unprotectText = ""
     @State private var showInsertMenu = false
     @State private var addingSummary = false
+    @State private var fileBefore: Data?
 
     private var item: PDFItem? { library.item(id: itemID) }
     private var locked: Bool { item?.meta.locked == true }
@@ -373,7 +434,9 @@ struct PDFReaderScreen: View {
         return nil
     }
 
-    private var summaryItem: PDFItem? { item.flatMap { Summary.find(in: library, for: $0) } }
+    /// O PDF que está sendo lido agora (no modo leitor, pode ser a cópia com OCR).
+    private var activeItem: PDFItem? { mode == .text ? textSource : item }
+    private var summaryItem: PDFItem? { activeItem.flatMap { Summary.find(in: library, for: $0) } }
 
     // O corpo fica dividido em partes: numa expressão só, o compilador não dá conta de conferir os tipos.
     var body: some View {
@@ -383,16 +446,13 @@ struct PDFReaderScreen: View {
     /// O leitor, a barra flutuante e as barras de cima e de baixo.
     private var chrome: some View {
         ZStack(alignment: .bottom) {
-            if mode == .original {
-                originalPane
-            } else {
-                TextReaderPane(model: textModel)
-            }
+            content
             VStack(spacing: 8) {
-                if mode == .original { floatingBar }
-                pageBar
+                floatingBar
+                bottomRow
             }
         }
+        .overlay(alignment: .top) { searchBar }
         .background(Theme.background.ignoresSafeArea())
         .navigationTitle(item?.name ?? "")
         .navigationBarTitleDisplayMode(.inline)
@@ -402,9 +462,31 @@ struct PDFReaderScreen: View {
         .modifier(ItemActionsModifier(actions: actions, onDeleted: { dismiss() }))
     }
 
-    private var markDialogShown: Binding<Bool> {
-        Binding(get: { model.tappedMark != nil }, set: { if !$0 { model.tappedMark = nil } })
+    /// Páginas (sempre carregadas, para manter a posição e os destaques) e, por cima, o texto.
+    private var content: some View {
+        HStack(spacing: 0) {
+            if mode == .text && showThumbs, let source = textSource {
+                TextThumbnails(url: source.url, version: source.version, count: textModel.pageCount,
+                               current: textModel.currentPage) { textModel.scrollTo(page: $0, animated: true) }
+            }
+            ZStack(alignment: .topTrailing) {
+                originalPane
+                    .opacity(mode == .original ? 1 : 0)
+                    .allowsHitTesting(mode == .original)
+                if mode == .text {
+                    TextReaderPane(model: textModel)
+                }
+                pageBadge
+            }
+        }
     }
+
+    private var markDialogShown: Binding<Bool> {
+        Binding(get: { model.tappedMark != nil || textModel.tappedMark != nil },
+                set: { if !$0 { model.tappedMark = nil; textModel.tappedMark = nil } })
+    }
+
+    private var tappedMark: PDFAnnotation? { model.tappedMark ?? textModel.tappedMark }
 
     /// "Ir para a página", o toque num destaque, Ferramentas e as folhas das ferramentas.
     private func sheets<V: View>(_ content: V) -> some View {
@@ -418,25 +500,25 @@ struct PDFReaderScreen: View {
                 Text("O documento tem \(totalPages.pagesText).")
             }
             .confirmationDialog("Destaque", isPresented: markDialogShown, titleVisibility: .visible,
-                                presenting: model.tappedMark) { mark in
+                                presenting: tappedMark) { mark in
                 markActions(mark)
             } message: { mark in
                 Text(markMessage(mark))
             }
             .sheet(isPresented: $showTools, onDismiss: runPendingAction) { toolsSheet }
-            .sheet(item: $sheetAction) { action in
+            .sheet(item: $sheetAction, onDismiss: sheetClosed) { action in
                 actionSheetIfPossible(action)
             }
     }
 
     @ViewBuilder private func actionSheetIfPossible(_ action: ReaderAction) -> some View {
-        if let item { actionSheet(action, item: item) }
+        if let target = activeItem { actionSheet(action, item: target) }
     }
 
     @ViewBuilder private func markActions(_ mark: PDFAnnotation) -> some View {
-        Button("Apagar o destaque", role: .destructive) { guardEditable { model.removeMark(mark) } }
+        Button("Apagar o destaque", role: .destructive) { guardEditable { removeMark(mark) } }
         ForEach(HighlightColor.allCases) { c in
-            Button("Mudar para \(c.label.lowercased())") { guardEditable { model.recolorMark(mark, c) } }
+            Button("Mudar para \(c.label.lowercased())") { guardEditable { recolorMark(mark, c) } }
         }
         Button("Cancelar", role: .cancel) {}
     }
@@ -447,8 +529,8 @@ struct PDFReaderScreen: View {
     }
 
     private var toolsSheet: some View {
-        ReaderToolsSheet(item: item, locked: locked, hasTextMode: textSource != nil,
-                         hasSummary: summaryItem != nil, canUndo: item.map { library.canUndo($0) } ?? false,
+        ReaderToolsSheet(item: activeItem, mode: mode, locked: locked, hasTextMode: textSource != nil,
+                         hasSummary: summaryItem != nil, canUndo: activeItem.map { library.canUndo($0) } ?? false,
                          onPick: { action in
                              pendingAction = action
                              showTools = false
@@ -465,7 +547,7 @@ struct PDFReaderScreen: View {
         }
     }
 
-    /// Desfazer, remover a senha e incluir páginas.
+    /// Desfazer a última alteração do arquivo, remover a senha e incluir páginas.
     private func dialogs<V: View>(_ content: V) -> some View {
         content
             .confirmationDialog("Desfazer a última alteração?", isPresented: $confirmUndo, titleVisibility: .visible) {
@@ -499,11 +581,11 @@ struct PDFReaderScreen: View {
     }
 
     private func undoLastChange() {
-        guard let item else { return }
+        guard let target = activeItem else { return }
         do {
-            saveTask?.cancel()
-            saveTask = nil
-            try library.undo(item)
+            cancelSaves()
+            try library.undo(target)
+            history.clear()
             reloadDocument()
             flow.toast("Alteração desfeita.")
         } catch {
@@ -526,7 +608,7 @@ struct PDFReaderScreen: View {
     private func lifecycle<V: View>(_ content: V) -> some View {
         content
             .onAppear { appeared() }
-            .onDisappear { saveNow() }
+            .onDisappear { saveAllNow() }
             .onChange(of: item?.version) { _, new in versionChanged(new) }
             .task(id: mode) { await loadTextIfNeeded() }
             .onChange(of: mode) { old, new in modeChanged(from: old, to: new) }
@@ -536,6 +618,7 @@ struct PDFReaderScreen: View {
         if let item {
             library.markOpened(item)
             if expectedVersion == nil { expectedVersion = item.version }
+            model.docID = item.id
         }
         if !didSetMode {
             didSetMode = true
@@ -550,31 +633,53 @@ struct PDFReaderScreen: View {
                 showThumbs = sizeClass == .regular   // iPad: miniaturas à mostra; iPhone: escondidas
             }
         }
-        model.onChange = { scheduleSave() }
+        if DemoSeeder.isActive && DemoSeeder.consumeReaderSelection() {
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 2_000_000_000)
+                model.demoSelection()
+            }
+        }
+        model.onEdit = { label, change in recordEdit(label, change) }
+        textModel.onEdit = { label, change in recordEdit(label, change) }
+        textModel.onSummary = { addToSummary() }
+        let m = model
+        textModel.color = { [weak m] in m?.color ?? .yellow }
+    }
+
+    private func recordEdit(_ label: String, _ change: ReaderHistory.Change) {
+        history.record(label, change)
+        switch change {
+        case .marks(let docID, _, _), .recolor(let docID, _, _, _, _): scheduleSave(docID)
+        default: break
+        }
     }
 
     /// O arquivo mudou por outra ferramenta (organizar, remover, desfazer): lê de novo.
     private func versionChanged(_ new: String?) {
-        guard let new, !saving, saveTask == nil, new != expectedVersion else { return }
+        guard let new, !saving, saveTasks.isEmpty, new != expectedVersion else { return }
         expectedVersion = new
         reloadDocument()
     }
 
     private func loadTextIfNeeded() async {
         guard mode == .text, let source = textSource else { return }
-        await textModel.load(url: source.url, reviewPages: source.meta.reviewPages ?? [])
+        let shared = source.id == item?.id ? model.pdfView?.document : nil
+        await textModel.load(url: source.url, version: source.version, pdf: shared, id: source.id,
+                             reviewPages: source.meta.reviewPages ?? [])
     }
 
     /// Mantém a mesma página ao trocar de modo.
     private func modeChanged(from old: ReaderMode, to new: ReaderMode) {
         if new == .text {
             model.setMarking(false)
+            if searchShown { closeSearch() }
             let page = model.currentPage
             Task { @MainActor in
                 try? await Task.sleep(nanoseconds: 150_000_000)
                 textModel.scrollTo(page: page)
             }
         } else if old == .text {
+            textModel.setMarking(false)
             let page = textModel.currentPage
             Task { @MainActor in
                 try? await Task.sleep(nanoseconds: 150_000_000)
@@ -599,16 +704,7 @@ struct PDFReaderScreen: View {
             .alert(wrongPassword ? "Senha incorreta" : "Senha do PDF", isPresented: $askPassword) {
                 SecureField("Senha", text: $passwordText)
                 Button("Cancelar", role: .cancel) {}
-                Button("Abrir") {
-                    if Library.checkPassword(item.url, passwordText) {
-                        password = passwordText
-                        wrongPassword = false
-                    } else {
-                        wrongPassword = true
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { askPassword = true }
-                    }
-                    passwordText = ""
-                }
+                Button("Abrir") { tryPassword(item) }
             } message: {
                 Text(wrongPassword ? "Tente de novo (maiúsculas e minúsculas fazem diferença)." : "Digite a senha para abrir.")
             }
@@ -616,18 +712,169 @@ struct PDFReaderScreen: View {
             PDFKitView(url: item.url, model: model, password: password, showThumbnails: showThumbs,
                        reloadToken: reloadToken)
                 .ignoresSafeArea(edges: .bottom)
-                .searchable(text: $query, isPresented: $searchShown, placement: .navigationBarDrawer(displayMode: .automatic),
-                            prompt: "Buscar no documento")
-                .onSubmit(of: .search) { model.search(query) }
-                .onChange(of: query) { _, newValue in
-                    if newValue.isEmpty { model.clearSearch() }
-                }
         }
+    }
+
+    private func tryPassword(_ item: PDFItem) {
+        if Library.checkPassword(item.url, passwordText) {
+            password = passwordText
+            wrongPassword = false
+        } else {
+            wrongPassword = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { askPassword = true }
+        }
+        passwordText = ""
+    }
+
+    // MARK: - Barras
+
+    /// Número da página, no canto de cima à direita das páginas (toque para ir a outra).
+    private var pageBadge: some View {
+        Button {
+            pageText = ""
+            askPage = true
+        } label: {
+            Text("\(shownPage) / \(totalPages)")
+                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                .foregroundStyle(Theme.text)
+                .padding(.horizontal, 10)
+                .frame(height: 28)
+                .background(Capsule().fill(.regularMaterial))
+        }
+        .padding(.top, searchShown ? 64 : 8)
+        .padding(.trailing, 10)
+        .opacity(totalPages > 0 ? 1 : 0)
+        .accessibilityLabel("Página \(shownPage) de \(totalPages). Toque para ir para outra página.")
+    }
+
+    /// Desfazer (sempre à mão, no lugar onde ficava o número da página) e refazer (logo acima, quando houver).
+    private var bottomRow: some View {
+        HStack(alignment: .bottom, spacing: 10) {
+            VStack(spacing: 10) {
+                if history.canRedo {
+                    circleButton("arrow.uturn.forward", label: "Refazer") { redo() }
+                        .transition(.scale.combined(with: .opacity))
+                }
+                circleButton("arrow.uturn.backward", label: "Desfazer") { undo() }
+                    .opacity(history.canUndo ? 1 : 0.4)
+                    .disabled(!history.canUndo)
+            }
+            .animation(.easeOut(duration: 0.2), value: history.canRedo)
+            Spacer()
+            if mode == .original && model.searched && !searchShown { resultsPill }
+        }
+        .padding(.horizontal, Theme.margin)
+        .padding(.bottom, 10)
+    }
+
+    private func circleButton(_ symbol: String, label: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: symbol)
+                .font(.system(size: 17, weight: .semibold))
+                .foregroundStyle(Theme.text)
+                .frame(width: 46, height: 46)
+                .background(Circle().fill(.regularMaterial))
+                .overlay(Circle().stroke(Color.black.opacity(0.08), lineWidth: 0.5))
+                .shadow(color: .black.opacity(0.12), radius: 3, y: 1)
+        }
+        .accessibilityLabel(label)
+    }
+
+    private var resultsPill: some View {
+        HStack(spacing: 14) {
+            Text(model.results.isEmpty ? "Nada encontrado" : "\(model.resultIndex + 1) de \(model.results.count)")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(Theme.text)
+            if !model.results.isEmpty {
+                Button { model.previous() } label: { Image(systemName: "chevron.up") }
+                Button { model.next() } label: { Image(systemName: "chevron.down") }
+            }
+        }
+        .padding(.horizontal, 14)
+        .frame(height: 34)
+        .background(Capsule().fill(.regularMaterial))
+    }
+
+    /// Busca do modo Original: um campo próprio, que só aparece pela lupa (a busca presa à barra do
+    /// alto mudava o tamanho da área do PDF ao rolar e fazia o leitor pular de página).
+    @ViewBuilder private var searchBar: some View {
+        if searchShown && mode == .original {
+            HStack(spacing: 10) {
+                Image(systemName: "magnifyingglass").foregroundStyle(Theme.secondaryText)
+                TextField("Buscar no documento", text: $query)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .submitLabel(.search)
+                    .focused($searchFocused)
+                    .onSubmit { model.search(query) }
+                if model.searched {
+                    Text(model.results.isEmpty ? "0" : "\(model.resultIndex + 1)/\(model.results.count)")
+                        .font(.system(size: 13, weight: .semibold)).foregroundStyle(Theme.secondaryText)
+                    Button { model.previous() } label: { Image(systemName: "chevron.up") }
+                        .disabled(model.results.isEmpty)
+                    Button { model.next() } label: { Image(systemName: "chevron.down") }
+                        .disabled(model.results.isEmpty)
+                }
+                Button("OK") { closeSearch() }.fontWeight(.semibold)
+            }
+            .padding(.horizontal, 12)
+            .frame(height: 46)
+            .background(RoundedRectangle(cornerRadius: 14).fill(.regularMaterial))
+            .padding(.horizontal, Theme.margin)
+            .padding(.top, 6)
+            .transition(.move(edge: .top).combined(with: .opacity))
+        }
+    }
+
+    private func openSearch() {
+        if mode == .text {
+            textModel.presentFind()
+            return
+        }
+        withAnimation { searchShown = true }
+        searchFocused = true
+    }
+
+    private func closeSearch() {
+        searchFocused = false
+        withAnimation { searchShown = false }
+        query = ""
+        model.clearSearch()
+    }
+
+    // seleção e marca-texto do modo ativo
+    private var marking: Bool { mode == .original ? model.marking : textModel.marking }
+    private var hasSelection: Bool { mode == .original ? model.hasSelection : textModel.hasSelection }
+    private var marksInSelection: Bool { mode == .original ? model.hasMarksInSelection : textModel.hasMarksInSelection }
+
+    private func setMarking(_ on: Bool) {
+        if mode == .original { model.setMarking(on) } else { textModel.setMarking(on) }
+    }
+
+    private func highlightSelection(_ c: HighlightColor) {
+        model.color = c
+        if mode == .original { model.highlightSelection(c) } else { textModel.highlightSelection(c) }
+    }
+
+    private func unmarkSelection() {
+        if mode == .original { model.unmarkSelection() } else { textModel.unmarkSelection() }
+    }
+
+    private func copySelection() -> Bool {
+        mode == .original ? model.copySelection() : textModel.copySelection()
+    }
+
+    private func removeMark(_ a: PDFAnnotation) {
+        if mode == .original { model.removeMark(a) } else { textModel.removeMark(a) }
+    }
+
+    private func recolorMark(_ a: PDFAnnotation, _ c: HighlightColor) {
+        if mode == .original { model.recolorMark(a, c) } else { textModel.recolorMark(a, c) }
     }
 
     /// Barra flutuante: ações do texto selecionado, ou o aviso do marca-texto ligado.
     @ViewBuilder private var floatingBar: some View {
-        if model.marking {
+        if marking {
             HStack(spacing: 12) {
                 Circle().fill(Color(model.color.uiColor)).frame(width: 18, height: 18)
                     .overlay(Circle().stroke(Color.black.opacity(0.15), lineWidth: 1))
@@ -636,136 +883,100 @@ struct PDFReaderScreen: View {
                     .foregroundStyle(Theme.text)
                     .lineLimit(2)
                 Spacer(minLength: 4)
-                if model.canUndoMark {
-                    Button { model.undoMark() } label: { Image(systemName: "arrow.uturn.backward") }
-                        .accessibilityLabel("Desfazer destaque")
-                }
-                Button("OK") { model.setMarking(false) }.fontWeight(.semibold)
+                Button("OK") { setMarking(false) }.fontWeight(.semibold)
             }
             .padding(.horizontal, 14)
             .frame(minHeight: 44)
             .background(Capsule().fill(.regularMaterial))
             .padding(.horizontal, Theme.margin)
-        } else if model.hasSelection {
-            HStack(spacing: 6) {
-                Button {
-                    if model.copySelection() { flow.toast("Texto copiado.") }
-                } label: { Label("Copiar", systemImage: "doc.on.doc") }
-                Divider().frame(height: 20)
-                Menu {
-                    ForEach(HighlightColor.allCases) { c in
-                        Button { guardEditable { model.highlightSelection(c) } } label: { Text(c.label) }
-                    }
-                } label: {
-                    Label("Destacar", systemImage: "highlighter")
-                } primaryAction: {
-                    guardEditable { model.highlightSelection(model.color) }
-                }
-                Divider().frame(height: 20)
-                Button { addToSummary() } label: { Label("Ao resumo", systemImage: "text.badge.plus") }
-                    .disabled(addingSummary)
-            }
-            .font(.system(size: 14, weight: .semibold))
-            .labelStyle(.titleAndIcon)
-            .padding(.horizontal, 14)
-            .frame(height: 44)
-            .background(Capsule().fill(.regularMaterial))
-            .padding(.horizontal, Theme.margin)
+        } else if hasSelection {
+            selectionBar
         }
     }
 
-    private var pageBar: some View {
-        HStack(spacing: 10) {
+    private static func dot(_ c: HighlightColor) -> UIImage {
+        UIImage(systemName: "circle.fill")?.withTintColor(c.uiColor, renderingMode: .alwaysOriginal) ?? UIImage()
+    }
+
+    private var selectionBar: some View {
+        HStack(spacing: 4) {
             Button {
-                pageText = ""
-                askPage = true
-            } label: {
-                Text("\(shownPage) / \(totalPages)")
-                    .font(.system(size: 14, weight: .semibold, design: .rounded))
-                    .foregroundStyle(Theme.text)
-                    .padding(.horizontal, 12)
-                    .frame(height: 34)
-                    .background(Capsule().fill(.regularMaterial))
-            }
-            .accessibilityLabel("Página \(shownPage) de \(totalPages). Toque para ir para outra página.")
-            Spacer()
-            if mode == .original && model.searched {
-                HStack(spacing: 14) {
-                    Text(model.results.isEmpty ? "Nada encontrado" : "\(model.resultIndex + 1) de \(model.results.count)")
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(Theme.text)
-                    if !model.results.isEmpty {
-                        Button { model.previous() } label: { Image(systemName: "chevron.up") }
-                        Button { model.next() } label: { Image(systemName: "chevron.down") }
+                if copySelection() { flow.toast("Texto copiado.") }
+            } label: { Label("Copiar", systemImage: "doc.on.doc") }
+            Divider().frame(height: 20)
+            // tocar abre todas as cores; escolher uma destaca e fecha tudo (como a barra do Word)
+            Menu {
+                ForEach(HighlightColor.allCases) { c in
+                    Button { guardEditable { highlightSelection(c) } } label: {
+                        Label { Text(c.label) } icon: { Image(uiImage: Self.dot(c)) }
                     }
                 }
-                .padding(.horizontal, 14)
-                .frame(height: 34)
-                .background(Capsule().fill(.regularMaterial))
+            } label: {
+                Label("Destacar", systemImage: "highlighter")
             }
+            if marksInSelection {
+                Divider().frame(height: 20)
+                Button { guardEditable { unmarkSelection() } } label: { Label("Tirar", systemImage: "eraser") }
+                    .accessibilityLabel("Desfazer destaque")
+            }
+            Divider().frame(height: 20)
+            Button { addToSummary() } label: { Label("Resumo", systemImage: "text.badge.plus") }
+                .disabled(addingSummary)
+                .accessibilityLabel("Adicionar ao resumo")
         }
+        .font(.system(size: 13.5, weight: .semibold))
+        .labelStyle(.titleAndIcon)
+        .padding(.horizontal, 12)
+        .frame(height: 44)
+        .background(Capsule().fill(.regularMaterial))
         .padding(.horizontal, Theme.margin)
-        .padding(.bottom, 10)
-        .opacity(totalPages > 0 ? 1 : 0)
     }
 
-    /// Barra de baixo, no estilo do app Notas: tudo à mão sem tirar espaço do texto.
+    /// Barra de baixo, no estilo do app Notas: tudo à mão sem tirar espaço do texto (igual nos dois modos).
     @ViewBuilder private var bottomBar: some View {
-        if mode == .original {
-            Button {
-                showThumbs.toggle()
-                UserDefaults.standard.set(showThumbs, forKey: "readerThumbs")
-            } label: {
-                Image(systemName: showThumbs ? "sidebar.left" : "sidebar.squares.left")
-            }
-            .accessibilityLabel(showThumbs ? "Esconder as miniaturas" : "Mostrar as miniaturas")
-            Spacer()
-            Menu {
-                Button {
-                    guardEditable { model.setMarking(!model.marking) }
-                } label: {
-                    Label(model.marking ? "Desligar o marca-texto" : "Ligar o marca-texto", systemImage: "highlighter")
-                }
-                Picker("Cor", selection: $model.color) {
-                    ForEach(HighlightColor.allCases) { c in Text(c.label).tag(c) }
-                }
-                if model.canUndoMark {
-                    Button { model.undoMark() } label: { Label("Desfazer o último destaque", systemImage: "arrow.uturn.backward") }
-                }
-            } label: {
-                Image(systemName: "highlighter")
-                    .foregroundStyle(model.marking ? Color(model.color.uiColor) : Color.accentColor)
-            } primaryAction: {
-                guardEditable { model.setMarking(!model.marking) }
-            }
-            .accessibilityLabel("Destacar")
-            Spacer()
-            Button { searchShown = true } label: { Image(systemName: "magnifyingglass") }
-                .accessibilityLabel("Buscar no documento")
-            Spacer()
-            Menu {
-                Button { addToSummary() } label: { Label("Adicionar a seleção ao resumo", systemImage: "text.badge.plus") }
-                    .disabled(!model.hasSelection)
-                if let s = summaryItem {
-                    Button { flow.open(.reader(s.id)) } label: { Label("Abrir o resumo", systemImage: "doc.text") }
-                }
-            } label: {
-                Image(systemName: "text.badge.plus")
-            }
-            .accessibilityLabel("Resumo")
-            Spacer()
-            Button { showTools = true } label: { Image(systemName: "ellipsis.circle") }
-                .accessibilityLabel("Ferramentas")
-            Spacer()
-            if let item { ShareLink(item: item.url) { Image(systemName: "square.and.arrow.up") } }
-        } else {
-            Button { textModel.presentFind() } label: { Image(systemName: "magnifyingglass") }
-            Spacer()
-            Button { showTools = true } label: { Image(systemName: "ellipsis.circle") }
-                .accessibilityLabel("Ferramentas")
-            Spacer()
-            if let item { ShareLink(item: item.url) { Image(systemName: "square.and.arrow.up") } }
+        Button {
+            showThumbs.toggle()
+            UserDefaults.standard.set(showThumbs, forKey: "readerThumbs")
+        } label: {
+            Image(systemName: showThumbs ? "sidebar.left" : "sidebar.squares.left")
         }
+        .accessibilityLabel(showThumbs ? "Esconder as miniaturas" : "Mostrar as miniaturas")
+        Spacer()
+        Menu {
+            Button {
+                guardEditable { setMarking(!marking) }
+            } label: {
+                Label(marking ? "Desligar o marca-texto" : "Ligar o marca-texto", systemImage: "highlighter")
+            }
+            Picker("Cor", selection: $model.color) {
+                ForEach(HighlightColor.allCases) { c in Text(c.label).tag(c) }
+            }
+        } label: {
+            Image(systemName: "highlighter")
+                .foregroundStyle(marking ? Color(model.color.uiColor) : Color.accentColor)
+        } primaryAction: {
+            guardEditable { setMarking(!marking) }
+        }
+        .accessibilityLabel("Destacar")
+        Spacer()
+        Button { openSearch() } label: { Image(systemName: "magnifyingglass") }
+            .accessibilityLabel("Buscar no documento")
+        Spacer()
+        Menu {
+            Button { addToSummary() } label: { Label("Adicionar a seleção ao resumo", systemImage: "text.badge.plus") }
+                .disabled(!hasSelection)
+            if let s = summaryItem {
+                Button { flow.open(.reader(s.id)) } label: { Label("Abrir o resumo", systemImage: "doc.text") }
+            }
+        } label: {
+            Image(systemName: "text.badge.plus")
+        }
+        .accessibilityLabel("Resumo")
+        Spacer()
+        Button { showTools = true } label: { Image(systemName: "ellipsis.circle") }
+            .accessibilityLabel("Ferramentas")
+        Spacer()
+        if let target = activeItem { ShareLink(item: target.url) { Image(systemName: "square.and.arrow.up") } }
     }
 
     @ToolbarContentBuilder
@@ -782,48 +993,54 @@ struct PDFReaderScreen: View {
         }
         ToolbarItemGroup(placement: .topBarTrailing) {
             if mode == .text {
-                Menu {
-                    Section("Tamanho da letra") {
-                        Button { textModel.biggerFont() } label: { Label("Aumentar", systemImage: "textformat.size.larger") }
-                        Button { textModel.smallerFont() } label: { Label("Diminuir", systemImage: "textformat.size.smaller") }
-                    }
-                    Section("Letra") {
-                        Picker("Letra", selection: $textModel.serif) {
-                            Text("Com serifa").tag(true)
-                            Text("Sem serifa").tag(false)
-                        }
-                    }
-                    Section("Fundo") {
-                        Picker("Fundo", selection: $textModel.theme) {
-                            ForEach(ReaderTheme.allCases) { Text($0.rawValue).tag($0) }
-                        }
-                    }
-                    Section {
-                        Button {
-                            UIPasteboard.general.string = textModel.document?.plainText ?? ""
-                            AppFlow.shared.toast("Texto copiado.")
-                        } label: { Label("Copiar todo o texto", systemImage: "doc.on.doc") }
-                        if let text = textModel.document?.plainText {
-                            ShareLink(item: text, preview: SharePreview(item?.name ?? "Texto")) {
-                                Label("Compartilhar o texto", systemImage: "square.and.arrow.up")
-                            }
-                        }
-                    }
-                } label: {
-                    Image(systemName: "textformat.size")
-                }
-                .accessibilityLabel("Opções de leitura")
+                textOptionsMenu
             } else if saving {
                 ProgressView()
             }
         }
     }
 
+    private var textOptionsMenu: some View {
+        Menu {
+            Section("Tamanho da letra") {
+                Button { textModel.biggerFont() } label: { Label("Aumentar", systemImage: "textformat.size.larger") }
+                Button { textModel.smallerFont() } label: { Label("Diminuir", systemImage: "textformat.size.smaller") }
+            }
+            Section("Letra") {
+                Picker("Letra", selection: $textModel.serif) {
+                    Text("Com serifa").tag(true)
+                    Text("Sem serifa").tag(false)
+                }
+            }
+            Section("Fundo") {
+                Picker("Fundo", selection: $textModel.theme) {
+                    ForEach(ReaderTheme.allCases) { Text($0.rawValue).tag($0) }
+                }
+            }
+            Section {
+                Button {
+                    UIPasteboard.general.string = textModel.document?.plainText ?? ""
+                    AppFlow.shared.toast("Texto copiado.")
+                } label: { Label("Copiar todo o texto", systemImage: "doc.on.doc") }
+                if let text = textModel.document?.plainText {
+                    ShareLink(item: text, preview: SharePreview(item?.name ?? "Texto")) {
+                        Label("Compartilhar o texto", systemImage: "square.and.arrow.up")
+                    }
+                }
+            }
+        } label: {
+            Image(systemName: "textformat.size")
+        }
+        .accessibilityLabel("Opções de leitura")
+    }
+
     // MARK: - Ações
 
-    /// Destaques e cortes mudam o arquivo: não valem para PDF com senha (a cópia perderia a senha).
+    /// Destaques, cortes e numeração mudam o arquivo: não valem para PDF com senha nem para PDF assinado.
     private func guardEditable(_ action: () -> Void) {
-        if locked {
+        if let target = activeItem, target.meta.isSigned {
+            flow.toast("Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura.")
+        } else if locked && mode == .original {
             flow.toast("Este PDF tem senha. Para destacar, crie antes uma cópia sem senha (Ferramentas › Remover senha).")
         } else {
             action()
@@ -831,17 +1048,28 @@ struct PDFReaderScreen: View {
     }
 
     private func addToSummary() {
-        guard let item else { return }
-        guard let ex = model.excerpt() else {
-            flow.toast("Selecione o trecho (toque e segure no texto) e depois toque em “Ao resumo”.")
+        guard let source = activeItem else { return }
+        let ex = mode == .original ? model.excerpt() : textModel.excerpt()
+        guard let ex else {
+            flow.toast("Selecione o trecho (toque e segure no texto) e depois toque em “Resumo”.")
             return
         }
         addingSummary = true
+        let rel = Summary.relativePath(for: source)
+        let storeURL = Summary.storeURL(root: library.root, rel: rel)
+        let existing = Summary.find(in: library, for: source)
+        let before = existing.flatMap { try? Data(contentsOf: $0.url) }
+        let storeBefore = try? Data(contentsOf: storeURL)
         Task {
             do {
-                let s = try await Summary.add([ex], from: item, library: library)
-                model.pdfView?.clearSelection()
-                model.selectionChanged()
+                let s = try await Summary.add([ex], from: source, library: library)
+                if let after = try? Data(contentsOf: s.url) {
+                    history.record("Adicionar ao resumo", .summary(summaryID: s.id, rel: s.relativePath, folder: s.folder,
+                                                                    name: s.name, before: before, after: after,
+                                                                    storeBefore: storeBefore,
+                                                                    storeAfter: try? Data(contentsOf: storeURL)))
+                }
+                if mode == .original { model.clearSelection() } else { textModel.clearSelection() }
                 flow.toast("Trecho adicionado a “\(s.name)”.", actionTitle: "Abrir") { flow.open(.reader(s.id)) }
             } catch {
                 flow.show(error: error)
@@ -850,84 +1078,194 @@ struct PDFReaderScreen: View {
         }
     }
 
+    // MARK: desfazer e refazer
+
+    private func undo() { step(forward: false) }
+    private func redo() { step(forward: true) }
+
+    private func step(forward: Bool) {
+        guard let s = forward ? history.popRedo() : history.popUndo() else { return }
+        Task {
+            do {
+                try await apply(s.change, forward: forward)
+                if forward { history.pushUndo(s) } else { history.pushRedo(s) }
+                flow.toast(forward ? "Refeito: \(s.label.lowercased())." : "Desfeito: \(s.label.lowercased()).")
+            } catch {
+                flow.show(error: error)
+            }
+        }
+    }
+
+    private func document(for docID: String) -> PDFDocument? {
+        if docID == item?.id, let d = model.pdfView?.document { return d }
+        if docID == textModel.docID { return textModel.pdf }
+        return nil
+    }
+
+    private func apply(_ change: ReaderHistory.Change, forward: Bool) async throws {
+        switch change {
+        case .marks(let docID, _, _), .recolor(let docID, _, _, _, _):
+            guard let doc = document(for: docID) else { throw UserFacingError("O PDF desse destaque não está aberto.") }
+            ReaderHistory.apply(change, forward: forward, in: doc)
+            model.pdfView?.setNeedsDisplay()
+            model.pdfView?.layoutDocumentView()
+            textModel.applyMarks()
+            model.selectionChanged()
+            scheduleSave(docID)
+        case .file(let itemID, let before, let after):
+            guard let target = library.item(id: itemID) else { return }
+            cancelSaves()
+            try await library.replaceContents(target, with: forward ? after : before)
+            reloadDocument()
+        case .summary(_, let rel, let folder, let name, let before, let after, let storeBefore, let storeAfter):
+            let storeURL = Summary.storeURL(root: library.root, rel: rel)
+            let current = library.item(path: rel)
+            let data = forward ? after : before
+            if let data {
+                if let current {
+                    try await library.replaceContents(current, with: data)
+                } else {
+                    _ = try library.save(newData: data, name: name, folder: folder)
+                }
+            } else if let current {
+                try library.delete([current])
+            }
+            let store = forward ? storeAfter : storeBefore
+            if let store {
+                try? store.write(to: storeURL, options: .atomic)
+            } else {
+                try? FileManager.default.removeItem(at: storeURL)
+            }
+        }
+    }
+
+    // MARK: gravar
+
     /// Grava os destaques pouco depois da última mudança (e ao sair do leitor).
-    private func scheduleSave() {
-        saveTask?.cancel()
-        saveTask = Task {
+    private func scheduleSave(_ docID: String) {
+        saveTasks[docID]?.cancel()
+        saveTasks[docID] = Task {
             try? await Task.sleep(nanoseconds: 1_200_000_000)
             guard !Task.isCancelled else { return }
-            await save()
+            await save(docID)
         }
     }
 
-    private func saveNow() {
-        guard saveTask != nil else { return }
-        saveTask?.cancel()
-        Task { await save() }
+    private func cancelSaves() {
+        for t in saveTasks.values { t.cancel() }
+        saveTasks = [:]
     }
 
-    private func save() async {
-        guard let item, let doc = model.pdfView?.document, !locked else {
-            saveTask = nil
-            return
-        }
+    private func saveAllNow() {
+        let ids = Array(saveTasks.keys)
+        guard !ids.isEmpty else { return }
+        cancelSaves()
+        Task { for id in ids { await save(id) } }
+    }
+
+    /// Grava agora o que estiver pendente (antes de cortar, numerar ou assinar).
+    private func flushSaves() async {
+        let ids = Array(saveTasks.keys)
+        cancelSaves()
+        for id in ids { await save(id) }
+    }
+
+    private func save(_ docID: String) async {
+        defer { saveTasks[docID] = nil }
+        guard let target = library.item(id: docID), target.meta.locked != true, !target.meta.isSigned,
+              let doc = document(for: docID) else { return }
         saving = true
         do {
-            try await library.saveEdited(item, document: doc)
-            expectedVersion = library.item(id: itemID)?.version
+            try await library.saveEdited(target, document: doc)
+            if docID == itemID { expectedVersion = library.item(id: itemID)?.version }
         } catch {
             flow.show(error: error)
         }
         saving = false
-        saveTask = nil
     }
 
     private func reloadDocument() {
         expectedVersion = library.item(id: itemID)?.version
         reloadToken += 1
         model.clearSearch()
+        if mode == .text, let source = textSource {
+            Task {
+                try? await Task.sleep(nanoseconds: 300_000_000)
+                let shared = source.id == item?.id ? model.pdfView?.document : nil
+                let fresh = library.item(id: source.id) ?? source
+                await textModel.load(url: fresh.url, version: fresh.version, pdf: shared, id: fresh.id,
+                                     reviewPages: fresh.meta.reviewPages ?? [], force: true)
+            }
+        }
     }
 
     private func runPendingAction() {
-        guard let action = pendingAction, let item else { return }
+        guard let action = pendingAction, let target = activeItem else { return }
         pendingAction = nil
         switch action {
         case .textMode: mode = .text
+        case .pageMode: mode = .original
         case .goToPage:
             pageText = ""
             askPage = true
-        case .crop, .number, .split, .dewarp, .protect:
-            guardEditable { sheetAction = action }
+        case .crop, .number:
+            guardEditable {
+                Task {
+                    await flushSaves()
+                    fileBefore = try? Data(contentsOf: target.url)
+                    sheetAction = action
+                }
+            }
+        case .split, .dewarp, .protect:
+            if action != .split, target.meta.isSigned {
+                flow.toast("Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura.")
+            } else {
+                sheetAction = action
+            }
+        case .sign:
+            Task {
+                await flushSaves()
+                sheetAction = .sign
+            }
         case .ocr:
-            if jobs.isBusy(with: item.id) {
+            if jobs.isBusy(with: target.id) {
                 flow.toast("O OCR deste PDF já está em andamento.")
-            } else if item.meta.textStatus == .digital {
+            } else if target.meta.textStatus == .digital {
                 flow.toast("Todas as páginas já têm texto selecionável. O OCR não é necessário.")
             } else {
-                jobs.startOCR(item, library: library, flow: flow)
+                jobs.startOCR(target, library: library, flow: flow)
             }
-        case .organize: guardEditable { flow.open(.organize(item.id)) }
+        case .organize: guardEditable { flow.open(.organize(target.id)) }
         case .insert: guardEditable { showInsertMenu = true }
-        case .remove: guardEditable { flow.openTool("remove", on: item) }
-        case .extract: guardEditable { flow.openTool("extract", on: item) }
+        case .remove: guardEditable { flow.openTool("remove", on: target) }
+        case .extract: flow.openTool("extract", on: target)
         case .merge:
-            flow.mergePreselection = [item.id]
+            flow.mergePreselection = [target.id]
             flow.open(.merge)
         case .unprotect: askUnprotect = true
         case .duplicate:
             do {
-                if let copy = try library.duplicate(item) { flow.toast("Cópia criada: \(copy.name)") }
+                if let copy = try library.duplicate(target) { flow.toast("Cópia criada: \(copy.name)") }
             } catch { flow.show(error: error) }
         case .favorite:
-            library.setFavorite(item, !item.meta.favorite)
-            flow.toast(item.meta.favorite ? "Removido dos Favoritos." : "Adicionado aos Favoritos.")
-        case .rename: actions.rename(item)
-        case .move: actions.move([item])
-        case .details: flow.open(.document(item.id))
+            library.setFavorite(target, !target.meta.favorite)
+            flow.toast(target.meta.favorite ? "Removido dos Favoritos." : "Adicionado aos Favoritos.")
+        case .rename: actions.rename(target)
+        case .move: actions.move([target])
+        case .details: flow.open(.document(target.id))
         case .undo: confirmUndo = true
-        case .delete: actions.delete([item])
+        case .delete: actions.delete([target])
         case .openSummary:
             if let s = summaryItem { flow.open(.reader(s.id)) }
+        }
+    }
+
+    /// Depois de cortar ou numerar: guarda o antes e o depois para o desfazer.
+    private func sheetClosed() {
+        guard let before = fileBefore, let target = activeItem else { return }
+        fileBefore = nil
+        if let after = try? Data(contentsOf: target.url), after != before {
+            history.record("Corte ou numeração", .file(itemID: target.id, before: before, after: after))
         }
     }
 
@@ -935,7 +1273,7 @@ struct PDFReaderScreen: View {
     private func actionSheet(_ action: ReaderAction, item: PDFItem) -> some View {
         switch action {
         case .crop:
-            CropSheet(item: item, startPage: model.currentPage, onDone: { reloadDocument() })
+            CropSheet(item: item, startPage: shownPage, onDone: { reloadDocument() })
                 .appEnvironment()
         case .number:
             NumberSheet(item: item, onDone: { reloadDocument() })
@@ -944,6 +1282,8 @@ struct PDFReaderScreen: View {
             SplitSheet(item: item).appEnvironment()
         case .dewarp:
             DewarpSheet(item: item).appEnvironment()
+        case .sign:
+            SignSheet(item: item).appEnvironment()
         default:
             ProtectSheet(item: item).appEnvironment()
         }
@@ -953,6 +1293,7 @@ struct PDFReaderScreen: View {
 /// Todas as funções do app, a partir do leitor.
 struct ReaderToolsSheet: View {
     let item: PDFItem?
+    let mode: ReaderMode
     let locked: Bool
     let hasTextMode: Bool
     let hasSummary: Bool
@@ -960,29 +1301,37 @@ struct ReaderToolsSheet: View {
     let onPick: (ReaderAction) -> Void
     @Environment(\.dismiss) private var dismiss
 
+    private var signed: Bool { item?.meta.isSigned == true }
+
     var body: some View {
         NavigationStack {
             List {
-                Section("Página") {
-                    if hasTextMode { row("Modo leitor (só o texto)", "text.alignleft", .textMode) }
+                Section(mode == .original ? "Página" : "Texto") {
+                    if mode == .text {
+                        row("Ver as páginas (original)", "doc", .pageMode)
+                    } else if hasTextMode {
+                        row("Modo leitor (só o texto)", "text.alignleft", .textMode)
+                    }
                     row("Ir para a página…", "arrow.right.doc.on.clipboard", .goToPage)
-                    row("Cortar e girar páginas", "crop.rotate", .crop, disabled: locked)
-                    row("Numerar páginas", "number", .number, disabled: locked)
+                    row("Cortar e girar páginas", "crop.rotate", .crop, disabled: locked || signed)
+                    row("Numerar páginas", "number", .number, disabled: locked || signed)
                     if hasSummary { row("Abrir o resumo deste PDF", "doc.text", .openSummary) }
                 }
                 Section("Documento") {
-                    row("Fazer OCR", "text.viewfinder", .ocr, disabled: locked)
-                    row("Organizar páginas", "rectangle.grid.2x2", .organize, disabled: locked)
-                    row("Incluir páginas", "plus.rectangle.on.rectangle", .insert, disabled: locked)
-                    row("Remover páginas", "minus.rectangle", .remove, disabled: locked)
+                    row(signed ? "Assinar de novo (outra assinatura)" : "Assinar digitalmente", "signature", .sign,
+                        disabled: locked)
+                    row("Fazer OCR", "text.viewfinder", .ocr, disabled: locked || signed)
+                    row("Organizar páginas", "rectangle.grid.2x2", .organize, disabled: locked || signed)
+                    row("Incluir páginas", "plus.rectangle.on.rectangle", .insert, disabled: locked || signed)
+                    row("Remover páginas", "minus.rectangle", .remove, disabled: locked || signed)
                     row("Extrair páginas", "doc.badge.plus", .extract, disabled: locked)
                     row("Dividir em partes", "scissors", .split, disabled: locked)
                     row("Combinar com outros PDFs", "square.stack.3d.down.right", .merge)
-                    row("Corrigir páginas curvas", "book.pages", .dewarp, disabled: locked)
+                    row("Corrigir páginas curvas", "book.pages", .dewarp, disabled: locked || signed)
                     if locked {
                         row("Remover senha", "lock.open", .unprotect)
                     } else {
-                        row("Proteger com senha", "lock", .protect)
+                        row("Proteger com senha", "lock", .protect, disabled: signed)
                     }
                     row("Duplicar", "plus.square.on.square", .duplicate)
                 }

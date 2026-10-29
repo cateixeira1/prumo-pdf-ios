@@ -10,8 +10,8 @@ settings:
   base:
     SWIFT_VERSION: "5.0"
     SWIFT_STRICT_CONCURRENCY: minimal
-    MARKETING_VERSION: "1.8.0"
-    CURRENT_PROJECT_VERSION: "9"
+    MARKETING_VERSION: "1.9.0"
+    CURRENT_PROJECT_VERSION: "10"
     CODE_SIGN_STYLE: Automatic
     DEVELOPMENT_TEAM: ""
     ENABLE_USER_SCRIPT_SANDBOXING: "YES"
@@ -30,7 +30,7 @@ targets:
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true
         NSCameraUsageDescription: A câmera é usada para escanear documentos. As imagens ficam só neste iPhone.
-        NSFaceIDUsageDescription: O Face ID destrava o Prumo PDF, se você ligar a trava em Ajustes.
+        NSFaceIDUsageDescription: O Face ID destrava o Prumo PDF, se você ligar a trava em Ajustes, e confirma as assinaturas digitais.
         UIFileSharingEnabled: true
         LSSupportsOpeningDocumentsInPlace: true
         UILaunchScreen: {}

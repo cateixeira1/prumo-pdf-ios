@@ -23,6 +23,13 @@ enum DemoSeeder {
     private static var pendingSearch: String?
     private static var pendingPickerSource: String?
     private static var pendingHomeTool: String?
+    private static var pendingReaderSelection = false
+
+    /// Captura do leitor com texto selecionado (barra de seleção à mostra).
+    static func consumeReaderSelection() -> Bool {
+        defer { pendingReaderSelection = false }
+        return pendingReaderSelection
+    }
 
     static func consumeHomeTool() -> String? {
         defer { pendingHomeTool = nil }
@@ -110,6 +117,18 @@ enum DemoSeeder {
             if let p = peticao {
                 pendingDetailAction = screen
                 flow.path = [.document(p.id)]
+            }
+        case "sign":
+            if let p = peticao {
+                _ = try? CertificateStore.importP12(DemoCertificate.data, password: DemoCertificate.password)
+                pendingDetailAction = "sign"
+                flow.path = [.document(p.id)]
+            }
+        case "readerselect":
+            UserDefaults.standard.set(false, forKey: "readerThumbs")
+            if let p = peticao {
+                pendingReaderSelection = true
+                flow.path = [.document(p.id), .reader(p.id)]
             }
         case "settings": flow.path = [.settings]
         case "tools": pendingHomeTool = "organize"

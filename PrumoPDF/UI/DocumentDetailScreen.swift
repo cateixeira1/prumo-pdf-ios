@@ -32,6 +32,7 @@ struct DocumentDetailScreen: View {
     @State private var unprotectText = ""
     @State private var showCrop = false
     @State private var showNumber = false
+    @State private var showSign = false
 
     private var item: PDFItem? { library.item(id: itemID) }
 
@@ -66,6 +67,7 @@ struct DocumentDetailScreen: View {
                     }
                 }
             }
+            if item.meta.isSigned { signedCard(item) }
             TileGrid {
                 Tile(title: "Ler", systemImage: "book.fill", color: Theme.blue,
                      subtitle: hasOCRText(item) ? "Original ou modo leitor" : nil) {
@@ -87,22 +89,24 @@ struct DocumentDetailScreen: View {
                 }
                 Tile(title: "Organizar páginas", systemImage: "rectangle.grid.2x2.fill", color: Theme.purple,
                      count: pages > 0 ? "\(pages)" : nil, shape: .rounded) {
-                    flow.open(.organize(item.id))
+                    edit(item) { flow.open(.organize(item.id)) }
                 }
                 Tile(title: "Incluir páginas", systemImage: "plus.rectangle.on.rectangle", color: Theme.teal,
                      shape: .rounded) {
-                    showInsertMenu = true
+                    edit(item) { showInsertMenu = true }
                 }
                 Tile(title: "Remover páginas", systemImage: "minus.rectangle", color: Theme.red, shape: .rounded) {
-                    pickerRequest = PagePickerRequest(kind: .remove, sourceURL: item.url,
-                                                      sourceVersion: item.version, sourceTitle: item.name)
+                    edit(item) {
+                        pickerRequest = PagePickerRequest(kind: .remove, sourceURL: item.url,
+                                                          sourceVersion: item.version, sourceTitle: item.name)
+                    }
                 }
                 Tile(title: "Dividir em partes", systemImage: "scissors", color: Theme.pink) {
                     showSplit = true
                 }
                 Tile(title: "Corrigir páginas curvas", systemImage: "book.pages", color: Theme.teal, shape: .rounded,
                      subtitle: "Fotos de livros, papel ondulado") {
-                    showDewarp = true
+                    edit(item) { showDewarp = true }
                 }
                 Tile(title: "Extrair páginas", systemImage: "doc.badge.plus", color: Theme.indigo) {
                     pickerRequest = PagePickerRequest(kind: .extract, sourceURL: item.url,
@@ -110,12 +114,13 @@ struct DocumentDetailScreen: View {
                 }
                 Tile(title: "Cortar e girar", systemImage: "crop.rotate", color: Theme.indigo, shape: .rounded,
                      subtitle: "Margens e orientação") {
-                    if item.meta.locked == true { lockedToast() } else { showCrop = true }
+                    if item.meta.locked == true { lockedToast() } else { edit(item) { showCrop = true } }
                 }
                 Tile(title: "Numerar páginas", systemImage: "number", color: Theme.indigo,
                      subtitle: "Posição e formato") {
-                    if item.meta.locked == true { lockedToast() } else { showNumber = true }
+                    if item.meta.locked == true { lockedToast() } else { edit(item) { showNumber = true } }
                 }
+                signTile(item)
                 Tile(title: "Renomear", systemImage: "pencil", color: Theme.gray) {
                     actions.rename(item)
                 }
@@ -134,7 +139,7 @@ struct DocumentDetailScreen: View {
                 } else {
                     Tile(title: "Proteger com senha", systemImage: "lock.fill", color: Theme.purple, shape: .rounded,
                          subtitle: "Criptografia padrão de PDF") {
-                        showProtect = true
+                        edit(item) { showProtect = true }
                     }
                 }
                 Tile(title: "Duplicar", systemImage: "plus.square.on.square", color: Theme.gray, shape: .rounded) {
@@ -237,7 +242,13 @@ struct DocumentDetailScreen: View {
         }
         .onAppear {
             // Ferramenta pedida na tela inicial (ou captura de tela de demonstração).
-            switch flow.consumeTool(for: item.id) ?? DemoSeeder.consumeDetailAction() {
+            let requested = flow.consumeTool(for: item.id) ?? DemoSeeder.consumeDetailAction()
+            let editing: Set<String> = ["crop", "number", "protect", "dewarp", "insert", "insertLibrary", "insertFile", "remove"]
+            if let r = requested, editing.contains(r), item.meta.isSigned {
+                edit(item) {}
+                return
+            }
+            switch requested {
             case "split"?: showSplit = true
             case "picker"?: showLibraryInsert = true
             case "readchoice"?: showReadChoice = true
@@ -248,6 +259,7 @@ struct DocumentDetailScreen: View {
             case "crop"?: if item.meta.locked == true { lockedToast() } else { showCrop = true }
             case "number"?: if item.meta.locked == true { lockedToast() } else { showNumber = true }
             case "protect"?: showProtect = true
+            case "sign"?: showSign = true
             case "remove"?:
                 pickerRequest = PagePickerRequest(kind: .remove, sourceURL: item.url,
                                                   sourceVersion: item.version, sourceTitle: item.name)
@@ -328,12 +340,50 @@ struct DocumentDetailScreen: View {
                         Badge(text: status.label, color: status.needsOCR ? Theme.orange : Theme.blue)
                     }
                     if item.meta.isOCRResult { Badge(text: "OCR", color: Theme.green) }
+                    if item.meta.isSigned { Badge(text: "Assinado", color: Theme.blue) }
                 }
             }
             Spacer(minLength: 0)
         }
         .padding(14)
         .background(RoundedRectangle(cornerRadius: Theme.tileRadius, style: .continuous).fill(Theme.tile))
+    }
+
+    /// PDF assinado não pode ser alterado (qualquer mudança invalida a assinatura).
+    private func edit(_ item: PDFItem, _ action: () -> Void) {
+        if item.meta.isSigned {
+            flow.toast("Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura. Use o original, sem assinatura, para mudar páginas, cortar ou numerar.")
+        } else {
+            action()
+        }
+    }
+
+    private func signTile(_ item: PDFItem) -> some View {
+        Tile(title: "Assinar digitalmente", systemImage: "signature", color: Theme.blue, shape: .rounded,
+             subtitle: item.meta.isSigned ? "Assinado · assinar de novo" : "Certificado A1") {
+            if item.meta.locked == true {
+                flow.toast("PDF com senha não pode ser assinado. Remova a senha antes.")
+            } else {
+                showSign = true
+            }
+        }
+        .sheet(isPresented: $showSign) {
+            SignSheet(item: item).appEnvironment()
+        }
+    }
+
+    private func signedCard(_ item: PDFItem) -> some View {
+        let n = item.meta.signed ?? 1
+        let count: String = n == 1 ? "1 assinatura" : "\(n) assinaturas"
+        return TileCard {
+            Label {
+                Text("Assinado digitalmente (\(count)). O PDF não pode ser alterado sem invalidar a assinatura. Para conferir a validade, abra no Adobe Reader ou em validar.iti.gov.br.")
+                    .font(.system(size: 13.5))
+                    .foregroundStyle(Theme.text)
+            } icon: {
+                Image(systemName: "signature").foregroundStyle(Theme.blue)
+            }
+        }
     }
 
     private func lockedToast() {

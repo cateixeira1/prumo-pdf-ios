@@ -7,6 +7,9 @@ struct ReaderDocument {
     struct Page {
         let number: Int          // começa em 1
         let paragraphs: [String]
+        /// Para cada parágrafo, a posição (em `page.string`, UTF-16) de cada caractere; -1 nos espaços
+        /// criados ao juntar linhas. Assim um trecho escolhido no texto corrido vira um destaque no PDF.
+        var maps: [[Int]] = []
         var isEmpty: Bool { paragraphs.isEmpty }
     }
 
@@ -25,6 +28,7 @@ struct ReaderDocument {
 struct TextLine {
     let text: String
     let rect: CGRect   // no espaço da página (origem embaixo à esquerda); .null quando desconhecido
+    var range: NSRange? = nil   // onde o texto está em `page.string` (UTF-16)
 }
 
 enum ReaderTextBuilder {
@@ -39,7 +43,8 @@ enum ReaderTextBuilder {
         for i in 0..<doc.pageCount {
             autoreleasepool {
                 guard let page = doc.page(at: i) else { return }
-                pages.append(ReaderDocument.Page(number: i + 1, paragraphs: reflow(lines(of: page))))
+                let mapped = reflowMapped(lines(of: page))
+                pages.append(ReaderDocument.Page(number: i + 1, paragraphs: mapped.map { $0.0 }, maps: mapped.map { $0.1 }))
             }
         }
         return ReaderDocument(pages: pages)
@@ -47,22 +52,101 @@ enum ReaderTextBuilder {
 
     /// Linhas da página, com a posição de cada uma quando o PDFKit informa.
     static func lines(of page: PDFPage) -> [TextLine] {
+        let full = (page.string ?? "") as NSString
         if page.rotation % 360 == 0,
            let selection = page.selection(for: page.bounds(for: .mediaBox)) {
             let byLine = selection.selectionsByLine()
                 .compactMap { sel -> TextLine? in
-                    let text = (sel.string ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+                    let raw = sel.string ?? ""
+                    let text = raw.trimmingCharacters(in: .whitespacesAndNewlines)
                     guard !text.isEmpty else { return nil }
-                    return TextLine(text: text, rect: sel.bounds(for: page))
+                    var range: NSRange?
+                    if sel.numberOfTextRanges(on: page) > 0 {
+                        let r = sel.range(at: 0, on: page)
+                        let lead = (raw as NSString).range(of: text).location
+                        if r.location != NSNotFound, lead != NSNotFound {
+                            let candidate = NSRange(location: r.location + lead, length: (text as NSString).length)
+                            if NSMaxRange(candidate) <= full.length, full.substring(with: candidate) == text {
+                                range = candidate
+                            }
+                        }
+                    }
+                    if range == nil { range = locate(text, in: full, near: 0) }
+                    return TextLine(text: text, rect: sel.bounds(for: page), range: range)
                 }
             if !byLine.isEmpty { return byLine }
         }
-        // Sem posições: usa só o texto, linha por linha.
+        // Sem posições: usa só o texto, linha por linha (procurando onde cada linha está).
+        var cursor = 0
         return (page.string ?? "")
             .components(separatedBy: .newlines)
             .map { $0.trimmingCharacters(in: .whitespaces) }
             .filter { !$0.isEmpty }
-            .map { TextLine(text: $0, rect: .null) }
+            .map { text in
+                let r = locate(text, in: full, near: cursor)
+                if let r { cursor = NSMaxRange(r) }
+                return TextLine(text: text, rect: .null, range: r)
+            }
+    }
+
+    private static func locate(_ text: String, in full: NSString, near start: Int) -> NSRange? {
+        guard start < full.length else { return nil }
+        let r = full.range(of: text, options: [], range: NSRange(location: start, length: full.length - start))
+        return r.location == NSNotFound ? nil : r
+    }
+
+    /// Como `reflow`, guardando a posição de cada caractere na página.
+    static func reflowMapped(_ lines: [TextLine]) -> [(String, [Int])] {
+        guard !lines.isEmpty else { return [] }
+        func positions(_ line: TextLine) -> [Int] {
+            let n = (line.text as NSString).length
+            if let r = line.range, r.length == n { return (0..<n).map { r.location + $0 } }
+            return Array(repeating: -1, count: n)
+        }
+        let texts = reflow(lines)
+        // refaz a junção com as posições (mesmas regras de `reflow`)
+        var out: [(String, [Int])] = []
+        var current = ""
+        var currentMap: [Int] = []
+        var previous: TextLine?
+        let known = lines.filter { !$0.rect.isNull && $0.rect.height > 0 }
+        let medianHeight = median(known.map(\.rect.height)) ?? 0
+        let maxWidth = known.map(\.rect.width).max() ?? 0
+        var gaps: [CGFloat] = []
+        for (a, b) in zip(lines, lines.dropFirst()) where !a.rect.isNull && !b.rect.isNull {
+            let gap = a.rect.minY - b.rect.maxY
+            if gap > -medianHeight * 0.5 { gaps.append(max(0, gap)) }
+        }
+        let paragraphGap: CGFloat
+        if gaps.count >= 3, let typical = median(gaps) {
+            paragraphGap = max(typical * 1.6, typical + medianHeight * 0.45)
+        } else {
+            paragraphGap = medianHeight * 0.9
+        }
+        for line in lines {
+            guard let prev = previous else {
+                current = line.text
+                currentMap = positions(line)
+                previous = line
+                continue
+            }
+            if startsNewParagraph(line, after: prev, medianHeight: medianHeight,
+                                  paragraphGap: paragraphGap, maxWidth: maxWidth) {
+                out.append((current, currentMap))
+                current = line.text
+                currentMap = positions(line)
+            } else if current.hasSuffix("-"), let first = line.text.first, first.isLowercase {
+                current = String(current.dropLast()) + line.text
+                currentMap = Array(currentMap.dropLast()) + positions(line)
+            } else {
+                current += " " + line.text
+                currentMap += [-1] + positions(line)
+            }
+            previous = line
+        }
+        if !current.isEmpty { out.append((current, currentMap)) }
+        // mesmo resultado de `reflow` (os dois seguem as mesmas regras)
+        return out.count == texts.count ? out : texts.map { ($0, Array(repeating: -1, count: ($0 as NSString).length)) }
     }
 
     /// Junta as linhas em parágrafos.

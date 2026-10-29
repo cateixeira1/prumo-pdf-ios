@@ -22,6 +22,7 @@ struct DocMeta: Codable, Hashable {
     var hasUndo = false
     var added: Date?
     var locked: Bool?                // PDF protegido por senha
+    var signed: Int?                 // quantas assinaturas digitais o PDF tem
 
     init(id: String = UUID().uuidString, path: String, added: Date? = Date()) {
         self.id = id
@@ -49,7 +50,10 @@ struct DocMeta: Codable, Hashable {
         hasUndo = try c.decodeIfPresent(Bool.self, forKey: .hasUndo) ?? false
         added = try c.decodeIfPresent(Date.self, forKey: .added)
         locked = try c.decodeIfPresent(Bool.self, forKey: .locked)
+        signed = try? c.decodeIfPresent(Int.self, forKey: .signed)
     }
+
+    var isSigned: Bool { (signed ?? 0) > 0 }
 }
 
 struct PDFItem: Identifiable, Hashable {
@@ -503,6 +507,7 @@ final class Library: ObservableObject {
         meta.textStatus = analysis?.status
         meta.ocrPages = analysis?.ocrPages
         meta.locked = analysis?.locked == true ? true : nil
+        meta.signed = (analysis?.signed ?? 0) > 0 ? analysis?.signed : nil
         metas[id] = meta
         texts[id] = folded
         if let i = items.firstIndex(where: { $0.id == id }) {
@@ -823,6 +828,12 @@ final class Library: ObservableObject {
             if !keepReview { $0.reviewPages = nil }
         }
         reload()
+    }
+
+    /// Depois de assinar: o PDF passa a ter `count` assinaturas (sem esperar a próxima análise).
+    func markSigned(_ id: String, count: Int) {
+        updateMeta(id) { $0.signed = count > 0 ? count : nil }
+        if let i = items.firstIndex(where: { $0.id == id }), let m = metas[id] { items[i].meta = m }
     }
 
     func canUndo(_ item: PDFItem) -> Bool {

@@ -1,5 +1,6 @@
 import Foundation
 import LocalAuthentication
+import UIKit
 import PDFKit
 import SwiftUI
 
@@ -83,8 +84,16 @@ final class AppLock: ObservableObject {
         if enabled { locked = true }
     }
 
-    /// Pede Face ID (ou o código do iPhone, se a biometria falhar).
-    func unlock() async {
+    private var prompting = false
+
+    /// Pede Face ID (ou o código do iPhone, se a biometria falhar). `automatic`: pedido feito pelo app
+    /// (ao voltar para ele), não pelo botão. Só acontece com o app ativo na tela: pedir antes disso
+    /// (quando a tela bloqueada aparece, ao sair do app) dava o erro "LocalAuthentication -6".
+    func unlock(automatic: Bool = false) async {
+        guard locked, !prompting else { return }
+        if automatic && UIApplication.shared.applicationState != .active { return }
+        prompting = true
+        defer { prompting = false }
         let ctx = LAContext()
         ctx.localizedCancelTitle = "Cancelar"
         do {
@@ -94,7 +103,27 @@ final class AppLock: ObservableObject {
                 lastError = nil
             }
         } catch {
-            lastError = (error as? LAError)?.code == .userCancel ? nil : error.localizedDescription
+            lastError = Self.message(for: error, automatic: automatic)
+        }
+    }
+
+    /// Mensagem para mostrar (ou nada, quando não é um problema de verdade: cancelou, o sistema interrompeu,
+    /// o app saiu da tela).
+    static func message(for error: Error, automatic: Bool) -> String? {
+        guard let e = error as? LAError else { return automatic ? nil : error.localizedDescription }
+        switch e.code {
+        case .userCancel, .systemCancel, .appCancel, .notInteractive, .userFallback:
+            return nil
+        case .biometryNotAvailable:
+            return automatic ? nil : "O \(methodName) não está disponível agora. Tente de novo em instantes."
+        case .biometryLockout:
+            return "O \(methodName) foi bloqueado por muitas tentativas. Toque em Desbloquear e use o código do iPhone."
+        case .authenticationFailed:
+            return "Não foi possível confirmar. Tente de novo."
+        case .passcodeNotSet:
+            return "Configure um código no iPhone (Ajustes › Face ID e Código) para usar o bloqueio."
+        default:
+            return automatic ? nil : e.localizedDescription
         }
     }
 
@@ -122,6 +151,7 @@ final class AppLock: ObservableObject {
 /// Tela que cobre o app enquanto ele está travado.
 struct LockView: View {
     @ObservedObject var lock: AppLock
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         VStack(spacing: 18) {
@@ -158,6 +188,9 @@ struct LockView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Theme.background.ignoresSafeArea())
-        .task { if !DemoSeeder.isActive { await lock.unlock() } }
+        .task { if !DemoSeeder.isActive { await lock.unlock(automatic: true) } }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active && !DemoSeeder.isActive { Task { await lock.unlock(automatic: true) } }
+        }
     }
 }

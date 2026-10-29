@@ -358,6 +358,7 @@ struct SettingsScreen: View {
                         .foregroundStyle(Theme.secondaryText)
                 }
             }
+            SettingsSignatureSection()
             SectionTitle(text: "OCR")
             TileCard {
                 VStack(alignment: .leading, spacing: 8) {
@@ -763,5 +764,13 @@ enum PasswordStrength {
         if pw.count < 6 || s <= 2 { return Theme.red }
         if s <= 4 { return Theme.orange }
         return Theme.green
+    }
+}
+
+/// "Assinatura digital" nos Ajustes (separada para o corpo dos Ajustes não ficar grande demais).
+struct SettingsSignatureSection: View {
+    var body: some View {
+        SectionTitle(text: "Assinatura digital")
+        CertificatesCard()
     }
 }

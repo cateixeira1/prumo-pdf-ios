@@ -89,7 +89,7 @@ struct RootView: View {
 
 /// Ferramentas da tela inicial: cada uma pergunta o PDF (do app Arquivos ou do Prumo).
 enum HomeTool: String, Identifiable, CaseIterable {
-    case read, ocr, organize, insert, remove, extract, split, crop, number
+    case read, ocr, organize, insert, remove, extract, split, crop, number, sign
     var id: String { rawValue }
 
     var question: String {
@@ -103,6 +103,7 @@ enum HomeTool: String, Identifiable, CaseIterable {
         case .split: return "Dividir qual PDF?"
         case .crop: return "Cortar ou girar qual PDF?"
         case .number: return "Numerar qual PDF?"
+        case .sign: return "Assinar qual PDF?"
         }
     }
 }
@@ -178,6 +179,7 @@ struct HomeView: View {
                         tool = .crop
                     }
                     Tile(title: "Numerar páginas", systemImage: "number", color: Theme.indigo) { tool = .number }
+                    signToolTile
                 }
                 WideTile(title: "Converter em PDF", systemImage: "arrow.triangle.2.circlepath.doc.on.clipboard",
                          color: Theme.teal, subtitle: "Fotos, imagens, Word, Excel, PowerPoint, Pages, texto") {
@@ -306,7 +308,13 @@ struct HomeView: View {
             flow.openTool("crop", on: item)
         case .number:
             flow.openTool("number", on: item)
+        case .sign:
+            flow.openTool("sign", on: item)
         }
+    }
+
+    private var signToolTile: some View {
+        Tile(title: "Assinar digitalmente", systemImage: "signature", color: Theme.blue, shape: .rounded) { tool = .sign }
     }
 }
 
