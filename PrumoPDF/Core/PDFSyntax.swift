@@ -591,6 +591,11 @@ final class PDFFile {
         fields().filter { $0["FT"]?.nameValue == "Sig" && $0["V"] != nil }.count
     }
 
+    /// Campos de assinatura, assinados ou vazios.
+    var signatureFieldCount: Int {
+        fields().filter { $0["FT"]?.nameValue == "Sig" }.count
+    }
+
     /// Permissão da assinatura de certificação (1: nada pode mudar; 2: formulários e assinaturas; 3: e anotações).
     var docMDPLevel: Int? {
         guard let perms = resolve(catalog?["Perms"])?.dictValue, let sig = resolve(perms["DocMDP"])?.dictValue else { return nil }

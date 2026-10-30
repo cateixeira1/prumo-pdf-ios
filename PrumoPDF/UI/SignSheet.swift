@@ -13,6 +13,10 @@ struct SignSheet: View {
     @State private var page = SignOptions.Page(rawValue: UserDefaults.standard.string(forKey: "signPage") ?? "") ?? .last
     @State private var position = SignOptions.Position(rawValue: UserDefaults.standard.string(forKey: "signPosition") ?? "") ?? .bottomLeft
     @State private var reason = ""
+    @State private var level = ProtectionLevel.saved
+    @State private var why = ProtectionLevel.Why.standard
+    @State private var lockedLevel: ProtectionLevel?
+    @State private var askLevelOne = false
     @State private var working = false
     @StateObject private var importer = CertificateImporter()
 
@@ -44,6 +48,7 @@ struct SignSheet: View {
                     }
                     Button("Adicionar certificado A1 (.pfx ou .p12)…") { importer.start() }
                 }
+                levelSection
                 Section("Carimbo na página") {
                     Toggle("Mostrar a assinatura na página", isOn: $stamp)
                     if stamp {
@@ -69,9 +74,53 @@ struct SignSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Cancelar") { dismiss() } } }
             .modifier(CertificateImportModifier(importer: importer) { reload(select: $0) })
+            .alert("Nível 1 em PDF com vários campos de assinatura?", isPresented: $askLevelOne) {
+                Button("Voltar", role: .cancel) {}
+                Button("Assinar no nível 1", role: .destructive) { start() }
+            } message: {
+                Text("Este PDF tem \(fieldCount) campos de assinatura. No nível 1, depois da sua assinatura ninguém mais poderá assinar os outros campos sem invalidar a sua. Para os outros poderem assinar, use o nível 2.")
+            }
         }
         .interactiveDismissDisabled(working)
-        .onAppear { reload(select: nil) }
+        .onAppear { reload(select: nil); loadLevel() }
+    }
+
+    private var fieldCount: Int {
+        if case .fields(let n) = why { return n }
+        return 0
+    }
+
+    @ViewBuilder private var levelSection: some View {
+        Section {
+            if why == .signed {
+                Text(lockedLevel.map { "O nível de proteção foi definido pela primeira assinatura (\($0.title.components(separatedBy: ":")[0].lowercased())) e não muda mais." }
+                     ?? "O nível de proteção foi definido pela primeira assinatura e não muda mais.")
+                    .font(.system(size: 13))
+                    .foregroundStyle(Theme.secondaryText)
+            } else {
+                Picker("Nível", selection: $level) {
+                    ForEach(ProtectionLevel.allCases) { Text($0.title).tag($0) }
+                }
+                if fieldCount > 1 {
+                    Text("Este PDF tem \(fieldCount) campos de assinatura: o Prumo escolheu o nível 2, para os outros signatários ainda poderem assinar. Você pode mudar para o nível 1 ou 3.")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(Theme.orange)
+                }
+                Text(level.explanation)
+                    .font(.system(size: 13))
+                    .foregroundStyle(Theme.secondaryText)
+            }
+        } header: {
+            Text("Proteção do documento")
+        }
+    }
+
+    private func loadLevel() {
+        guard let data = try? Data(contentsOf: item.url) else { return }
+        let r = ProtectionLevel.offered(for: data, preferred: ProtectionLevel.saved)
+        why = r.why
+        lockedLevel = r.level
+        if why != .signed, let l = r.level { level = l }
     }
 
     private var warning: String {
@@ -92,12 +141,21 @@ struct SignSheet: View {
     }
 
     private func sign() {
+        if why != .signed, fieldCount > 1, level == .noChanges {
+            askLevelOne = true
+        } else {
+            start()
+        }
+    }
+
+    private func start() {
         guard let c = cert else { return }
         UserDefaults.standard.set(stamp, forKey: "signStamp")
         UserDefaults.standard.set(page.rawValue, forKey: "signPage")
         UserDefaults.standard.set(position.rawValue, forKey: "signPosition")
         let options = SignOptions(stamp: stamp, page: page, position: position,
-                                  reason: reason.trimmingCharacters(in: .whitespaces))
+                                  reason: reason.trimmingCharacters(in: .whitespaces),
+                                  level: why == .signed ? .standard : level)
         working = true
         Task {
             defer { working = false }
@@ -200,7 +258,7 @@ struct CertificatesCard: View {
                 Button("Adicionar certificado A1 (.pfx ou .p12)…") { importer.start() }
                     .buttonStyle(.bordered)
                     .font(.system(size: 15, weight: .semibold))
-                Text("O certificado fica nas Chaves do iPhone, só neste aparelho (não vai para o iCloud nem para backups). A senha do arquivo não é gravada; cada assinatura pede o Face ID ou o código. Depois de assinado, um PDF não pode mais ser alterado sem invalidar a assinatura. Certificado A3 (token ou cartão) funciona no Prumo para Windows.")
+                Text("O certificado fica nas Chaves do iPhone, só neste aparelho (não vai para o iCloud nem para backups). A senha do arquivo não é gravada; cada assinatura pede o Face ID ou o código. Certificado A3 (token ou cartão) não funciona no iPhone: use o Prumo para Windows, que liga o token pelo Windows.")
                     .font(.system(size: 13))
                     .foregroundStyle(Theme.secondaryText)
             }
@@ -218,5 +276,32 @@ struct CertificatesCard: View {
             Text("O certificado de \(c.name) sai deste iPhone. O arquivo .pfx que você tem continua onde estava, e os PDFs já assinados continuam válidos.")
         }
         .onAppear { certs = CertificateStore.all() }
+    }
+}
+
+/// Ajustes: nível de proteção padrão da assinatura (DocMDP) e o que cada nível significa.
+struct SignLevelCard: View {
+    @AppStorage("signLevel") private var raw = ProtectionLevel.standard.rawValue
+
+    private var level: ProtectionLevel { ProtectionLevel(rawValue: raw) ?? .standard }
+
+    var body: some View {
+        TileCard {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Nível padrão ao assinar")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(Theme.text)
+                Picker("Nível padrão", selection: $raw) {
+                    ForEach(ProtectionLevel.allCases) { Text($0.title).tag($0.rawValue) }
+                }
+                .pickerStyle(.menu)
+                Text(level.explanation)
+                    .font(.system(size: 13))
+                    .foregroundStyle(Theme.secondaryText)
+                Text("O nível vale para a primeira assinatura do PDF (assinatura de certificação, DocMDP) e depois não muda. Na hora de assinar, dá para trocar o nível daquele PDF. PDF com mais de um campo de assinatura usa o nível 2 automaticamente, e o Prumo confirma com você antes de assinar. Nenhum nível impede que outro programa grave uma alteração no arquivo: o que muda é que a assinatura deixa de valer (ou é marcada como alterada), e leitores como o Adobe Acrobat avisam. Por isso o Prumo assina uma cópia (“Nome - assinado”), mantém o original editável e desliga as ferramentas de edição na cópia.")
+                    .font(.system(size: 13))
+                    .foregroundStyle(Theme.secondaryText)
+            }
+        }
     }
 }

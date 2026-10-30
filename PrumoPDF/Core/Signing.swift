@@ -180,6 +180,50 @@ enum CertificateStore {
     }
 }
 
+/// Nível de proteção da assinatura de certificação (DocMDP, "P" na norma ISO 32000): o que ainda pode
+/// entrar no PDF depois da primeira assinatura sem que ela deixe de valer.
+enum ProtectionLevel: Int, CaseIterable, Identifiable {
+    case noChanges = 1, forms = 2, comments = 3
+    var id: Int { rawValue }
+    static let standard = ProtectionLevel.forms
+
+    var title: String {
+        switch self {
+        case .noChanges: return "Nível 1: nenhuma mudança"
+        case .forms: return "Nível 2: novas assinaturas e preenchimento de campos"
+        case .comments: return "Nível 3: assinaturas, campos e comentários"
+        }
+    }
+
+    var explanation: String {
+        switch self {
+        case .noChanges:
+            return "Depois de assinado, nada pode ser mudado e ninguém mais pode assinar: qualquer mudança invalida a assinatura. Serve para documento com um só signatário."
+        case .forms:
+            return "Outras pessoas ainda podem assinar e preencher campos de formulário sem invalidar a sua assinatura. Texto, páginas e anotações continuam travados. É o padrão do Prumo e o mais usado em contratos."
+        case .comments:
+            return "Além do nível 2, permite comentários e anotações (como destaques) feitos por outros leitores, sem invalidar a assinatura. O texto e as páginas continuam travados."
+        }
+    }
+
+    /// O padrão escolhido nos Ajustes.
+    static var saved: ProtectionLevel {
+        ProtectionLevel(rawValue: UserDefaults.standard.integer(forKey: "signLevel")) ?? .standard
+    }
+
+    enum Why: Equatable { case signed, fields(Int), standard }
+
+    /// Nível a oferecer: PDF já assinado → o da primeira assinatura (não muda mais); PDF com mais de um
+    /// campo de assinatura → 2, para os outros ainda poderem assinar; senão, o padrão do usuário.
+    static func offered(for data: Data, preferred: ProtectionLevel) -> (level: ProtectionLevel?, why: Why) {
+        guard let file = try? PDFFile(data) else { return (preferred, .standard) }
+        if file.signatureCount > 0 { return (file.docMDPLevel.flatMap(ProtectionLevel.init(rawValue:)), .signed) }
+        let n = file.signatureFieldCount
+        if n > 1 { return (.forms, .fields(n)) }
+        return (preferred, .standard)
+    }
+}
+
 /// Onde e como a assinatura aparece.
 struct SignOptions: Equatable {
     enum Page: String, CaseIterable, Identifiable {
@@ -204,11 +248,11 @@ struct SignOptions: Equatable {
     var page: Page = .last
     var position: Position = .bottomLeft
     var reason = ""
+    var level: ProtectionLevel = .standard
 }
 
 /// Assinatura digital PAdES (o mesmo formato do Prumo para Windows e do Adobe Acrobat):
-/// SubFilter ETSI.CAdES.detached; a primeira assinatura é de certificação (DocMDP, só formulários e
-/// novas assinaturas); as seguintes travam o próprio campo (FieldMDP). O verificador do ITI exige DocMDP
+/// SubFilter ETSI.CAdES.detached; a primeira assinatura é de certificação (DocMDP, nível 1, 2 ou 3); as seguintes travam o próprio campo (FieldMDP). O verificador do ITI exige DocMDP
 /// ou FieldMDP. Gravada como atualização incremental: o que já estava no arquivo não muda.
 enum PDFSigner {
     static let suffix = " - assinado"
@@ -303,7 +347,7 @@ enum PDFSigner {
         // dicionário da assinatura, com espaço reservado para o CMS
         let reference: String
         if certify {
-            reference = "/Reference [<</Type /SigRef /TransformMethod /DocMDP /TransformParams <</Type /TransformParams /P 2 /V /1.2>>>>]"
+            reference = "/Reference [<</Type /SigRef /TransformMethod /DocMDP /TransformParams <</Type /TransformParams /P \(options.level.rawValue) /V /1.2>>>>]"
         } else {
             // trava só o próprio campo: travar todos (/All) faria uma terceira assinatura contar como
             // mudança proibida nesta

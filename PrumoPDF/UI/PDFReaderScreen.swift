@@ -682,8 +682,15 @@ struct PDFReaderScreen: View {
             textModel.setMarking(false)
             let page = textModel.currentPage
             Task { @MainActor in
-                try? await Task.sleep(nanoseconds: 150_000_000)
-                model.go(toPage: page)
+                // o PDF estava escondido e acabou de voltar: a primeira tentativa pode cair antes de a
+                // vista ter o tamanho final (e ficar na primeira página), então confere e tenta de novo
+                for attempt in 0..<5 {
+                    try? await Task.sleep(nanoseconds: attempt == 0 ? 150_000_000 : 120_000_000)
+                    guard mode == .original else { return }
+                    model.go(toPage: page)
+                    model.pageChanged()
+                    if model.currentPage == page { return }
+                }
             }
         }
     }

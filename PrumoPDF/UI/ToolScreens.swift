@@ -772,5 +772,7 @@ struct SettingsSignatureSection: View {
     var body: some View {
         SectionTitle(text: "Assinatura digital")
         CertificatesCard()
+        SectionTitle(text: "Proteção do PDF assinado")
+        SignLevelCard()
     }
 }

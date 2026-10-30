@@ -202,6 +202,69 @@ final class V19Tests: XCTestCase {
         keep(thrice, "tres-assinaturas.pdf")
     }
 
+    /// Voltar do modo Texto para o Original: a vista do PDF volta da página em que o texto estava.
+    func testReaderReturnsToTheSamePageAfterBeingHidden() async throws {
+        let doc = TestPDF.digital(pages: 10)
+        let container = ReaderContainerView(frame: CGRect(x: 0, y: 0, width: 390, height: 760))
+        let window = UIWindow(frame: container.frame)
+        window.addSubview(container)
+        window.makeKeyAndVisible()
+        container.pdfView.document = doc
+        container.layoutIfNeeded()
+        let model = ReaderModel()
+        model.pdfView = container.pdfView
+        try await Task.sleep(nanoseconds: 400_000_000)
+        func shown() -> Int? { container.pdfView.currentPage.map { doc.index(for: $0) + 1 } }
+        for target in [8, 3, 10] {
+            // como no leitor: escondido enquanto o modo Texto aparece, depois volta e vai para a página
+            container.alpha = 0
+            container.isUserInteractionEnabled = false
+            try await Task.sleep(nanoseconds: 150_000_000)
+            container.alpha = 1
+            container.isUserInteractionEnabled = true
+            for _ in 0..<5 {
+                model.go(toPage: target)
+                try await Task.sleep(nanoseconds: 120_000_000)
+                if shown() == target { break }
+            }
+            XCTAssertEqual(shown(), target, "o PDF abre na página \(target) e não na primeira")
+        }
+    }
+
+    func testProtectionLevelsAndAutomaticLevel() throws {
+        defer { removeTestCertificates() }
+        let maria = try CertificateStore.importP12(TestCertificates.maria, password: TestCertificates.password)
+        let joao = try CertificateStore.importP12(TestCertificates.joao, password: TestCertificates.password)
+        let original = try XCTUnwrap(TestPDF.digital(pages: 2).dataRepresentation())
+        for level in ProtectionLevel.allCases {
+            let opts = SignOptions(level: level)
+            let once = try PDFSigner.sign(original, certificate: maria, options: opts,
+                                          sign: try CertificateStore.signer(for: maria))
+            XCTAssertEqual(try PDFFile(once).docMDPLevel, level.rawValue)
+            XCTAssertEqual(try verify(once, signature: 0).holderName, "MARIA DE TESTE")
+            keep(once, "nivel-\(level.rawValue).pdf")
+            let offered = ProtectionLevel.offered(for: once, preferred: .noChanges)
+            XCTAssertEqual(offered.level, level, "PDF já assinado: vale o nível da primeira assinatura")
+            XCTAssertEqual(offered.why, .signed)
+            if level == .noChanges {
+                XCTAssertThrowsError(try PDFSigner.sign(once, certificate: joao, options: SignOptions(),
+                                                        sign: try CertificateStore.signer(for: joao)),
+                                     "nível 1 não aceita outra assinatura")
+            } else {
+                let twice = try PDFSigner.sign(once, certificate: joao, options: SignOptions(position: .bottomRight),
+                                               sign: try CertificateStore.signer(for: joao))
+                XCTAssertEqual(try PDFFile(twice).docMDPLevel, level.rawValue)
+                XCTAssertEqual(try verify(twice, signature: 0).holderName, "MARIA DE TESTE")
+                XCTAssertEqual(try verify(twice, signature: 1).holderName, "JOAO DA SILVA")
+                keep(twice, "nivel-\(level.rawValue)-duas.pdf")
+            }
+        }
+        // padrão do usuário num PDF sem assinatura
+        let plain = ProtectionLevel.offered(for: original, preferred: .comments)
+        XCTAssertEqual(plain.level, .comments)
+        XCTAssertEqual(plain.why, .standard)
+    }
+
     func testSignInvisibleRotatedAndXrefStream() throws {
         defer { removeTestCertificates() }
         let maria = try CertificateStore.importP12(TestCertificates.maria, password: TestCertificates.password)
