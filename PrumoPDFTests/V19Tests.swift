@@ -191,6 +191,15 @@ final class V19Tests: XCTestCase {
         XCTAssertEqual(try verify(twice, signature: 1).holderName, "JOAO DA SILVA")
         XCTAssertTrue(String(decoding: twice, as: UTF8.self).contains("/TransformMethod /FieldMDP"))
         keep(twice, "duas-assinaturas.pdf")
+
+        // terceira assinatura (de novo a primeira pessoa, em outro canto): as anteriores continuam
+        let thrice = try PDFSigner.sign(twice, certificate: maria, options: SignOptions(stamp: true, page: .first, position: .topRight),
+                                        sign: try CertificateStore.signer(for: maria))
+        XCTAssertTrue(thrice.starts(with: twice))
+        XCTAssertEqual(try PDFFile(thrice).signatureCount, 3)
+        for k in 0..<3 { _ = try verify(thrice, signature: k) }
+        XCTAssertEqual(PDFDocument(data: thrice)?.pageCount, 3)
+        keep(thrice, "tres-assinaturas.pdf")
     }
 
     func testSignInvisibleRotatedAndXrefStream() throws {

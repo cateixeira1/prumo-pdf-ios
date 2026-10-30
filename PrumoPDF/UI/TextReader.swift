@@ -215,7 +215,7 @@ final class TextReaderModel: NSObject, ObservableObject, UITextViewDelegate, UIG
                 if let cur = per[s.page] { per[s.page] = (min(cur.0, c), max(cur.1, c)) } else { per[s.page] = (c, c) }
             }
         }
-        return per.keys.sorted().map { p in (p, NSRange(location: per[p]!.0, length: per[p]!.1 - per[p]!.0 + 1)) }
+        return per.keys.sorted().map { p in (page: p, range: NSRange(location: per[p]!.0, length: per[p]!.1 - per[p]!.0 + 1)) }
     }
 
     func selectionRanges() -> [(page: Int, range: NSRange)] {

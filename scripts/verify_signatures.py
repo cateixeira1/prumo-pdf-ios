@@ -6,6 +6,10 @@ o certificado), com o SubFilter PAdES e, nas assinaturas anteriores, com as muda
 permitidas pelo DocMDP/FieldMDP. Os certificados de teste são autoassinados: cada um é usado como raiz
 confiável só para esta conferência.
 
+As regras de mudança são as do Adobe: depois da assinatura de certificação (P=2), pode entrar uma nova
+assinatura visível. O padrão do pyHanko recusa isso ("mais estrito que o Acrobat", segundo a documentação
+dele); a norma (ISO 32000-1, 12.8.2.2) e o guia do ITI permitem, com P=2, a inclusão de novas assinaturas.
+
 Uso: python verify_signatures.py PASTA
 """
 
@@ -13,8 +17,20 @@ import sys
 from pathlib import Path
 
 from pyhanko.pdf_utils.reader import PdfFileReader
+from pyhanko.sign.diff_analysis import (CatalogModificationRule, DocInfoRule, DSSCompareRule, FormUpdatingRule,
+                                        GenericFieldModificationRule, MetadataUpdateRule, ModificationLevel,
+                                        ObjectStreamRule, SigFieldCreationRule, SigFieldModificationRule,
+                                        StandardDiffPolicy, XrefStreamRule)
 from pyhanko.sign.validation import validate_pdf_signature
 from pyhanko_certvalidator import ValidationContext
+
+LTA = ModificationLevel.LTA_UPDATES
+ACROBAT_POLICY = StandardDiffPolicy(
+    global_rules=[CatalogModificationRule(), DocInfoRule().as_qualified(LTA), XrefStreamRule().as_qualified(LTA),
+                  ObjectStreamRule().as_qualified(LTA), DSSCompareRule().as_qualified(LTA),
+                  MetadataUpdateRule().as_qualified(LTA)],
+    form_rule=FormUpdatingRule(field_rules=[SigFieldCreationRule(allow_new_visible_after_certify=True),
+                                            SigFieldModificationRule(), GenericFieldModificationRule()]))
 
 
 def main(folder: str) -> int:
@@ -32,7 +48,7 @@ def main(folder: str) -> int:
                 bad += 1
             for s in sigs:
                 vc = ValidationContext(trust_roots=[s.signer_cert])
-                st = validate_pdf_signature(s, vc)
+                st = validate_pdf_signature(s, vc, diff_policy=ACROBAT_POLICY)
                 sub = s.sig_object.get("/SubFilter")
                 ok = st.intact and st.valid and str(sub) == "/ETSI.CAdES.detached"
                 if st.modification_level is not None and st.docmdp_ok is False:

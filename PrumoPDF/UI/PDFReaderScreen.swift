@@ -233,8 +233,8 @@ final class ReaderModel: NSObject, ObservableObject, UIGestureRecognizerDelegate
     /// Só para a captura de tela: um trecho selecionado, com parte dele já destacada.
     func demoSelection() {
         guard let view = pdfView, let doc = view.document,
-              let phrase = doc.findString("danos materiais e morais", withOptions: [.caseInsensitive]).first,
-              let word = doc.findString("danos", withOptions: [.caseInsensitive]).first else { return }
+              let phrase = doc.findString("febre persistente, dor abdominal intensa", withOptions: [.caseInsensitive]).first,
+              let word = doc.findString("febre persistente", withOptions: [.caseInsensitive]).first else { return }
         Highlights.add(word, color: .yellow, in: doc)
         view.setCurrentSelection(phrase, animate: false)
         selectionChanged()

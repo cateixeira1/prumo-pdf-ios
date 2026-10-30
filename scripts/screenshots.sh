@@ -9,7 +9,9 @@ APP=$(find build/Build/Products -maxdepth 2 -name "PrumoPDF.app" -path "*iphones
 if [ -z "$APP" ]; then
   echo "App do simulador não encontrado; compilando…"
   xcodebuild build -project PrumoPDF.xcodeproj -scheme PrumoPDF -destination "id=$SIM" \
-    -derivedDataPath build CODE_SIGNING_ALLOWED=NO -quiet || exit 1
+    -derivedDataPath build CODE_SIGNING_ALLOWED=NO \
+    OTHER_LDFLAGS="-Xlinker -sectcreate -Xlinker __TEXT -Xlinker __entitlements -Xlinker $PWD/ci/simulator-entitlements.plist" \
+    -quiet || exit 1
   APP=$(find build/Build/Products -maxdepth 2 -name "PrumoPDF.app" -path "*iphonesimulator*" | head -1)
 fi
 echo "App: $APP"
@@ -58,8 +60,8 @@ shot 11-combinar merge
 shot 12-ajustes settings
 shot 17-busca-no-texto search 8
 shot 18-incluir-de-outro-pdf picker 9
-shot 19-escolha-de-leitura readchoice 22
-shot 20-modo-leitor readertext 22
+shot 19-escolha-de-leitura readchoice 45
+shot 20-modo-leitor readertext 45
 shot 21-ferramenta-escolher-pdf tools 8
 shot 22-adicionar-a-pasta addfolder 9
 shot 23-converter-em-pdf convert 8

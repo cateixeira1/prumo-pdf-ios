@@ -43,13 +43,17 @@ jobs:
         run: |
           set +e
           mkdir -p "$OUT/signed"
+          # Sem assinatura, o app do simulador não tem os "direitos simulados" que as Chaves (Keychain) exigem
+          # (erro -34018). O Xcode grava esses direitos na seção __TEXT,__entitlements; aqui ela é gravada direto.
           # os testes da assinatura guardam os PDFs assinados aqui, para o pyHanko conferir depois
           TEST_RUNNER_PRUMO_SIGNED_OUT="$OUT/signed" xcodebuild test \
             -project PrumoPDF.xcodeproj -scheme PrumoPDF \
             -destination "id=$SIM_ID" \
             -derivedDataPath build \
             -resultBundlePath TestResults.xcresult \
-            CODE_SIGNING_ALLOWED=NO > "$OUT/logs/test.log" 2>&1
+            CODE_SIGNING_ALLOWED=NO \
+            OTHER_LDFLAGS="-Xlinker -sectcreate -Xlinker __TEXT -Xlinker __entitlements -Xlinker $PWD/ci/simulator-entitlements.plist" \
+            > "$OUT/logs/test.log" 2>&1
           rc=$?
           grep -E "error:|Test Case .*(passed|failed)|Executed|TEST (SUCCEEDED|FAILED)|\*\* " "$OUT/logs/test.log" | tail -200
           exit $rc

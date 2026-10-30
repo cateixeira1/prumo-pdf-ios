@@ -24,6 +24,17 @@ struct SigningCertificate: Identifiable, Hashable {
 enum CertificateStore {
     static let service = "br.com.prumopdf.certificados"
 
+    #if DEBUG && targetEnvironment(simulator)
+    /// Só no simulador sem assinatura (CI): se as Chaves recusarem por falta de direitos (-34018), os
+    /// certificados ficam na memória enquanto o app estiver aberto. No iPhone, sempre vão para as Chaves.
+    private static var memory: [String: (identity: SecIdentity, cert: SigningCertificate)] = [:]
+    private static func useMemory(_ status: OSStatus) -> Bool {
+        guard status == errSecMissingEntitlement else { return false }
+        print("Chaves do simulador indisponíveis (-34018): certificado guardado na memória (só nos testes).")
+        return true
+    }
+    #endif
+
     static func importP12(_ data: Data, password: String) throws -> SigningCertificate {
         var items: CFArray?
         let status = SecPKCS12Import(data as CFData, [kSecImportExportPassphrase as String: password] as CFDictionary, &items)
@@ -55,6 +66,13 @@ enum CertificateStore {
             kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
         ]
         let st = SecItemAdd(add as CFDictionary, nil)
+        #if DEBUG && targetEnvironment(simulator)
+        if useMemory(st) {
+            let c = SigningCertificate(id: x509.sha1, certificate: x509, chain: chain)
+            memory[c.id] = (identity, c)
+            return c
+        }
+        #endif
         guard st == errSecSuccess || st == errSecDuplicateItem else {
             throw UserFacingError("Não foi possível guardar o certificado nas Chaves do iPhone (código \(st)).")
         }
@@ -89,8 +107,11 @@ enum CertificateStore {
                                     kSecReturnData as String: true,
                                     kSecMatchLimit as String: kSecMatchLimitAll]
         var out: CFTypeRef?
-        guard SecItemCopyMatching(query as CFDictionary, &out) == errSecSuccess,
-              let rows = out as? [[String: Any]] else { return [] }
+        let status = SecItemCopyMatching(query as CFDictionary, &out)
+        #if DEBUG && targetEnvironment(simulator)
+        if status == errSecMissingEntitlement { return memory.values.map { $0.cert }.sorted { $0.name < $1.name } }
+        #endif
+        guard status == errSecSuccess, let rows = out as? [[String: Any]] else { return [] }
         return rows.compactMap { row in
             guard let data = row[kSecValueData as String] as? Data,
                   let info = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
@@ -104,6 +125,9 @@ enum CertificateStore {
 
     /// A identidade (certificado + chave) nas Chaves.
     static func identity(for cert: SigningCertificate) -> SecIdentity? {
+        #if DEBUG && targetEnvironment(simulator)
+        if let m = memory[cert.id] { return m.identity }
+        #endif
         let query: [String: Any] = [kSecClass as String: kSecClassIdentity,
                                     kSecReturnRef as String: true,
                                     kSecMatchLimit as String: kSecMatchLimitAll]
@@ -121,6 +145,9 @@ enum CertificateStore {
     }
 
     static func remove(_ cert: SigningCertificate) {
+        #if DEBUG && targetEnvironment(simulator)
+        memory[cert.id] = nil
+        #endif
         if let identity = identity(for: cert) {
             SecItemDelete([kSecClass as String: kSecClassIdentity, kSecValueRef as String: identity] as CFDictionary)
             var c: SecCertificate?
@@ -181,7 +208,7 @@ struct SignOptions: Equatable {
 
 /// Assinatura digital PAdES (o mesmo formato do Prumo para Windows e do Adobe Acrobat):
 /// SubFilter ETSI.CAdES.detached; a primeira assinatura é de certificação (DocMDP, só formulários e
-/// novas assinaturas); as seguintes travam os campos (FieldMDP). O verificador do ITI exige DocMDP
+/// novas assinaturas); as seguintes travam o próprio campo (FieldMDP). O verificador do ITI exige DocMDP
 /// ou FieldMDP. Gravada como atualização incremental: o que já estava no arquivo não muda.
 enum PDFSigner {
     static let suffix = " - assinado"
@@ -278,7 +305,9 @@ enum PDFSigner {
         if certify {
             reference = "/Reference [<</Type /SigRef /TransformMethod /DocMDP /TransformParams <</Type /TransformParams /P 2 /V /1.2>>>>]"
         } else {
-            reference = "/Reference [<</Type /SigRef /TransformMethod /FieldMDP /TransformParams <</Type /TransformParams /Action /All /V /1.2>> /Data \(rootRef.0) \(rootRef.1) R>>]"
+            // trava só o próprio campo: travar todos (/All) faria uma terceira assinatura contar como
+            // mudança proibida nesta
+            reference = "/Reference [<</Type /SigRef /TransformMethod /FieldMDP /TransformParams <</Type /TransformParams /Action /Include /Fields [(Assinatura\(index))] /V /1.2>> /Data \(rootRef.0) \(rootRef.1) R>>]"
         }
         var sig = "<</Type /Sig /Filter /Adobe.PPKLite /SubFilter /ETSI.CAdES.detached "
         sig += "/ByteRange [0 BYTERANGE_1 BYTERANGE_2 BYTERANGE_3] "
@@ -289,7 +318,7 @@ enum PDFSigner {
         up.set(sigNum, sig)
 
         // campo de assinatura (também é a anotação na página)
-        let lock = certify ? "" : " /Lock <</Type /SigFieldLock /Action /All>>"
+        let lock = certify ? "" : " /Lock <</Type /SigFieldLock /Action /Include /Fields [(Assinatura\(index))]>>"
         up.set(fieldNum, "<</Type /Annot /Subtype /Widget /FT /Sig /T (Assinatura\(index)) /V \(sigNum) 0 R /F 132 /Rect \(rect) /P \(pageRef.0) \(pageRef.1) R\(ap)\(lock)>>")
 
         // a página passa a listar o campo em /Annots
