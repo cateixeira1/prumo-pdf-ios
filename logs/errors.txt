@@ -1,0 +1,1 @@
+2026-10-30 03:56:09.179091+0000 PrumoPDF[9478:58839] [ProcessSuspension] 0x12a2800c0 - ProcessAssertion::acquireSync Failed to acquire RBS assertion 'XPCConnectionTerminationWatchdog' for process with PID=10672, error: (null)

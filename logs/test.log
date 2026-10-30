@@ -1,0 +1,1279 @@
+Command line invocation:
+    /Applications/Xcode_26.6.app/Contents/Developer/usr/bin/xcodebuild test -project PrumoPDF.xcodeproj -scheme PrumoPDF -destination id=0C838647-022A-46B9-BC8F-310CD1CE6BDE -derivedDataPath build -resultBundlePath TestResults.xcresult CODE_SIGNING_ALLOWED=NO "OTHER_LDFLAGS=-Xlinker -sectcreate -Xlinker __TEXT -Xlinker __entitlements -Xlinker /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/ci/simulator-entitlements.plist"
+
+Build settings from command line:
+    CODE_SIGNING_ALLOWED = NO
+    OTHER_LDFLAGS = -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __entitlements -Xlinker /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/ci/simulator-entitlements.plist
+
+Writing result bundle at path:
+	/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/TestResults.xcresult
+
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (2 targets)
+    Target 'PrumoPDFTests' in project 'PrumoPDF'
+        ➜ Explicit dependency on target 'PrumoPDF' in project 'PrumoPDF'
+    Target 'PrumoPDF' in project 'PrumoPDF' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /usr/bin/what -q /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/coremlc
+
+ExecuteExternalTool /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/coremlc generate /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Models/UVDoc.mlpackage /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources/CoreMLGenerated/UVDoc --dry-run yes --deployment-target 17.0 --sdkroot /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk --platform ios --output-partial-info-plist /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/UVDoc-CoreMLPartialInfo.plist --container bundle-resources --language Swift --swift-version 5.0
+
+ExecuteExternalTool /Applications/Xcode_26.6.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Assets.xcassets
+
+ExecuteExternalTool /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+ExecuteExternalTool /Applications/Xcode_26.6.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+Build description signature: b55799ccc3156a37add5b8d07952e367
+Build description path: /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/XCBuildData/b55799ccc3156a37add5b8d07952e367.xcbuilddata
+ClangStatCache /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/SDKStatCaches.noindex/iphonesimulator26.5-23F81a-688ef53f1462e2c8f657fdc38a81448ff45c64a1807a658693f2a61704f17a36.sdkstatcache
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF.xcodeproj
+    /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -o /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/SDKStatCaches.noindex/iphonesimulator26.5-23F81a-688ef53f1462e2c8f657fdc38a81448ff45c64a1807a658693f2a61704f17a36.sdkstatcache
+
+CreateBuildDirectory /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF.xcodeproj
+    builtin-create-build-directory /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products
+
+CreateBuildDirectory /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF.xcodeproj
+    builtin-create-build-directory /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex
+
+CreateBuildDirectory /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF.xcodeproj
+    builtin-create-build-directory /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF-57748fa9f44809532fc6247f4ef9d880-VFS-iphonesimulator/all-product-headers.yaml
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF.xcodeproj
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF-57748fa9f44809532fc6247f4ef9d880-VFS-iphonesimulator/all-product-headers.yaml
+
+CreateBuildDirectory /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF.xcodeproj
+    builtin-create-build-directory /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+CreateBuildDirectory /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/ExplicitPrecompiledModules
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF.xcodeproj
+    builtin-create-build-directory /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+CreateBuildDirectory /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF.xcodeproj
+    builtin-create-build-directory /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/empty-PrumoPDFTests.plist (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/empty-PrumoPDFTests.plist
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests.DependencyStaticMetadataFileList (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests.hmap (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests.hmap
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests.DependencyMetadataFileList (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests.DependencyMetadataFileList
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-project-headers.hmap (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-project-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-own-target-headers.hmap (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-own-target-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-generated-files.hmap (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-generated-files.hmap
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-all-target-headers.hmap (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-all-target-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-all-non-framework-target-headers.hmap (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-all-non-framework-target-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests_const_extract_protocols.json (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests_const_extract_protocols.json
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.SwiftFileList (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.SwiftFileList
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.SwiftConstValuesFileList (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.SwiftConstValuesFileList
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.LinkFileList (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.LinkFileList
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests-OutputFileMap.json (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests-OutputFileMap.json
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/ad8d0adc0e7d56743af20a07273fe772.sb (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/ad8d0adc0e7d56743af20a07273fe772.sb
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF.hmap (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF.hmap
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF.DependencyStaticMetadataFileList (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF.DependencyMetadataFileList (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF.DependencyMetadataFileList
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-project-headers.hmap (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-project-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-own-target-headers.hmap (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-own-target-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-generated-files.hmap (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-generated-files.hmap
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-all-target-headers.hmap (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-all-target-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-all-non-framework-target-headers.hmap (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-all-non-framework-target-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-DebugDylibPath-normal-x86_64.txt (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-DebugDylibPath-normal-x86_64.txt
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-DebugDylibInstallName-normal-x86_64.txt (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-DebugDylibInstallName-normal-x86_64.txt
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF_const_extract_protocols.json (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF_const_extract_protocols.json
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.SwiftFileList (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.SwiftFileList
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.SwiftConstValuesFileList (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.SwiftConstValuesFileList
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.LinkFileList (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.LinkFileList
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF-OutputFileMap.json (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF-OutputFileMap.json
+
+WriteAuxiliaryFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/38205a68361e07ddea8c62cfb007a6e4.sb (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    write-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/38205a68361e07ddea8c62cfb007a6e4.sb
+
+MkDir /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    /bin/mkdir -p /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest
+
+MkDir /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    /bin/mkdir -p /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns
+
+MkDir /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    /bin/mkdir -p /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks
+
+MkDir /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    /bin/mkdir -p /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app
+
+Ld /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/__preview.dylib normal (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target x86_64-apple-ios17.0-simulator -dynamiclib -isysroot /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -O0 -L/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -F/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -install_name @rpath/PrumoPDF.debug.dylib -Xlinker -dead_strip -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -dependency_info -Xlinker /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF_dependency_info.dat -o /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/__preview.dylib
+
+MkDir /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/assetcatalog_output/thinned (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    /bin/mkdir -p /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/assetcatalog_output/thinned
+
+MkDir /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/assetcatalog_output/unthinned (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    /bin/mkdir -p /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/assetcatalog_output/unthinned
+
+GenerateAssetSymbols /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Assets.xcassets (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    /Applications/Xcode_26.6.app/Contents/Developer/usr/bin/actool /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Assets.xcassets --compile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app --output-format human-readable-text --notices --warnings --export-dependency-info /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/assetcatalog_dependencies --output-partial-info-plist /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/assetcatalog_generated_info.plist --app-icon AppIcon --accent-color AccentColor --compress-pngs --enable-on-demand-resources YES --development-region pt-BR --target-device iphone --target-device ipad --minimum-deployment-target 17.0 --platform iphonesimulator --bundle-identifier br.com.prumopdf.app --generate-swift-asset-symbol-extensions NO --generate-swift-asset-symbols /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources/GeneratedAssetSymbols.swift --generate-objc-asset-symbols /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources/GeneratedAssetSymbols.h --generate-asset-symbol-index /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources/GeneratedAssetSymbols-Index.plist
+/* com.apple.actool.compilation-results */
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources/GeneratedAssetSymbols-Index.plist
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources/GeneratedAssetSymbols.h
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources/GeneratedAssetSymbols.swift
+
+
+CoreMLModelCompile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/ /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Models/UVDoc.mlpackage (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    /usr/bin/sandbox-exec -D SCRIPT_OUTPUT_FILE_0\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/UVDoc.mlmodelc -D SCRIPT_OUTPUT_FILE_1\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/UVDoc-CoreMLPartialInfo.plist -D SCRIPT_INPUT_FILE_0\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Models/UVDoc.mlpackage -D SCRIPT_INPUT_FILE_1\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Models/UVDoc.mlpackage -D SCRIPT_INPUT_ANCESTOR_0\=/ -D SCRIPT_INPUT_ANCESTOR_1\=/Users -D SCRIPT_INPUT_ANCESTOR_2\=/Users/runner -D SCRIPT_INPUT_ANCESTOR_3\=/Users/runner/work -D SCRIPT_INPUT_ANCESTOR_4\=/Users/runner/work/prumo-pdf-ios -D SCRIPT_INPUT_ANCESTOR_5\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios -D SCRIPT_INPUT_ANCESTOR_6\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF -D SCRIPT_INPUT_ANCESTOR_7\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Models -D SCRIPT_OUTPUT_ANCESTOR_0\=/ -D SCRIPT_OUTPUT_ANCESTOR_1\=/Users -D SCRIPT_OUTPUT_ANCESTOR_2\=/Users/runner -D SCRIPT_OUTPUT_ANCESTOR_3\=/Users/runner/work -D SCRIPT_OUTPUT_ANCESTOR_4\=/Users/runner/work/prumo-pdf-ios -D SCRIPT_OUTPUT_ANCESTOR_5\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios -D SCRIPT_OUTPUT_ANCESTOR_6\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build -D SCRIPT_OUTPUT_ANCESTOR_7\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build -D SCRIPT_OUTPUT_ANCESTOR_8\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex -D SCRIPT_OUTPUT_ANCESTOR_9\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build -D SCRIPT_OUTPUT_ANCESTOR_10\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator -D SCRIPT_OUTPUT_ANCESTOR_11\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build -D SCRIPT_OUTPUT_ANCESTOR_12\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products -D SCRIPT_OUTPUT_ANCESTOR_13\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -D SCRIPT_OUTPUT_ANCESTOR_14\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app -D SRCROOT\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios -D PROJECT_DIR\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios -D OBJROOT\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex -D SYMROOT\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products -D DSTROOT\=/tmp/PrumoPDF.dst -D SHARED_PRECOMPS_DIR\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrecompiledHeaders -D CACHE_ROOT\=/var/folders/fq/bhsbs5bd52791c8x2z6s3dh40000gn/C/com.apple.DeveloperTools/26.6-17F113/Xcode -D CONFIGURATION_BUILD_DIR\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -D CONFIGURATION_TEMP_DIR\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator -D LOCROOT\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios -D LOCSYMROOT\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios -D INDEX_PRECOMPS_DIR\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Index.noindex/PrecompiledHeaders -D INDEX_DATA_STORE_DIR\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Index.noindex/DataStore -D TEMP_DIR\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build -D TARGET_TEMP_DIR\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build -D DERIVED_FILE_DIR\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources -f /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/ad8d0adc0e7d56743af20a07273fe772.sb /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/coremlc compile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Models/UVDoc.mlpackage /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/ --deployment-target 17.0 --sdkroot /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk --platform ios --output-partial-info-plist /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/UVDoc-CoreMLPartialInfo.plist --container bundle-resources
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/UVDoc.mlmodelc/coremldata.bin
+
+CoreMLModelCodegen /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Models/UVDoc.mlpackage (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    /usr/bin/sandbox-exec -D SCRIPT_OUTPUT_FILE_0\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources/CoreMLGenerated/UVDoc/UVDoc.swift -D SCRIPT_INPUT_FILE_0\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Models/UVDoc.mlpackage -D SCRIPT_INPUT_ANCESTOR_0\=/ -D SCRIPT_INPUT_ANCESTOR_1\=/Users -D SCRIPT_INPUT_ANCESTOR_2\=/Users/runner -D SCRIPT_INPUT_ANCESTOR_3\=/Users/runner/work -D SCRIPT_INPUT_ANCESTOR_4\=/Users/runner/work/prumo-pdf-ios -D SCRIPT_INPUT_ANCESTOR_5\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios -D SCRIPT_INPUT_ANCESTOR_6\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF -D SCRIPT_INPUT_ANCESTOR_7\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Models -D SCRIPT_OUTPUT_ANCESTOR_0\=/ -D SCRIPT_OUTPUT_ANCESTOR_1\=/Users -D SCRIPT_OUTPUT_ANCESTOR_2\=/Users/runner -D SCRIPT_OUTPUT_ANCESTOR_3\=/Users/runner/work -D SCRIPT_OUTPUT_ANCESTOR_4\=/Users/runner/work/prumo-pdf-ios -D SCRIPT_OUTPUT_ANCESTOR_5\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios -D SCRIPT_OUTPUT_ANCESTOR_6\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build -D SCRIPT_OUTPUT_ANCESTOR_7\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build -D SCRIPT_OUTPUT_ANCESTOR_8\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex -D SCRIPT_OUTPUT_ANCESTOR_9\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build -D SCRIPT_OUTPUT_ANCESTOR_10\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator -D SCRIPT_OUTPUT_ANCESTOR_11\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build -D SCRIPT_OUTPUT_ANCESTOR_12\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources -D SCRIPT_OUTPUT_ANCESTOR_13\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources/CoreMLGenerated -D SCRIPT_OUTPUT_ANCESTOR_14\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources/CoreMLGenerated/UVDoc -D SRCROOT\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios -D PROJECT_DIR\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios -D OBJROOT\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex -D SYMROOT\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products -D DSTROOT\=/tmp/PrumoPDF.dst -D SHARED_PRECOMPS_DIR\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrecompiledHeaders -D CACHE_ROOT\=/var/folders/fq/bhsbs5bd52791c8x2z6s3dh40000gn/C/com.apple.DeveloperTools/26.6-17F113/Xcode -D CONFIGURATION_BUILD_DIR\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -D CONFIGURATION_TEMP_DIR\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator -D LOCROOT\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios -D LOCSYMROOT\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios -D INDEX_PRECOMPS_DIR\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Index.noindex/PrecompiledHeaders -D INDEX_DATA_STORE_DIR\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Index.noindex/DataStore -D TEMP_DIR\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build -D TARGET_TEMP_DIR\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build -D DERIVED_FILE_DIR\=/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources -f /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/38205a68361e07ddea8c62cfb007a6e4.sb /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/coremlc generate /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Models/UVDoc.mlpackage /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources/CoreMLGenerated/UVDoc --deployment-target 17.0 --sdkroot /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk --platform ios --output-partial-info-plist /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/UVDoc-CoreMLPartialInfo.plist --container bundle-resources --language Swift --swift-version 5.0
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources/CoreMLGenerated/UVDoc/UVDoc.swift
+
+Copy /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks/libXCTestSwiftSupport.dylib /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks
+
+Copy /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks/libXCTestBundleInject.dylib /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestBundleInject.dylib (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestBundleInject.dylib /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks
+
+Copy /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks/XCUnit.framework /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCUnit.framework (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCUnit.framework /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks
+
+Copy /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks/XCUIAutomation.framework /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/XCUIAutomation.framework (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/XCUIAutomation.framework /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks
+
+Copy /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks/XCTestSupport.framework /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTestSupport.framework (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTestSupport.framework /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks
+
+Copy /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks/XCTestCore.framework /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTestCore.framework (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTestCore.framework /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks
+
+Copy /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks/XCTest.framework /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/XCTest.framework (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/XCTest.framework /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks
+
+Copy /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks/XCTAutomationSupport.framework /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks
+
+Copy /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks/Testing.framework /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/Testing.framework (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/Testing.framework /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks
+
+CompileAssetCatalogVariant thinned /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Assets.xcassets (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    /Applications/Xcode_26.6.app/Contents/Developer/usr/bin/actool /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Assets.xcassets --compile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/assetcatalog_output/thinned --output-format human-readable-text --notices --warnings --export-dependency-info /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/assetcatalog_dependencies_thinned --output-partial-info-plist /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/assetcatalog_generated_info.plist_thinned --app-icon AppIcon --accent-color AccentColor --compress-pngs --enable-on-demand-resources YES --filter-for-thinning-device-configuration iPhone18,3 --filter-for-device-os-version 26.5 --development-region pt-BR --target-device iphone --target-device ipad --minimum-deployment-target 17.0 --platform iphonesimulator
+/* com.apple.actool.compilation-results */
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/assetcatalog_generated_info.plist_thinned
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/assetcatalog_output/thinned/AppIcon60x60@2x.png
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/assetcatalog_output/thinned/AppIcon76x76@2x~ipad.png
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/assetcatalog_output/thinned/Assets.car
+
+
+SwiftDriver PrumoPDF normal x86_64 com.apple.xcode.tools.swift.compiler (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-SwiftDriver -- /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name PrumoPDF -Onone @/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.SwiftFileList -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -target x86_64-apple-ios17.0-simulator -g -module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -F /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -c -j4 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/SDKStatCaches.noindex/iphonesimulator26.5-23F81a-688ef53f1462e2c8f657fdc38a81448ff45c64a1807a658693f2a61704f17a36.sdkstatcache -output-file-map /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex -sdk-module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF_const_extract_protocols.json -Xcc -iquote -Xcc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-generated-files.hmap -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-own-target-headers.hmap -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-all-target-headers.hmap -Xcc -iquote -Xcc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-project-headers.hmap -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources-normal/x86_64 -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources/x86_64 -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF-Swift.h -working-directory /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios -experimental-emit-module-separately -disable-cmo
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/_Builtin_stdarg-2DBHVKS3RN84Y2H3QSXYIT9M7.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/_AvailabilityInternal-5RZ3GEYV07QEIK80JV1CE3KC2.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/_SwiftConcurrencyShims-E1ZTVTWAFBNOCR63E62SW0JXO.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/_Builtin_float-71R7Y0WC9J5SG3WJCL02QLSCT.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/SwiftShims-CTRIFNFY5SFSKNF9XVPYLWPWV.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/_Builtin_stdbool-CP44JXRR73YSR1JYFVRBE8WTS.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/ptrcheck-DHSZQDYETO3FWV351LDGIPOIR.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/DeveloperToolsSupport-5FGIDBCUP0L94ASK0955HFR2F.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/_Builtin_stddef-EF3YZH96HFW67JBNYEODFEDR5.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/ptrauth-E2TFQJUR0DKXKAISDOII0HZP2.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/_DarwinFoundation1-CDRJI7RSIMFLBRZ78UHTE45J8.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/_DarwinFoundation2-BJYV5MA0D45GJE6HHQA3OCUPN.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/ExtensionFoundation-BWN9DYOQAQFXQ2L9UPAK24D6N.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/_Builtin_limits-DGS56UU9YUVOL5T3O32M1JHTO.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/_Builtin_stdint-ETPQWAYJ73R2BEMJDE5P4SJCJ.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/_Builtin_tgmath-2JEP0GNQ3J5UEBWJXLA27B3RW.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/sys_types-E7VL5YRSIEWPS2NZ1G83TTZSE.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/_DarwinFoundation3-6ZUD5Z9GGW28M92DP952NCAJU.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/_Builtin_stdatomic-BARMKHIN5H0ZJVAKOFJPKABBQ.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/_Builtin_intrinsics-79ZBN02ZR7FDCO4WSHBQMOMRL.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/_Builtin_inttypes-6SGNNZU2T1GX4H81ZS15PBHAP.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/Darwin-5F8ULSOAP20ZJZCQQQIL1396M.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/ObjectiveC-7XTU3FCCF4ZKJC8GC601KQO1N.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/MachO-4EYG4996RYD2D5TCSHR0NE7PC.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/os_object-66GPMQZRI6UTACUBPE03Y67FZ.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/os_workgroup-2NKKJWABPIJ9GHSFFSOP29B3M.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/simd-557UNANHHBCRAX7JON07OAPQP.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/Dispatch-P14188TJZTJMFV6NI140LR2P.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/dnssd-5Z7FFP3JI2JACKD5CFJPBVXCS.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/CoreFoundation-C1EC70MGKVPYCX3ZOU0H5QA4D.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/XPC-3JOIO9XA5WI2ACHA8COKPB171.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/os-8JMEZAXSRYF1LC21OOK6BR24S.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/Security-16EK7WING8OC4GD3YA4O83TMQ.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/CoreGraphics-2OQ5P25HSYPNT0D3DSCD1BUJX.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/CFNetwork-73HY7CV8JTPTOBYHZZDOZ0H96.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/CoreAudioTypes-DTK9IVQNG53POGP7Y8RO9R5QC.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/ImageIO-9X74SWKZB40EHKXXHIHCQ2KF0.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/CoreText-7H6EOGR8UUJB7WMAZ5RIJZQ50.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/CoreAudio-ANFH6BZD41N5R5NSBSN4Q4H59.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/Foundation-ENYS0W6RBHHPT9P780RPC616Y.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/Spatial-CY1CRJWB9VEJ0A1XXXRLPB3WC.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/IOSurface-2M4RGM3NON65GMS8UOR1XE29F.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/CoreData-6AUVZCO7ZPCN1USMF6QRT43NY.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/LocalAuthentication-9YJDIT2Q77858ARW29581MDKA.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/UniformTypeIdentifiers-1U99AL9FX0UOVKIKX8EIPKAMU.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/Symbols-AAEFWPETAZUGIZL9G9M12NV0G.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/OSLog-6G56AO0HNJI7829EZD1EGXJEJ.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/Accessibility-57B7QG8HSC85B32DOQGPY2N1I.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/DataDetection-8RQZWQD3JBBV4BZIPLE4D6CL9.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/CoreMIDI-A9YYBRTVYVL68HZNQM93GO0UD.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/CoreTransferable-2S41SPGQST5RNJMR9PYZKLE7S.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/UIUtilities-5ICCYI0DK3NIYL6REEZ7EA7ME.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/Metal-5HPNJENJ3LAZH1441TSUNL2VP.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/FileProvider-2AIBRXE3X3UU0ENYIZTAUTEPW.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/AudioToolbox-DC7A2UCLM3C6V0MF3E67XDPE4.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/_LocationEssentials-BHEC8WEX5V17N8ZZGSDV1Y7RV.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/Network-X2BK0ZVQFS1M2TKD1DR6S2IE.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/CoreLocation-2RAMUYY6BHZ5CQPG3LHP9UUL3.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/OpenGLES-1BBM9AGMHAX6LP8A8QKQ4YYCL.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/UserNotifications-7VADRDKEO79RB85XMT2DV1QCB.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/AVRouting-C0C9KKP8HIN48XBK921DLSI9F.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/CoreVideo-28TET2ULU8UW00SIHSL53ZQ6U.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/CoreMedia-4XPW0OYH0ER14YVORMQY996AM.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/CoreImage-1M6IP63795C7LYQ58HJZWB767.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/QuartzCore-27OXOJ0O6U9AFA9GJWRCE3VCC.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/CoreML-TRAW0YIJP633FQRVGIPR4QCH.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/SwiftUICore-6CJN9230DBJ9GGKY8POMD3UYR.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/UIKit-79T1BWGBDEEBBG27P4KIQ63BB.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/MediaToolbox-2XRSTP4KEGSP6DHSEFD6CBATA.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/AVFAudio-6BZQU377IBPVNQRIAAP0IR9TI.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/Vision-EHUU9V9TSPWK4K9UMEY40EQ36.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/Accelerate-7SL68DYLW4D2MPQ2UB87GGZO2.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/AVFoundation-COXNJZKY5BYQOQHSMJJD5UUJ6.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/Photos-E025PZU06CWIW2UGQNOH1WQ8I.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/PDFKit-6JWV9K0MTS63TPIWUL5YYS348.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/WebKit-738GX1E8YDSM1SNOBH4HN24BB.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/PhotosUI-627TLM21O30IMX045REOSN1VY.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/SwiftUI-EPZC55YYVMG6WLR0UKV0WA2NQ.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/VisionKit-EM1MWZ0D81N3OYN2YUAVGZJZV.pcm
+
+SwiftEmitModule normal x86_64 Emitting\ module\ for\ PrumoPDF (in target 'PrumoPDF' from project 'PrumoPDF')
+EmitSwiftModule normal x86_64 (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:133:91: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func finishScan(_ scan: VNDocumentCameraScan, target: ScanTarget, library: Library = .shared) {
+                                                                                          ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:105:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:156:51: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func answerOCR(now: Bool, library: Library = .shared, jobs: JobCenter = .shared) {
+                                                  ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:105:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:156:78: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func answerOCR(now: Bool, library: Library = .shared, jobs: JobCenter = .shared) {
+                                                                             ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/JobCenter.swift:7:16: note: static property declared here
+    static let shared = JobCenter()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:170:108: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func insertScannedPages(_ pending: PendingScanInsert, at position: InsertPosition, library: Library = .shared) {
+                                                                                                           ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:105:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:194:55: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func handleIncoming(url: URL, library: Library = .shared) {
+                                                      ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:105:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:245:44: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+                       library: Library = .shared) async -> [PDFItem] {
+                                           ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:105:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Backup.swift:121:9: warning: stored property 'wrapper' of 'Sendable'-conforming struct 'LibraryFolderDocument' has non-Sendable type 'FileWrapper'
+    let wrapper: FileWrapper
+        ^
+/Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSFileWrapper.h:37:12: note: class 'FileWrapper' does not conform to the 'Sendable' protocol
+@interface NSFileWrapper : NSObject<NSSecureCoding>
+           ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/JobCenter.swift:26:56: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func startOCR(_ item: PDFItem, library: Library = .shared, flow: AppFlow = .shared) {
+                                                       ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:105:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/JobCenter.swift:26:81: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func startOCR(_ item: PDFItem, library: Library = .shared, flow: AppFlow = .shared) {
+                                                                                ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:55:16: note: static property declared here
+    static let shared = AppFlow()
+               ^
+
+SwiftCompile normal x86_64 Compiling\ PagePickerScreen.swift,\ PageSelection.swift,\ PageToolSheets.swift,\ PageTools.swift,\ PrumoPDFApp.swift,\ ReaderHistory.swift,\ ReaderText.swift,\ RootView.swift,\ ScanService.swift,\ Security.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/PagePickerScreen.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/PageSelection.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/PageToolSheets.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/PageTools.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/PrumoPDFApp.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/ReaderHistory.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/ReaderText.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/RootView.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/ScanService.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Security.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/PagePickerScreen.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/PageSelection.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/PageToolSheets.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/PageTools.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/PrumoPDFApp.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/ReaderHistory.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/ReaderText.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/RootView.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/ScanService.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Security.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 Compiling\ Analyzer.swift,\ AppFlow.swift,\ Backup.swift,\ CMS.swift,\ Components.swift,\ Converter.swift,\ DemoCertificate.swift,\ DemoSeeder.swift,\ Dewarp.swift,\ DocumentDetailScreen.swift,\ DragSelect.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Analyzer.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Backup.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/CMS.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/Components.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Converter.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/DemoCertificate.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/DemoSeeder.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Dewarp.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/DocumentDetailScreen.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/DragSelect.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Analyzer.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:133:91: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func finishScan(_ scan: VNDocumentCameraScan, target: ScanTarget, library: Library = .shared) {
+                                                                                          ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:105:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:156:51: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func answerOCR(now: Bool, library: Library = .shared, jobs: JobCenter = .shared) {
+                                                  ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:105:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:156:78: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func answerOCR(now: Bool, library: Library = .shared, jobs: JobCenter = .shared) {
+                                                                             ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/JobCenter.swift:7:16: note: static property declared here
+    static let shared = JobCenter()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:170:108: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func insertScannedPages(_ pending: PendingScanInsert, at position: InsertPosition, library: Library = .shared) {
+                                                                                                           ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:105:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:194:55: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func handleIncoming(url: URL, library: Library = .shared) {
+                                                      ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:105:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:245:44: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+                       library: Library = .shared) async -> [PDFItem] {
+                                           ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:105:16: note: static property declared here
+    static let shared = Library()
+               ^
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Backup.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Backup.swift:121:9: warning: stored property 'wrapper' of 'Sendable'-conforming struct 'LibraryFolderDocument' has non-Sendable type 'FileWrapper'
+    let wrapper: FileWrapper
+        ^
+/Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSFileWrapper.h:37:12: note: class 'FileWrapper' does not conform to the 'Sendable' protocol
+@interface NSFileWrapper : NSObject<NSSecureCoding>
+           ^
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/CMS.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/Components.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/JobCenter.swift:26:56: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func startOCR(_ item: PDFItem, library: Library = .shared, flow: AppFlow = .shared) {
+                                                       ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:105:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/JobCenter.swift:26:81: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func startOCR(_ item: PDFItem, library: Library = .shared, flow: AppFlow = .shared) {
+                                                                                ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:55:16: note: static property declared here
+    static let shared = AppFlow()
+               ^
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Converter.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/DemoCertificate.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/DemoSeeder.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/DemoSeeder.swift:60:13: warning: result of 'try?' is unused
+            try? library.createFolder(named: folder)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/DemoSeeder.swift:62:9: warning: result of 'try?' is unused
+        try? library.createFolder(named: "Indenização - Hospital", in: "Processos")
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Dewarp.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/DocumentDetailScreen.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/DragSelect.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 Compiling\ Settings.swift,\ SignSheet.swift,\ Signing.swift,\ Summary.swift,\ TextReader.swift,\ Theme.swift,\ ThumbnailCache.swift,\ ToolScreens.swift,\ UVDoc.swift,\ GeneratedAssetSymbols.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Settings.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/SignSheet.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Signing.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Summary.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/TextReader.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/Theme.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/ThumbnailCache.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/ToolScreens.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources/CoreMLGenerated/UVDoc/UVDoc.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Settings.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/SignSheet.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Signing.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Summary.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/TextReader.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/Theme.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/ThumbnailCache.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/ToolScreens.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources/CoreMLGenerated/UVDoc/UVDoc.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+LinkAssetCatalog /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Assets.xcassets (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-linkAssetCatalog --thinned /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/assetcatalog_output/thinned --thinned-dependencies /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/assetcatalog_dependencies_thinned --thinned-info-plist-content /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/assetcatalog_generated_info.plist_thinned --unthinned /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/assetcatalog_output/unthinned --unthinned-dependencies /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/assetcatalog_dependencies_unthinned --unthinned-info-plist-content /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/assetcatalog_generated_info.plist_unthinned --output /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app --plist-output /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/assetcatalog_generated_info.plist
+note: Emplaced /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/AppIcon60x60@2x.png (in target 'PrumoPDF' from project 'PrumoPDF')
+note: Emplaced /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Assets.car (in target 'PrumoPDF' from project 'PrumoPDF')
+note: Emplaced /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/AppIcon76x76@2x~ipad.png (in target 'PrumoPDF' from project 'PrumoPDF')
+
+SwiftDriverJobDiscovery normal x86_64 Emitting module for PrumoPDF (in target 'PrumoPDF' from project 'PrumoPDF')
+
+SwiftDriver\ Compilation\ Requirements PrumoPDF normal x86_64 com.apple.xcode.tools.swift.compiler (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name PrumoPDF -Onone @/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.SwiftFileList -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -target x86_64-apple-ios17.0-simulator -g -module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -F /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -c -j4 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/SDKStatCaches.noindex/iphonesimulator26.5-23F81a-688ef53f1462e2c8f657fdc38a81448ff45c64a1807a658693f2a61704f17a36.sdkstatcache -output-file-map /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex -sdk-module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF_const_extract_protocols.json -Xcc -iquote -Xcc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-generated-files.hmap -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-own-target-headers.hmap -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-all-target-headers.hmap -Xcc -iquote -Xcc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-project-headers.hmap -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources-normal/x86_64 -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources/x86_64 -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF-Swift.h -working-directory /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios -experimental-emit-module-separately -disable-cmo
+
+ProcessInfoPlistFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Info.plist /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Info.plist (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-infoPlistUtility /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Info.plist -producttype com.apple.product-type.application -genpkginfo /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PkgInfo -expandbuildsettings -format binary -platform iphonesimulator -additionalcontentfile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/UVDoc-CoreMLPartialInfo.plist -additionalcontentfile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/assetcatalog_generated_info.plist -o /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Info.plist
+
+SwiftMergeGeneratedHeaders /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources/PrumoPDF-Swift.h /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF-Swift.h (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-swiftHeaderTool -arch x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF-Swift.h -o /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources/PrumoPDF-Swift.h
+
+Copy /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.swiftmodule/x86_64-apple-ios-simulator.swiftmodule /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.swiftmodule (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.swiftmodule /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.swiftmodule/x86_64-apple-ios-simulator.swiftmodule
+
+Copy /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.swiftmodule/x86_64-apple-ios-simulator.swiftdoc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.swiftdoc (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.swiftdoc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.swiftmodule/x86_64-apple-ios-simulator.swiftdoc
+
+Copy /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.swiftmodule/x86_64-apple-ios-simulator.abi.json /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.abi.json (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.abi.json /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.swiftmodule/x86_64-apple-ios-simulator.abi.json
+
+Copy /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.swiftmodule/Project/x86_64-apple-ios-simulator.swiftsourceinfo /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.swiftsourceinfo (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.swiftsourceinfo /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.swiftmodule/Project/x86_64-apple-ios-simulator.swiftsourceinfo
+
+SwiftCompile normal x86_64 Compiling\ Highlights.swift,\ JobCenter.swift,\ Library.swift,\ LibrarySync.swift,\ ListScreens.swift,\ OCRService.swift,\ PDFOps.swift,\ PDFReaderScreen.swift,\ PDFSyntax.swift,\ PageOrganizer.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Highlights.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/JobCenter.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/LibrarySync.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/ListScreens.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/OCRService.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/PDFOps.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/PDFReaderScreen.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/PDFSyntax.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/PageOrganizer.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Highlights.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/JobCenter.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/JobCenter.swift:26:56: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func startOCR(_ item: PDFItem, library: Library = .shared, flow: AppFlow = .shared) {
+                                                       ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:105:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/JobCenter.swift:26:81: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func startOCR(_ item: PDFItem, library: Library = .shared, flow: AppFlow = .shared) {
+                                                                                ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:55:16: note: static property declared here
+    static let shared = AppFlow()
+               ^
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/LibrarySync.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/ListScreens.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:245:44: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+                       library: Library = .shared) async -> [PDFItem] {
+                                           ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:105:16: note: static property declared here
+    static let shared = Library()
+               ^
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/OCRService.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/PDFOps.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/PDFReaderScreen.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/PDFSyntax.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/UI/PageOrganizer.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftDriverJobDiscovery normal x86_64 Compiling Settings.swift, SignSheet.swift, Signing.swift, Summary.swift, TextReader.swift, Theme.swift, ThumbnailCache.swift, ToolScreens.swift, UVDoc.swift, GeneratedAssetSymbols.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+
+SwiftDriver PrumoPDFTests normal x86_64 com.apple.xcode.tools.swift.compiler (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-SwiftDriver -- /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name PrumoPDFTests -Onone @/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.SwiftFileList -DDEBUG -plugin-path /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -target x86_64-apple-ios17.0-simulator -g -module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -Isystem /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib -F /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -F /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks -F /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk/Developer/Library/Frameworks -c -j4 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/SDKStatCaches.noindex/iphonesimulator26.5-23F81a-688ef53f1462e2c8f657fdc38a81448ff45c64a1807a658693f2a61704f17a36.sdkstatcache -output-file-map /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex -sdk-module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests_const_extract_protocols.json -Xcc -iquote -Xcc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-generated-files.hmap -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-own-target-headers.hmap -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-all-target-headers.hmap -Xcc -iquote -Xcc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-project-headers.hmap -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/DerivedSources-normal/x86_64 -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/DerivedSources/x86_64 -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests-Swift.h -working-directory /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios -experimental-emit-module-separately -disable-cmo
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules/XCUIAutomation-5WSB10QCGB0G79T0BIH599HGM.pcm
+
+SwiftExplicitDependencyCompileModuleFromInterface x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules/XCUIAutomation-1JAGH374GVS7W.swiftmodule
+
+SwiftExplicitDependencyGeneratePcm x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules/XCTest-3FFHLENA0U8E4A83VM36YKBZK.pcm
+
+SwiftDriverJobDiscovery normal x86_64 Compiling PagePickerScreen.swift, PageSelection.swift, PageToolSheets.swift, PageTools.swift, PrumoPDFApp.swift, ReaderHistory.swift, ReaderText.swift, RootView.swift, ScanService.swift, Security.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+
+SwiftExplicitDependencyCompileModuleFromInterface x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules/XCTest-1HZOFOZEJVT9.swiftmodule
+
+SwiftDriverJobDiscovery normal x86_64 Compiling Analyzer.swift, AppFlow.swift, Backup.swift, CMS.swift, Components.swift, Converter.swift, DemoCertificate.swift, DemoSeeder.swift, Dewarp.swift, DocumentDetailScreen.swift, DragSelect.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+
+SwiftEmitModule normal x86_64 Emitting\ module\ for\ PrumoPDFTests (in target 'PrumoPDFTests' from project 'PrumoPDF')
+
+EmitSwiftModule normal x86_64 (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 Compiling\ TestHelpers.swift,\ V18Tests.swift,\ V19Tests.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/TestHelpers.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/V18Tests.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/V19Tests.swift (in target 'PrumoPDFTests' from project 'PrumoPDF')
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/TestHelpers.swift (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/V18Tests.swift (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/V19Tests.swift (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 Compiling\ LibraryTests.swift,\ OCRTests.swift,\ ReaderTextTests.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/LibraryTests.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/OCRTests.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/ReaderTextTests.swift (in target 'PrumoPDFTests' from project 'PrumoPDF')
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/LibraryTests.swift (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/OCRTests.swift (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/ReaderTextTests.swift (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 Compiling\ ConverterTests.swift,\ CoreTests.swift,\ DewarpTests.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/ConverterTests.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/CoreTests.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/DewarpTests.swift (in target 'PrumoPDFTests' from project 'PrumoPDF')
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/ConverterTests.swift (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/CoreTests.swift (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/DewarpTests.swift (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftDriverJobDiscovery normal x86_64 Emitting module for PrumoPDFTests (in target 'PrumoPDFTests' from project 'PrumoPDF')
+
+SwiftDriver\ Compilation\ Requirements PrumoPDFTests normal x86_64 com.apple.xcode.tools.swift.compiler (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name PrumoPDFTests -Onone @/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.SwiftFileList -DDEBUG -plugin-path /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -target x86_64-apple-ios17.0-simulator -g -module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -Isystem /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib -F /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -F /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks -F /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk/Developer/Library/Frameworks -c -j4 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/SDKStatCaches.noindex/iphonesimulator26.5-23F81a-688ef53f1462e2c8f657fdc38a81448ff45c64a1807a658693f2a61704f17a36.sdkstatcache -output-file-map /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex -sdk-module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests_const_extract_protocols.json -Xcc -iquote -Xcc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-generated-files.hmap -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-own-target-headers.hmap -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-all-target-headers.hmap -Xcc -iquote -Xcc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-project-headers.hmap -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/DerivedSources-normal/x86_64 -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/DerivedSources/x86_64 -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests-Swift.h -working-directory /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios -experimental-emit-module-separately -disable-cmo
+
+SwiftDriverJobDiscovery normal x86_64 Compiling LibraryTests.swift, OCRTests.swift, ReaderTextTests.swift (in target 'PrumoPDFTests' from project 'PrumoPDF')
+
+SwiftCompile normal x86_64 Compiling\ SecurityTests.swift,\ SyncTests.swift,\ TestCertificates.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/SecurityTests.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/SyncTests.swift /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/TestCertificates.swift (in target 'PrumoPDFTests' from project 'PrumoPDF')
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/SecurityTests.swift (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/SyncTests.swift (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftCompile normal x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDFTests/TestCertificates.swift (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    
+
+SwiftMergeGeneratedHeaders /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/DerivedSources/PrumoPDFTests-Swift.h /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests-Swift.h (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-swiftHeaderTool -arch x86_64 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests-Swift.h -o /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/DerivedSources/PrumoPDFTests-Swift.h
+
+Copy /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDFTests.swiftmodule/x86_64-apple-ios-simulator.swiftmodule /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.swiftmodule (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.swiftmodule /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDFTests.swiftmodule/x86_64-apple-ios-simulator.swiftmodule
+
+SwiftDriverJobDiscovery normal x86_64 Compiling ConverterTests.swift, CoreTests.swift, DewarpTests.swift (in target 'PrumoPDFTests' from project 'PrumoPDF')
+
+Copy /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDFTests.swiftmodule/x86_64-apple-ios-simulator.swiftdoc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.swiftdoc (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.swiftdoc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDFTests.swiftmodule/x86_64-apple-ios-simulator.swiftdoc
+
+Copy /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDFTests.swiftmodule/x86_64-apple-ios-simulator.abi.json /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.abi.json (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.abi.json /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDFTests.swiftmodule/x86_64-apple-ios-simulator.abi.json
+
+Copy /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDFTests.swiftmodule/Project/x86_64-apple-ios-simulator.swiftsourceinfo /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.swiftsourceinfo (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.swiftsourceinfo /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDFTests.swiftmodule/Project/x86_64-apple-ios-simulator.swiftsourceinfo
+
+SwiftDriverJobDiscovery normal x86_64 Compiling TestHelpers.swift, V18Tests.swift, V19Tests.swift (in target 'PrumoPDFTests' from project 'PrumoPDF')
+
+SwiftDriverJobDiscovery normal x86_64 Compiling SecurityTests.swift, SyncTests.swift, TestCertificates.swift (in target 'PrumoPDFTests' from project 'PrumoPDF')
+
+SwiftDriver\ Compilation PrumoPDFTests normal x86_64 com.apple.xcode.tools.swift.compiler (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-Swift-Compilation -- /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name PrumoPDFTests -Onone @/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.SwiftFileList -DDEBUG -plugin-path /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -target x86_64-apple-ios17.0-simulator -g -module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -Isystem /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib -F /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -F /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks -F /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk/Developer/Library/Frameworks -c -j4 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/SDKStatCaches.noindex/iphonesimulator26.5-23F81a-688ef53f1462e2c8f657fdc38a81448ff45c64a1807a658693f2a61704f17a36.sdkstatcache -output-file-map /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex -sdk-module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests_const_extract_protocols.json -Xcc -iquote -Xcc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-generated-files.hmap -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-own-target-headers.hmap -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-all-target-headers.hmap -Xcc -iquote -Xcc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests-project-headers.hmap -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/DerivedSources-normal/x86_64 -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/DerivedSources/x86_64 -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests-Swift.h -working-directory /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios -experimental-emit-module-separately -disable-cmo
+
+SwiftDriverJobDiscovery normal x86_64 Compiling Highlights.swift, JobCenter.swift, Library.swift, LibrarySync.swift, ListScreens.swift, OCRService.swift, PDFOps.swift, PDFReaderScreen.swift, PDFSyntax.swift, PageOrganizer.swift (in target 'PrumoPDF' from project 'PrumoPDF')
+
+SwiftDriver\ Compilation PrumoPDF normal x86_64 com.apple.xcode.tools.swift.compiler (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-Swift-Compilation -- /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name PrumoPDF -Onone @/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.SwiftFileList -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -target x86_64-apple-ios17.0-simulator -g -module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -F /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -c -j4 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/SDKStatCaches.noindex/iphonesimulator26.5-23F81a-688ef53f1462e2c8f657fdc38a81448ff45c64a1807a658693f2a61704f17a36.sdkstatcache -output-file-map /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex -sdk-module-cache-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF_const_extract_protocols.json -Xcc -iquote -Xcc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-generated-files.hmap -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-own-target-headers.hmap -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-all-target-headers.hmap -Xcc -iquote -Xcc /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-project-headers.hmap -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources-normal/x86_64 -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources/x86_64 -Xcc -I/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF-Swift.h -working-directory /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios -experimental-emit-module-separately -disable-cmo
+
+Ld /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PrumoPDF.debug.dylib normal (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target x86_64-apple-ios17.0-simulator -dynamiclib -isysroot /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -O0 -L/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -L/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -F/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -F/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -filelist /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.LinkFileList -install_name @rpath/PrumoPDF.debug.dylib -Xlinker -rpath -Xlinker /usr/lib/swift -Xlinker -rpath -Xlinker @executable_path/Frameworks -Xlinker -dead_strip -Xlinker -object_path_lto -Xlinker /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -dependency_info -Xlinker /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.swiftmodule @/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF-linker-args.resp -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __entitlements -Xlinker /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/ci/simulator-entitlements.plist -Xlinker -alias -Xlinker _main -Xlinker ___debug_main_executable_dylib_entry_point -o /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PrumoPDF.debug.dylib
+
+ConstructStubExecutorLinkFileList /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-ExecutorLinkFileList-normal-x86_64.txt (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    construct-stub-executor-link-file-list /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PrumoPDF.debug.dylib /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libPreviewsJITStubExecutor_no_swift_entry_point.a /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libPreviewsJITStubExecutor.a --output /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-ExecutorLinkFileList-normal-x86_64.txt
+note: Using stub executor library with Swift entry point. (in target 'PrumoPDF' from project 'PrumoPDF')
+
+Ld /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PrumoPDF normal (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target x86_64-apple-ios17.0-simulator -isysroot /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -O0 -L/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -F/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -Xlinker -rpath -Xlinker @executable_path -Xlinker -rpath -Xlinker @executable_path/Frameworks -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -e ___debug_blank_executor_main -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_dylib -Xlinker /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-DebugDylibPath-normal-x86_64.txt -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_instlnm -Xlinker /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-DebugDylibInstallName-normal-x86_64.txt -Xlinker -filelist -Xlinker /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF-ExecutorLinkFileList-normal-x86_64.txt /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PrumoPDF.debug.dylib -o /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PrumoPDF
+
+ExtractAppIntentsMetadata (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Users/runner/Library/Developer/DVTDownloads/MetalToolchain/mounts/5f4a441a6d0a11f2e9b28c67384263afe92320f7/Metal.xctoolchain --module-name PrumoPDF --sdk-root /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk --xcode-version 17F113 --platform-family iOS --deployment-target 17.0 --bundle-identifier br.com.prumopdf.app --output /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app --target-triple x86_64-apple-ios17.0-simulator --binary-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PrumoPDF --dependency-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF_dependency_info.dat --stringsdata-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.SwiftFileList --metadata-file-list /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF.DependencyMetadataFileList --static-metadata-file-list /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF.DependencyStaticMetadataFileList --swift-const-vals-list /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/Objects-normal/x86_64/PrumoPDF.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2026-10-30 03:45:04.976 appintentsmetadataprocessor[7816:28962] Starting appintentsmetadataprocessor export
+2026-10-30 03:45:05.025 appintentsmetadataprocessor[7816:28962] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+
+CopySwiftLibs /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-swiftStdLibTool --copy --verbose --scan-executable /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PrumoPDF.debug.dylib --scan-folder /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks --scan-folder /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns --scan-folder /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/SystemExtensions --scan-folder /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Extensions --platform iphonesimulator --toolchain /Users/runner/Library/Developer/DVTDownloads/MetalToolchain/mounts/5f4a441a6d0a11f2e9b28c67384263afe92320f7/Metal.xctoolchain --toolchain /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+Ignoring --strip-bitcode because --sign was not passed
+
+AppIntentsSSUTraining (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsnltrainingprocessor --infoplist-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Info.plist --temp-dir-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/ssu --bundle-id br.com.prumopdf.app --product-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app --extracted-metadata-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Metadata.appintents --metadata-file-list /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDF.build/PrumoPDF.DependencyMetadataFileList --source-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/Info.plist --archive-ssu-assets
+2026-10-30 03:45:05.123 appintentsnltrainingprocessor[7853:29034] Parsing options for appintentsnltrainingprocessor
+2026-10-30 03:45:05.124 appintentsnltrainingprocessor[7853:29034] Starting AppIntents SSU YAML Generation
+2026-10-30 03:45:05.142 appintentsnltrainingprocessor[7853:29034] No AppShortcuts found - Skipping.
+
+ProcessInfoPlistFile /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest/Info.plist /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/empty-PrumoPDFTests.plist (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-infoPlistUtility /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/empty-PrumoPDFTests.plist -producttype com.apple.product-type.bundle.unit-test -expandbuildsettings -format binary -platform iphonesimulator -o /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest/Info.plist
+
+Ld /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest/PrumoPDFTests normal (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target x86_64-apple-ios17.0-simulator -bundle -isysroot /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -O0 -L/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -L/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -L/Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib -F/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -F/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator -iframework /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks -iframework /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk/Developer/Library/Frameworks -filelist /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.LinkFileList -Xlinker -rpath -Xlinker /usr/lib/swift -Xlinker -rpath -Xlinker @loader_path/Frameworks -Xlinker -rpath -Xlinker @executable_path/Frameworks -Xlinker -dead_strip -bundle_loader /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PrumoPDF -Xlinker -object_path_lto -Xlinker /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -dependency_info -Xlinker /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.swiftmodule @/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests-linker-args.resp -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __entitlements -Xlinker /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/ci/simulator-entitlements.plist -Xlinker -needed_framework -Xlinker XCTest -framework XCTest -Xlinker -needed-lXCTestSwiftSupport -lXCTestSwiftSupport /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PrumoPDF.debug.dylib -o /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest/PrumoPDFTests
+
+CopySwiftLibs /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-swiftStdLibTool --copy --verbose --scan-executable /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest/PrumoPDFTests --scan-folder /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest/Frameworks --scan-folder /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest/PlugIns --scan-folder /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest/SystemExtensions --scan-folder /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest/Extensions --platform iphonesimulator --toolchain /Users/runner/Library/Developer/DVTDownloads/MetalToolchain/mounts/5f4a441a6d0a11f2e9b28c67384263afe92320f7/Metal.xctoolchain --toolchain /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest/Frameworks --strip-bitcode --scan-executable /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib --strip-bitcode-tool /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+Ignoring --strip-bitcode because --sign was not passed
+
+ExtractAppIntentsMetadata (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Users/runner/Library/Developer/DVTDownloads/MetalToolchain/mounts/5f4a441a6d0a11f2e9b28c67384263afe92320f7/Metal.xctoolchain --module-name PrumoPDFTests --sdk-root /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk --xcode-version 17F113 --platform-family iOS --deployment-target 17.0 --bundle-identifier br.com.prumopdf.tests --output /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest --target-triple x86_64-apple-ios17.0-simulator --binary-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest/PrumoPDFTests --dependency-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests_dependency_info.dat --stringsdata-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.SwiftFileList --metadata-file-list /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests.DependencyMetadataFileList --static-metadata-file-list /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests.DependencyStaticMetadataFileList --swift-const-vals-list /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/Objects-normal/x86_64/PrumoPDFTests.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2026-10-30 03:45:06.043 appintentsmetadataprocessor[7872:29098] Starting appintentsmetadataprocessor export
+2026-10-30 03:45:06.055 appintentsmetadataprocessor[7872:29098] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+
+AppIntentsSSUTraining (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsnltrainingprocessor --infoplist-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest/Info.plist --temp-dir-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/ssu --bundle-id br.com.prumopdf.tests --product-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest --extracted-metadata-path /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest/Metadata.appintents --metadata-file-list /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Intermediates.noindex/PrumoPDF.build/Debug-iphonesimulator/PrumoPDFTests.build/PrumoPDFTests.DependencyMetadataFileList --source-file /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest/Info.plist --archive-ssu-assets
+2026-10-30 03:45:06.100 appintentsnltrainingprocessor[7873:29099] Parsing options for appintentsnltrainingprocessor
+2026-10-30 03:45:06.100 appintentsnltrainingprocessor[7873:29099] Starting AppIntents SSU YAML Generation
+2026-10-30 03:45:06.101 appintentsnltrainingprocessor[7873:29099] No AppShortcuts found - Skipping.
+
+RegisterExecutionPolicyException /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-RegisterExecutionPolicyException /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest
+
+Touch /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest (in target 'PrumoPDFTests' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    /usr/bin/touch -c /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app/PlugIns/PrumoPDFTests.xctest
+
+RegisterExecutionPolicyException /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-RegisterExecutionPolicyException /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app
+
+Validate /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    builtin-validationUtility /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app -shallow-bundle -infoplist-subpath Info.plist
+
+Touch /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app (in target 'PrumoPDF' from project 'PrumoPDF')
+    cd /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios
+    /usr/bin/touch -c /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/build/Build/Products/Debug-iphonesimulator/PrumoPDF.app
+
+Test Suite 'All tests' started at 2026-10-30 03:49:35.451.
+Test Suite 'PrumoPDFTests.xctest' started at 2026-10-30 03:49:35.454.
+Test Suite 'ConverterTests' started at 2026-10-30 03:49:35.454.
+Test Case '-[PrumoPDFTests.ConverterTests testHTMLAndRTF]' started.
+Test Case '-[PrumoPDFTests.ConverterTests testHTMLAndRTF]' passed (3.178 seconds).
+Test Case '-[PrumoPDFTests.ConverterTests testImagesCombinedA4WithOrientation]' started.
+Test Case '-[PrumoPDFTests.ConverterTests testImagesCombinedA4WithOrientation]' passed (0.652 seconds).
+Test Case '-[PrumoPDFTests.ConverterTests testImagesOnePDFEach]' started.
+Test Case '-[PrumoPDFTests.ConverterTests testImagesOnePDFEach]' passed (0.302 seconds).
+Test Case '-[PrumoPDFTests.ConverterTests testKinds]' started.
+Test Case '-[PrumoPDFTests.ConverterTests testKinds]' passed (0.003 seconds).
+Test Case '-[PrumoPDFTests.ConverterTests testLongTextPaginatesA4]' started.
+Test Case '-[PrumoPDFTests.ConverterTests testLongTextPaginatesA4]' passed (1.574 seconds).
+Test Case '-[PrumoPDFTests.ConverterTests testMultipageTIFF]' started.
+Test Case '-[PrumoPDFTests.ConverterTests testMultipageTIFF]' passed (0.364 seconds).
+Test Case '-[PrumoPDFTests.ConverterTests testSavedConversionGoesToLibraryAndPendingOCR]' started.
+Test Case '-[PrumoPDFTests.ConverterTests testSavedConversionGoesToLibraryAndPendingOCR]' passed (0.701 seconds).
+Test Case '-[PrumoPDFTests.ConverterTests testWordDocument]' started.
+2026-10-30 03:49:42.546099+0000 PrumoPDF[9478:39661] [unspecified] _container_query_get_result_at_index: error = 2→(98) NOT_CODESIGNED;
+2026-10-30 03:49:42.546932+0000 PrumoPDF[9478:39661] [unspecified] container_system_group_path_for_identifier: error = ((container_error_t)98) NOT_CODESIGNED
+2026-10-30 03:49:42.547375+0000 PrumoPDF[9478:39661] [MC] Error getting system group container for systemgroup.com.apple.configurationprofiles: 98
+2026-10-30 03:49:48.111085+0000 PrumoPDF[9478:39661] [MC] Failed to get profile system group container path. Overriding with expected path: /Users/runner/Library/Developer/CoreSimulator/Devices/0C838647-022A-46B9-BC8F-310CD1CE6BDE/data/Containers/Shared/SystemGroup/systemgroup.com.apple.configurationprofiles
+2026-10-30 03:49:49.461586+0000 PrumoPDF[9478:40067] [Client] XPC connection interrupted
+2026-10-30 03:49:49.659376+0000 PrumoPDF[9478:36564] [ResourceLoadStatistics] Failed to request storage access quirks from WebPrivacy.
+2026-10-30 03:49:49.659711+0000 PrumoPDF[9478:36564] [ResourceLoadStatistics] Failed to request storage access user agent string quirks from WebPrivacy.
+2026-10-30 03:49:49.661891+0000 PrumoPDF[9478:36564] [ResourceLoadStatistics] Failed to request known fingerprinting scripts from WebPrivacy: Error Domain=WebPrivacyErrorDomain Code=1001 "List data not found" UserInfo={NSLocalizedDescription=List data not found}
+2026-10-30 03:49:56.416940+0000 PrumoPDF[9478:36564] [Process] WebContent process (0x12a2d40c0) took 13.866032 seconds to launch
+2026-10-30 03:49:56.433437+0000 PrumoPDF[9478:39657] [default] Failed to resolve host network app id to config: bundleID: com.apple.WebKit.Networking instance ID: Optional([_EXExtensionInstanceIdentifier: CC9963A3-5E94-4CE2-AD82-1F8E662FD80B])
+2026-10-30 03:49:56.470624+0000 PrumoPDF[9478:36564] [Process] GPU process (0x12a1501e0) took 7.741195 seconds to launch
+2026-10-30 03:49:59.462057+0000 PrumoPDF[9478:36564] [Process] 0x12a2d40c0 - [PID=10663] WebProcessProxy::didBecomeUnresponsive:
+2026-10-30 03:49:59.462569+0000 PrumoPDF[9478:36564] [Process] 0x1100cb020 - [pageProxyID=9, webPageID=10, PID=10663] WebPageProxy::processDidBecomeUnresponsive:
+2026-10-30 03:50:00.320486+0000 PrumoPDF[9478:36564] [Process] Networking process (0x12a13c190) took 3.890725 seconds to launch
+2026-10-30 03:50:01.359718+0000 PrumoPDF[9478:36564] [ResourceLoadStatistics] Failed to request query parameters from WebPrivacy.
+2026-10-30 03:50:05.609842+0000 PrumoPDF[9478:36564] [unspecified] _container_query_get_result_at_index: error = 2→(98) NOT_CODESIGNED;
+2026-10-30 03:50:05.616982+0000 PrumoPDF[9478:36564] [unspecified] container_system_group_path_for_identifier: error = ((container_error_t)98) NOT_CODESIGNED
+2026-10-30 03:50:16.407275+0000 PrumoPDF[9478:40508] [ResourceLoadStatistics] WebContent[10663] Unable to hide query parameters from script (missing data)
+2026-10-30 03:50:16.460650+0000 PrumoPDF[9478:36564] [ResourceLoadStatistics] Failed to request allowed query parameters from WebPrivacy.
+2026-10-30 03:50:16.576312+0000 PrumoPDF[9478:36564] [ResourceLoadStatistics] Failed to request restricted opener domains from WebPrivacy
+Converter: texto do .docx no PDF: Petição inicial
+A autora vem propor ação de indenização em face do
+hospital.
+Requer a citação do réu.
+Data Valor
+
+2026-10-30 03:50:18.033239+0000 PrumoPDF[9478:40508] [ProcessSuspension] WebContent[10663] 0x110048100 - [sessionID=1] WebProcess::updateFreezerStatus: isFreezable=1, error=-1
+Test Case '-[PrumoPDFTests.ConverterTests testWordDocument]' passed (35.816 seconds).
+Test Suite 'ConverterTests' passed at 2026-10-30 03:50:18.056.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 42.590 (42.602) seconds
+Test Suite 'DewarpTests' started at 2026-10-30 03:50:20.610.
+Test Case '-[PrumoPDFTests.DewarpTests testCurvedPageReadsBetterAfterCorrection]' started.
+2026-10-30 03:50:20.667851+0000 PrumoPDF[9478:40508] [ProcessSuspension] WebContent[10663] 0x110048100 - [sessionID=1] WebProcess::markAllLayersVolatile: Failed to mark layers as volatile for webPageID=10
+E5RT encountered an STL exception. msg = Espresso exception: "Invalid state": MpsGraph backend validation on incompatible OS.2026-10-30 03:50:42.628608+0000 PrumoPDF[9478:36564] [coreml] E5RT: Espresso exception: "Invalid state": MpsGraph backend validation on incompatible OS (11)
+2026-10-30 03:50:44.751706+0000 PrumoPDF[9478:41274] fopen failed for data file: errno = 2 (No such file or directory)
+2026-10-30 03:50:46.035231+0000 PrumoPDF[9478:41274] fopen failed for data file: errno = 2 (No such file or directory)
+Curvatura: palavras reconhecidas antes 414, depois 420
+Test Case '-[PrumoPDFTests.DewarpTests testCurvedPageReadsBetterAfterCorrection]' passed (114.556 seconds).
+Test Case '-[PrumoPDFTests.DewarpTests testDewarpPDFKeepsOtherPages]' started.
+Test Case '-[PrumoPDFTests.DewarpTests testDewarpPDFKeepsOtherPages]' passed (167.825 seconds).
+Test Case '-[PrumoPDFTests.DewarpTests testModelIsBundledAndPredictsGrid]' started.
+Test Case '-[PrumoPDFTests.DewarpTests testModelIsBundledAndPredictsGrid]' passed (4.984 seconds).
+Test Suite 'DewarpTests' passed at 2026-10-30 03:55:07.987.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 287.364 (287.376) seconds
+Test Suite 'LibraryTests' started at 2026-10-30 03:55:07.988.
+Test Case '-[PrumoPDFTests.LibraryTests testBackupFolderAndRestoreWithoutDuplicates]' started.
+Test Case '-[PrumoPDFTests.LibraryTests testBackupFolderAndRestoreWithoutDuplicates]' passed (0.264 seconds).
+Test Case '-[PrumoPDFTests.LibraryTests testBackupPreference]' started.
+Test Case '-[PrumoPDFTests.LibraryTests testBackupPreference]' passed (0.046 seconds).
+Test Case '-[PrumoPDFTests.LibraryTests testCopyIntoFolderKeepsOriginal]' started.
+Test Case '-[PrumoPDFTests.LibraryTests testCopyIntoFolderKeepsOriginal]' passed (0.129 seconds).
+Test Case '-[PrumoPDFTests.LibraryTests testFavoriteStarFeedsFavoritesList]' started.
+Test Case '-[PrumoPDFTests.LibraryTests testFavoriteStarFeedsFavoritesList]' passed (0.039 seconds).
+Test Case '-[PrumoPDFTests.LibraryTests testImportFoldersRenameMoveDelete]' started.
+Test Case '-[PrumoPDFTests.LibraryTests testImportFoldersRenameMoveDelete]' passed (0.143 seconds).
+Test Case '-[PrumoPDFTests.LibraryTests testMetadataSurvivesRestart]' started.
+Test Case '-[PrumoPDFTests.LibraryTests testMetadataSurvivesRestart]' passed (0.097 seconds).
+Test Case '-[PrumoPDFTests.LibraryTests testModifyAndUndo]' started.
+Test Case '-[PrumoPDFTests.LibraryTests testModifyAndUndo]' passed (0.860 seconds).
+Test Case '-[PrumoPDFTests.LibraryTests testSaveNewDocumentAndSplitNames]' started.
+Test Case '-[PrumoPDFTests.LibraryTests testSaveNewDocumentAndSplitNames]' passed (10.751 seconds).
+Test Case '-[PrumoPDFTests.LibraryTests testSearchFindsAccentInsensitiveText]' started.
+Busca: analisado=true isAnalyzing=false status=Optional(PrumoPDF.TextStatus.digital) texto direto=marcador-a-1 este e um texto digital com bastante conteudo para a pagina 1. marc
+Test Case '-[PrumoPDFTests.LibraryTests testSearchFindsAccentInsensitiveText]' passed (0.166 seconds).
+Test Suite 'LibraryTests' passed at 2026-10-30 03:55:20.507.
+	 Executed 9 tests, with 0 failures (0 unexpected) in 12.495 (12.519) seconds
+Test Suite 'OCRTests' started at 2026-10-30 03:55:20.508.
+Test Case '-[PrumoPDFTests.OCRTests testCancellation]' started.
+Test Case '-[PrumoPDFTests.OCRTests testCancellation]' passed (0.385 seconds).
+Test Case '-[PrumoPDFTests.OCRTests testDigitalOnlyDocumentReportsNothingToDo]' started.
+Test Case '-[PrumoPDFTests.OCRTests testDigitalOnlyDocumentReportsNothingToDo]' passed (0.021 seconds).
+Test Case '-[PrumoPDFTests.OCRTests testDigitalPagesAreUntouched]' started.
+2026-10-30 03:55:39.085613+0000 PrumoPDF[9478:36564] [general] Failed to terminate process: Error Domain=com.apple.extensionKit.errorDomain Code=18 "(null)" UserInfo={NSUnderlyingError=0x600000d08030 {Error Domain=RBSRequestErrorDomain Code=3 "No such process found" UserInfo={NSLocalizedFailureReason=No such process found}}}
+2026-10-30 03:56:09.175689+0000 PrumoPDF[9478:58839] [assertion] Error acquiring assertion: <Error Domain=RBSAssertionErrorDomain Code=2 "Specified target process 10672 does not exist" UserInfo={NSLocalizedFailureReason=Specified target process 10672 does not exist}>
+2026-10-30 03:56:09.179091+0000 PrumoPDF[9478:58839] [ProcessSuspension] 0x12a2800c0 - ProcessAssertion::acquireSync Failed to acquire RBS assertion 'XPCConnectionTerminationWatchdog' for process with PID=10672, error: (null)
+2026-10-30 03:56:14.844679+0000 PrumoPDF[9478:58839] [Query] Error for queryMetaDataSync: 2
+Test Case '-[PrumoPDFTests.OCRTests testDigitalPagesAreUntouched]' passed (56.318 seconds).
+Test Case '-[PrumoPDFTests.OCRTests testScannedPagesGetSearchableText]' started.
+2026-10-30 03:56:39.171646+0000 PrumoPDF[9478:36564] [general] Failed to terminate process: Error Domain=com.apple.extensionKit.errorDomain Code=18 "(null)" UserInfo={NSUnderlyingError=0x600000d04150 {Error Domain=RBSRequestErrorDomain Code=3 "No such process found" UserInfo={NSLocalizedFailureReason=No such process found}}}
+Texto reconhecido (página 1): excelentissimo senhor doutor juiz de direito a autora propoe a presente acao de indenizacao por danos materiais e morais em face do hospital reu. o prontuario demonstra a demora no diagnostico. valor da causa: r$ 150.000,00 em 12 de marco de 2025.
+Tamanho: original 100768 bytes, com OCR 112976 bytes
+Confiança média: 1.0; revisar: []
+Test Case '-[PrumoPDFTests.OCRTests testScannedPagesGetSearchableText]' passed (43.675 seconds).
+Test Case '-[PrumoPDFTests.OCRTests testScannedPageWithDigitalStampKeepsStampOnce]' started.
+Test Case '-[PrumoPDFTests.OCRTests testScannedPageWithDigitalStampKeepsStampOnce]' passed (15.531 seconds).
+Test Suite 'OCRTests' passed at 2026-10-30 03:57:16.444.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 115.930 (115.937) seconds
+Test Suite 'PDFOpsTests' started at 2026-10-30 03:57:16.445.
+Test Case '-[PrumoPDFTests.PDFOpsTests testAnalyzerClassifiesPages]' started.
+Test Case '-[PrumoPDFTests.PDFOpsTests testAnalyzerClassifiesPages]' passed (0.092 seconds).
+Test Case '-[PrumoPDFTests.PDFOpsTests testArrangementReorderRotateDelete]' started.
+Test Case '-[PrumoPDFTests.PDFOpsTests testArrangementReorderRotateDelete]' passed (0.038 seconds).
+Test Case '-[PrumoPDFTests.PDFOpsTests testInsertAllAtStartAndEnd]' started.
+Test Case '-[PrumoPDFTests.PDFOpsTests testInsertAllAtStartAndEnd]' passed (0.030 seconds).
+Test Case '-[PrumoPDFTests.PDFOpsTests testInsertSelectedPagesAfterPosition]' started.
+Test Case '-[PrumoPDFTests.PDFOpsTests testInsertSelectedPagesAfterPosition]' passed (0.056 seconds).
+Test Case '-[PrumoPDFTests.PDFOpsTests testRemoveKeepsAtLeastOnePage]' started.
+Test Case '-[PrumoPDFTests.PDFOpsTests testRemoveKeepsAtLeastOnePage]' passed (0.017 seconds).
+Test Case '-[PrumoPDFTests.PDFOpsTests testSplitAndExtractAndMerge]' started.
+Test Case '-[PrumoPDFTests.PDFOpsTests testSplitAndExtractAndMerge]' passed (0.032 seconds).
+Test Suite 'PDFOpsTests' passed at 2026-10-30 03:57:16.719.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.264 (0.273) seconds
+Test Suite 'PageSelectionTests' started at 2026-10-30 03:57:16.720.
+Test Case '-[PrumoPDFTests.PageSelectionTests testFormat]' started.
+Test Case '-[PrumoPDFTests.PageSelectionTests testFormat]' passed (0.006 seconds).
+Test Case '-[PrumoPDFTests.PageSelectionTests testParsesNumbersRangesAndEnd]' started.
+Test Case '-[PrumoPDFTests.PageSelectionTests testParsesNumbersRangesAndEnd]' passed (0.003 seconds).
+Test Case '-[PrumoPDFTests.PageSelectionTests testRejectsInvalidInput]' started.
+Test Case '-[PrumoPDFTests.PageSelectionTests testRejectsInvalidInput]' passed (0.046 seconds).
+Test Suite 'PageSelectionTests' passed at 2026-10-30 03:57:16.782.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.056 (0.062) seconds
+Test Suite 'ReaderTextTests' started at 2026-10-30 03:57:16.783.
+Test Case '-[PrumoPDFTests.ReaderTextTests testReaderTextFromOCRResult]' started.
+Modo leitor, página 1: ["EXCELENTÍSSIMO SENHOR DOUTOR JUIZ DE DIREITO", "A autora propõe a presente ação de indenização por danos materiais e morais em face do hospital réu. O prontuário demonstra a demora no diagnóstico. Valor da causa: R$ 150.000,00 em 12 de março de 2025."]
+Test Case '-[PrumoPDFTests.ReaderTextTests testReaderTextFromOCRResult]' passed (30.199 seconds).
+Test Case '-[PrumoPDFTests.ReaderTextTests testReflowJoinsLinesAndSplitsParagraphs]' started.
+Test Case '-[PrumoPDFTests.ReaderTextTests testReflowJoinsLinesAndSplitsParagraphs]' passed (0.003 seconds).
+Test Case '-[PrumoPDFTests.ReaderTextTests testReflowWithoutPositions]' started.
+Test Case '-[PrumoPDFTests.ReaderTextTests testReflowWithoutPositions]' passed (0.003 seconds).
+Test Case '-[PrumoPDFTests.ReaderTextTests testScannedPDFWithoutOCRHasNoText]' started.
+Test Case '-[PrumoPDFTests.ReaderTextTests testScannedPDFWithoutOCRHasNoText]' passed (0.045 seconds).
+Test Suite 'ReaderTextTests' passed at 2026-10-30 03:57:47.038.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 30.250 (30.256) seconds
+Test Suite 'ScanServiceTests' started at 2026-10-30 03:57:47.039.
+Test Case '-[PrumoPDFTests.ScanServiceTests testDefaultName]' started.
+Test Case '-[PrumoPDFTests.ScanServiceTests testDefaultName]' passed (0.007 seconds).
+Test Case '-[PrumoPDFTests.ScanServiceTests testMakesOnePagePerImageWithPhotoProportions]' started.
+Tamanho do PDF escaneado de teste: 189372 bytes
+Test Case '-[PrumoPDFTests.ScanServiceTests testMakesOnePagePerImageWithPhotoProportions]' passed (0.078 seconds).
+Test Suite 'ScanServiceTests' passed at 2026-10-30 03:57:47.127.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.085 (0.088) seconds
+Test Suite 'SecurityTests' started at 2026-10-30 03:57:47.129.
+Test Case '-[PrumoPDFTests.SecurityTests testLockedPDFIsRecognized]' started.
+Test Case '-[PrumoPDFTests.SecurityTests testLockedPDFIsRecognized]' passed (0.024 seconds).
+Test Case '-[PrumoPDFTests.SecurityTests testProtectAndUnprotect]' started.
+Criptografia PDFKit: /EncryptMetadata true
+/O <455b7cdf2ee95641a075c5d642890319abaf60029b38b48cc404f7586a2a2782> /U <b86ddfb1587056d57dd9ae74a6db864b00000000000000000000000000000000
+Criptografia PDFKit: contém /V 4
+Criptografia PDFKit: contém /R 4
+Criptografia PDFKit: contém /AESV2
+Test Case '-[PrumoPDFTests.SecurityTests testProtectAndUnprotect]' passed (0.103 seconds).
+Test Suite 'SecurityTests' passed at 2026-10-30 03:57:47.260.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.127 (0.132) seconds
+Test Suite 'SplitPlanTests' started at 2026-10-30 03:57:47.261.
+Test Case '-[PrumoPDFTests.SplitPlanTests testEqualParts]' started.
+Test Case '-[PrumoPDFTests.SplitPlanTests testEqualParts]' passed (0.003 seconds).
+Test Case '-[PrumoPDFTests.SplitPlanTests testInvalidParts]' started.
+Test Case '-[PrumoPDFTests.SplitPlanTests testInvalidParts]' passed (0.003 seconds).
+Test Case '-[PrumoPDFTests.SplitPlanTests testRemainderGoesToFirstParts]' started.
+Test Case '-[PrumoPDFTests.SplitPlanTests testRemainderGoesToFirstParts]' passed (0.003 seconds).
+Test Case '-[PrumoPDFTests.SplitPlanTests testSummary]' started.
+Test Case '-[PrumoPDFTests.SplitPlanTests testSummary]' passed (0.006 seconds).
+Test Suite 'SplitPlanTests' passed at 2026-10-30 03:57:47.319.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.015 (0.058) seconds
+Test Suite 'SyncTests' started at 2026-10-30 03:57:47.322.
+Test Case '-[PrumoPDFTests.SyncTests testFavoritesAndOCRLinkReachTheOtherDevice]' started.
+Test Case '-[PrumoPDFTests.SyncTests testFavoritesAndOCRLinkReachTheOtherDevice]' passed (0.322 seconds).
+Test Case '-[PrumoPDFTests.SyncTests testFileStillOnTheWayKeepsItsEntry]' started.
+Test Case '-[PrumoPDFTests.SyncTests testFileStillOnTheWayKeepsItsEntry]' passed (0.102 seconds).
+Test Case '-[PrumoPDFTests.SyncTests testMovingTheLibraryToACloudFolder]' started.
+Test Case '-[PrumoPDFTests.SyncTests testMovingTheLibraryToACloudFolder]' passed (3.427 seconds).
+Test Case '-[PrumoPDFTests.SyncTests testReadsTheListWrittenByWindows]' started.
+Test Case '-[PrumoPDFTests.SyncTests testReadsTheListWrittenByWindows]' passed (0.067 seconds).
+Test Suite 'SyncTests' passed at 2026-10-30 03:57:51.269.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 3.919 (3.947) seconds
+Test Suite 'V18Tests' started at 2026-10-30 03:57:51.270.
+Test Case '-[PrumoPDFTests.V18Tests testCropAndRotatePages]' started.
+Test Case '-[PrumoPDFTests.V18Tests testCropAndRotatePages]' passed (0.023 seconds).
+Test Case '-[PrumoPDFTests.V18Tests testHighlightIsSavedAsStandardAnnotation]' started.
+Test Case '-[PrumoPDFTests.V18Tests testHighlightIsSavedAsStandardAnnotation]' passed (2.303 seconds).
+Test Case '-[PrumoPDFTests.V18Tests testMarginsRoundTripForEveryRotation]' started.
+Test Case '-[PrumoPDFTests.V18Tests testMarginsRoundTripForEveryRotation]' passed (0.024 seconds).
+Test Case '-[PrumoPDFTests.V18Tests testNumberPagesKeepsTextAndHighlights]' started.
+Página numerada: MARCADOR-A-2 Este é um texto digital com bastante conteúdo para a
+página 2.
+Página 2 de 3
+Test Case '-[PrumoPDFTests.V18Tests testNumberPagesKeepsTextAndHighlights]' passed (0.067 seconds).
+Test Case '-[PrumoPDFTests.V18Tests testPasswordStrength]' started.
+Test Case '-[PrumoPDFTests.V18Tests testPasswordStrength]' passed (0.005 seconds).
+Test Case '-[PrumoPDFTests.V18Tests testSummaryIsCreatedAndExtended]' started.
+Test Case '-[PrumoPDFTests.V18Tests testSummaryIsCreatedAndExtended]' passed (5.482 seconds).
+Test Case '-[PrumoPDFTests.V18Tests testSummaryTextAndLabels]' started.
+Test Case '-[PrumoPDFTests.V18Tests testSummaryTextAndLabels]' passed (0.010 seconds).
+Test Suite 'V18Tests' passed at 2026-10-30 03:57:59.208.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 7.914 (7.938) seconds
+Test Suite 'V19Tests' started at 2026-10-30 03:57:59.208.
+Test Case '-[PrumoPDFTests.V19Tests testHighlightFromTextAndPartialUnmark]' started.
+Test Case '-[PrumoPDFTests.V19Tests testHighlightFromTextAndPartialUnmark]' passed (0.095 seconds).
+Test Case '-[PrumoPDFTests.V19Tests testHistoryRecordClearsRedo]' started.
+Test Case '-[PrumoPDFTests.V19Tests testHistoryRecordClearsRedo]' passed (0.016 seconds).
+Test Case '-[PrumoPDFTests.V19Tests testImportCertificateAndWrongPassword]' started.
+2026-10-30 03:57:59.437033+0000 PrumoPDF[9478:63231] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+2026-10-30 03:57:59.446823+0000 PrumoPDF[9478:63231] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+2026-10-30 03:57:59.447268+0000 PrumoPDF[9478:63231] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+Chaves do simulador indisponíveis (-34018): certificado guardado na memória (só nos testes).
+2026-10-30 03:57:59.844615+0000 PrumoPDF[9478:63231] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+2026-10-30 03:57:59.847104+0000 PrumoPDF[9478:63231] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+2026-10-30 03:57:59.848192+0000 PrumoPDF[9478:63231] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+Chaves do simulador indisponíveis (-34018): certificado guardado na memória (só nos testes).
+Certificado AES-256: aceito pelo iOS (CERTIFICADO AES)
+Test Case '-[PrumoPDFTests.V19Tests testImportCertificateAndWrongPassword]' passed (1.565 seconds).
+Test Case '-[PrumoPDFTests.V19Tests testLibrarySignsACopyAndThenInPlace]' started.
+2026-10-30 03:58:00.970028+0000 PrumoPDF[9478:60206] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+2026-10-30 03:58:00.974631+0000 PrumoPDF[9478:60206] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+2026-10-30 03:58:00.974984+0000 PrumoPDF[9478:60206] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+Chaves do simulador indisponíveis (-34018): certificado guardado na memória (só nos testes).
+Test Case '-[PrumoPDFTests.V19Tests testLibrarySignsACopyAndThenInPlace]' passed (0.172 seconds).
+Test Case '-[PrumoPDFTests.V19Tests testProtectionLevelsAndAutomaticLevel]' started.
+2026-10-30 03:58:01.134735+0000 PrumoPDF[9478:68857] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+2026-10-30 03:58:01.137889+0000 PrumoPDF[9478:68857] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+2026-10-30 03:58:01.138331+0000 PrumoPDF[9478:68857] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+Chaves do simulador indisponíveis (-34018): certificado guardado na memória (só nos testes).
+2026-10-30 03:58:01.147154+0000 PrumoPDF[947Chaves do simulador indisponíveis (-34018): certificado guardado na memória (só nos testes).
+8:60206] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+2026-10-30 03:58:01.314184+0000 PrumoPDF[9478:60206] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+2026-10-30 03:58:01.314546+0000 PrumoPDF[9478:60206] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+Test Case '-[PrumoPDFTests.V19Tests testProtectionLevelsAndAutomaticLevel]' passed (1.284 seconds).
+Test Case '-[PrumoPDFTests.V19Tests testReaderReturnsToTheSamePageAfterBeingHidden]' started.
+2026-10-30 03:58:02.690349+0000 PrumoPDF[9478:36564] [View] First responder issue detected: non-key window attempting reload - allowing due to manual keyboard (first responder window is <UIWindow: 0x17870c9e0; frame = (0 0; 390 760); autoresize = W+H; gestureRecognizers = <NSArray: 0x600000c95920>; layer = <UIWindowLayer: 0x60000183b6c0>>, key window is <UIWindow: 0x10df05830; frame = (0 0; 402 874); gestureRecognizers = <NSArray: 0x600000c90750>; layer = <UIWindowLayer: 0x60000171e180>>)
+2026-10-30 03:58:03.149540+0000 PrumoPDF[9478:36564] [View] First responder issue detected: non-key window attempting reload - allowing due to manual keyboard (first responder window is <UIWindow: 0x17870c9e0; frame = (0 0; 390 760); autoresize = W+H; gestureRecognizers = <NSArray: 0x600000c95920>; layer = <UIWindowLayer: 0x60000183b6c0>>, key window is <UIWindow: 0x10df05830; frame = (0 0; 402 874); gestureRecognizers = <NSArray: 0x600000c90750>; layer = <UIWindowLayer: 0x60000171e180>>)
+2026-10-30 03:58:03.322094+0000 PrumoPDF[9478:36564] [View] First responder issue detected: non-key window attempting reload - allowing due to manual keyboard (first responder window is <UIWindow: 0x17870c9e0; frame = (0 0; 390 760); autoresize = W+H; gestureRecognizers = <NSArray: 0x600000c95920>; layer = <UIWindowLayer: 0x60000183b6c0>>, key window is <UIWindow: 0x10df05830; frame = (0 0; 402 874); gestureRecognizers = <NSArray: 0x600000c90750>; layer = <UIWindowLayer: 0x60000171e180>>)
+2026-10-30 03:58:03.565643+0000 PrumoPDF[9478:36564] [View] First responder issue detected: non-key window attempting reload - allowing due to manual keyboard (first responder window is <UIWindow: 0x17870c9e0; frame = (0 0; 390 760); autoresize = W+H; gestureRecognizers = <NSArray: 0x600000c95920>; layer = <UIWindowLayer: 0x60000183b6c0>>, key window is <UIWindow: 0x10df05830; frame = (0 0; 402 874); gestureRecognizers = <NSArray: 0x600000c90750>; layer = <UIWindowLayer: 0x60000171e180>>)
+2026-10-30 03:58:03.718859+0000 PrumoPDF[9478:36564] [View] First responder issue detected: non-key window attempting reload - allowing due to manual keyboard (first responder window is <UIWindow: 0x17870c9e0; frame = (0 0; 390 760); autoresize = W+H; gestureRecognizers = <NSArray: 0x600000c95920>; layer = <UIWindowLayer: 0x60000183b6c0>>, key window is <UIWindow: 0x10df05830; frame = (0 0; 402 874); gestureRecognizers = <NSArray: 0x600000c90750>; layer = <UIWindowLayer: 0x60000171e180>>)
+2026-10-30 03:58:03.845952+0000 PrumoPDF[9478:36564] [View] First responder issue detected: non-key window attempting reload - allowing due to manual keyboard (first responder window is <UIWindow: 0x17870c9e0; frame = (0 0; 390 760); autoresize = W+H; gestureRecognizers = <NSArray: 0x600000c95920>; layer = <UIWindowLayer: 0x60000183b6c0>>, key window is <UIWindow: 0x10df05830; frame = (0 0; 402 874); gestureRecognizers = <NSArray: 0x600000c90750>; layer = <UIWindowLayer: 0x60000171e180>>)
+2026-10-30 03:58:04.002712+0000 PrumoPDF[9478:36564] [View] First responder issue detected: non-key window attempting reload - allowing due to manual keyboard (first responder window is <UIWindow: 0x17870c9e0; frame = (0 0; 390 760); autoresize = W+H; gestureRecognizers = <NSArray: 0x600000c95920>; layer = <UIWindowLayer: 0x60000183b6c0>>, key window is <UIWindow: 0x10df05830; frame = (0 0; 402 874); gestureRecognizers = <NSArray: 0x600000c90750>; layer = <UIWindowLayer: 0x60000171e180>>)
+Test Case '-[PrumoPDFTests.V19Tests testReaderReturnsToTheSamePageAfterBeingHidden]' passed (1.717 seconds).
+Test Case '-[PrumoPDFTests.V19Tests testSignInvisibleRotatedAndXrefStream]' started.
+2026-10-30 03:58:04.141490+0000 PrumoPDF[9478:69370] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+2026-10-30 03:58:04.145030+0000 PrumoPDF[9478:69370] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+2026-10-30 03:58:04.145414+0000 PrumoPDF[9478:69370] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+Chaves do simulador indisponíveis (-34018): certificado guardado na memória (só nos testes).
+Test Case '-[PrumoPDFTests.V19Tests testSignInvisibleRotatedAndXrefStream]' passed (0.325 seconds).
+Test Case '-[PrumoPDFTests.V19Tests testSignTwiceKeepsTheFirstSignature]' started.
+2026-10-30 03:58:04.482004+0000 PrumoPDF[9478:69371] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+2026-10-30 03:58:04.495191+0000 PrumoPDF[9478:69371] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+2026-10-30 03:58:04.495763+0000 PrumoPDF[9478:69371] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+Chaves do simulador indisponíveis (-34018): certificado guardado na memória (só nos testes).
+2026-10-30 03:58:04.532668+0000 PrumoPDF[9478:69371] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+Chaves do simulador indisponíveis (-34018): certificado guardado na memória (só nos testes).
+2026-10-30 03:58:04.590199+0000 PrumoPDF[9478:69371] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+2026-10-30 03:58:04.590592+0000 PrumoPDF[9478:69371] [Security] __delegate_identifier__:Performance Diagnostics__:::____message__:This method should not be called on the main thread as it may lead to UI unresponsiveness.
+Test Case '-[PrumoPDFTests.V19Tests testSignTwiceKeepsTheFirstSignature]' passed (0.894 seconds).
+Test Case '-[PrumoPDFTests.V19Tests testTextModeKnowsWhereEachLetterCameFrom]' started.
+Test Case '-[PrumoPDFTests.V19Tests testTextModeKnowsWhereEachLetterCameFrom]' passed (0.015 seconds).
+Test Suite 'V19Tests' passed at 2026-10-30 03:58:05.373.
+	 Executed 9 tests, with 0 failures (0 unexpected) in 6.082 (6.165) seconds
+Test Suite 'PrumoPDFTests.xctest' passed at 2026-10-30 03:58:05.374.
+	 Executed 66 tests, with 0 failures (0 unexpected) in 507.091 (509.921) seconds
+Test Suite 'All tests' passed at 2026-10-30 03:58:05.376.
+	 Executed 66 tests, with 0 failures (0 unexpected) in 507.091 (509.924) seconds
+2026-10-30 04:00:34.457 xcodebuild[6152:24126] [MT] IDETestOperationsObserverDebug: 927.723 elapsed -- Testing started completed.
+2026-10-30 04:00:34.459 xcodebuild[6152:24126] [MT] IDETestOperationsObserverDebug: 0.001 sec, +0.001 sec -- start
+2026-10-30 04:00:34.459 xcodebuild[6152:24126] [MT] IDETestOperationsObserverDebug: 927.724 sec, +927.722 sec -- end
+
+Test session results, code coverage, and logs:
+	/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/TestResults.xcresult
+
+** TEST SUCCEEDED **
+
+Testing started

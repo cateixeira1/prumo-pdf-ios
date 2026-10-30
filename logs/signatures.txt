@@ -1,0 +1,28 @@
+StandardDiffPolicy was not designed to support DocMDP level 3 (MDPPerm.ANNOTATE). Unexpected validation results may occur.
+duas-assinaturas.pdf: 2 assinatura(s)
+  - Assinatura1: MARIA DE TESTE:12345678909 | íntegra=True válida=True confiável=True subfilter=/ETSI.CAdES.detached docmdp_ok=True cobertura=SignatureCoverageLevel.ENTIRE_REVISION mudanças=ModificationLevel.FORM_FILLING -> OK
+  - Assinatura2: JOAO DA SILVA | íntegra=True válida=True confiável=True subfilter=/ETSI.CAdES.detached docmdp_ok=True cobertura=SignatureCoverageLevel.ENTIRE_FILE mudanças=ModificationLevel.NONE -> OK
+girada.pdf: 1 assinatura(s)
+  - Assinatura1: MARIA DE TESTE:12345678909 | íntegra=True válida=True confiável=True subfilter=/ETSI.CAdES.detached docmdp_ok=True cobertura=SignatureCoverageLevel.ENTIRE_FILE mudanças=ModificationLevel.NONE -> OK
+invisivel.pdf: 1 assinatura(s)
+  - Assinatura1: MARIA DE TESTE:12345678909 | íntegra=True válida=True confiável=True subfilter=/ETSI.CAdES.detached docmdp_ok=True cobertura=SignatureCoverageLevel.ENTIRE_FILE mudanças=ModificationLevel.NONE -> OK
+nivel-1.pdf: 1 assinatura(s)
+  - Assinatura1: MARIA DE TESTE:12345678909 | íntegra=True válida=True confiável=True subfilter=/ETSI.CAdES.detached docmdp_ok=True cobertura=SignatureCoverageLevel.ENTIRE_FILE mudanças=ModificationLevel.NONE -> OK
+nivel-2-duas.pdf: 2 assinatura(s)
+  - Assinatura1: MARIA DE TESTE:12345678909 | íntegra=True válida=True confiável=True subfilter=/ETSI.CAdES.detached docmdp_ok=True cobertura=SignatureCoverageLevel.ENTIRE_REVISION mudanças=ModificationLevel.FORM_FILLING -> OK
+  - Assinatura2: JOAO DA SILVA | íntegra=True válida=True confiável=True subfilter=/ETSI.CAdES.detached docmdp_ok=True cobertura=SignatureCoverageLevel.ENTIRE_FILE mudanças=ModificationLevel.NONE -> OK
+nivel-2.pdf: 1 assinatura(s)
+  - Assinatura1: MARIA DE TESTE:12345678909 | íntegra=True válida=True confiável=True subfilter=/ETSI.CAdES.detached docmdp_ok=True cobertura=SignatureCoverageLevel.ENTIRE_FILE mudanças=ModificationLevel.NONE -> OK
+nivel-3-duas.pdf: 2 assinatura(s)
+  - Assinatura1: MARIA DE TESTE:12345678909 | íntegra=True válida=True confiável=True subfilter=/ETSI.CAdES.detached docmdp_ok=True cobertura=SignatureCoverageLevel.ENTIRE_REVISION mudanças=ModificationLevel.FORM_FILLING -> OK
+  - Assinatura2: JOAO DA SILVA | íntegra=True válida=True confiável=True subfilter=/ETSI.CAdES.detached docmdp_ok=True cobertura=SignatureCoverageLevel.ENTIRE_FILE mudanças=ModificationLevel.NONE -> OK
+nivel-3.pdf: 1 assinatura(s)
+  - Assinatura1: MARIA DE TESTE:12345678909 | íntegra=True válida=True confiável=True subfilter=/ETSI.CAdES.detached docmdp_ok=True cobertura=SignatureCoverageLevel.ENTIRE_FILE mudanças=ModificationLevel.NONE -> OK
+tres-assinaturas.pdf: 3 assinatura(s)
+  - Assinatura1: MARIA DE TESTE:12345678909 | íntegra=True válida=True confiável=True subfilter=/ETSI.CAdES.detached docmdp_ok=True cobertura=SignatureCoverageLevel.ENTIRE_REVISION mudanças=ModificationLevel.FORM_FILLING -> OK
+  - Assinatura2: JOAO DA SILVA | íntegra=True válida=True confiável=True subfilter=/ETSI.CAdES.detached docmdp_ok=True cobertura=SignatureCoverageLevel.ENTIRE_REVISION mudanças=ModificationLevel.FORM_FILLING -> OK
+  - Assinatura3: MARIA DE TESTE:12345678909 | íntegra=True válida=True confiável=True subfilter=/ETSI.CAdES.detached docmdp_ok=True cobertura=SignatureCoverageLevel.ENTIRE_FILE mudanças=ModificationLevel.NONE -> OK
+uma-assinatura.pdf: 1 assinatura(s)
+  - Assinatura1: MARIA DE TESTE:12345678909 | íntegra=True válida=True confiável=True subfilter=/ETSI.CAdES.detached docmdp_ok=True cobertura=SignatureCoverageLevel.ENTIRE_FILE mudanças=ModificationLevel.NONE -> OK
+xref-em-fluxo.pdf: 1 assinatura(s)
+  - Assinatura1: MARIA DE TESTE:12345678909 | íntegra=True válida=True confiável=True subfilter=/ETSI.CAdES.detached docmdp_ok=True cobertura=SignatureCoverageLevel.ENTIRE_FILE mudanças=ModificationLevel.NONE -> OK

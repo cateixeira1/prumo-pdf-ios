@@ -1,0 +1,118 @@
+App: build/Build/Products/Debug-iphonesimulator/PrumoPDF.app
+Monitoring boot status for iPhone 17 (0C838647-022A-46B9-BC8F-310CD1CE6BDE).
+[2026-10-30 04:04:05 +0000] Status=1, isTerminal=NO, Elapsed=00:03.
+	Waiting on BackBoard
+
+[2026-10-30 04:04:26 +0000] Status=2, isTerminal=NO, Elapsed=00:20.
+	Waiting on Data Migration
+		Reason:(null)
+		Migration Elapsed:00:13 seconds
+
+[2026-10-30 04:04:32 +0000] Status=4, isTerminal=NO, Elapsed=00:29.
+	Waiting on System App
+
+[2026-10-30 04:04:32 +0000] Status=4, isTerminal=NO, Elapsed=00:29.
+	Waiting on System App
+
+[2026-10-30 04:04:32 +0000] Status=4, isTerminal=NO, Elapsed=00:29.
+	Waiting on System App
+
+[2026-10-30 04:04:32 +0000] Status=4, isTerminal=NO, Elapsed=00:30.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4, isTerminal=NO, Elapsed=00:33.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4, isTerminal=NO, Elapsed=00:33.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4, isTerminal=NO, Elapsed=00:34.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4, isTerminal=NO, Elapsed=00:37.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4, isTerminal=NO, Elapsed=00:38.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4, isTerminal=NO, Elapsed=00:40.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4, isTerminal=NO, Elapsed=00:41.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4, isTerminal=NO, Elapsed=00:42.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4, isTerminal=NO, Elapsed=00:43.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4, isTerminal=NO, Elapsed=00:43.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4, isTerminal=NO, Elapsed=00:45.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4, isTerminal=NO, Elapsed=00:46.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4, isTerminal=NO, Elapsed=00:47.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4, isTerminal=NO, Elapsed=00:48.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4, isTerminal=NO, Elapsed=00:49.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4, isTerminal=NO, Elapsed=00:50.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4, isTerminal=NO, Elapsed=00:50.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4, isTerminal=NO, Elapsed=00:51.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4, isTerminal=NO, Elapsed=00:52.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4, isTerminal=NO, Elapsed=00:53.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4, isTerminal=NO, Elapsed=00:55.
+	Waiting on System App
+
+[2026-10-30 04:05:06 +0000] Status=4294967295, isTerminal=YES, Elapsed=00:57.
+	Finished
+
+ok: 01-inicio (novas tentativas: 0)
+ok: 02-todos (novas tentativas: 0)
+ok: 03-pastas (novas tentativas: 0)
+ok: 04-pasta (novas tentativas: 0)
+ok: 05-documento (novas tentativas: 0)
+ok: 06-organizar (novas tentativas: 0)
+ok: 07-dividir (novas tentativas: 0)
+ok: 08-leitor (novas tentativas: 0)
+ok: 09-aguardando-ocr (novas tentativas: 0)
+ok: 10-pergunta-ocr (novas tentativas: 0)
+ok: 11-combinar (novas tentativas: 0)
+ok: 12-ajustes (novas tentativas: 0)
+ok: 17-busca-no-texto (novas tentativas: 0)
+ok: 18-incluir-de-outro-pdf (novas tentativas: 0)
+ok: 19-escolha-de-leitura (novas tentativas: 0)
+ok: 20-modo-leitor (novas tentativas: 0)
+ok: 21-ferramenta-escolher-pdf (novas tentativas: 0)
+ok: 22-adicionar-a-pasta (novas tentativas: 0)
+ok: 23-converter-em-pdf (novas tentativas: 0)
+ok: 24-corrigir-paginas-curvas (novas tentativas: 0)
+ok: 25-leitor-miniaturas (novas tentativas: 0)
+ok: 26-cortar-e-girar (novas tentativas: 0)
+ok: 27-numerar-paginas (novas tentativas: 0)
+ok: 28-bloqueado (novas tentativas: 0)
+ok: 29-leitor-selecao (novas tentativas: 0)
+ok: 30-assinar (novas tentativas: 0)
+ok: 13
+ok: 14
+ok: 15-inicio-escuro (novas tentativas: 0)
+ok: 16-documento-escuro (novas tentativas: 0)

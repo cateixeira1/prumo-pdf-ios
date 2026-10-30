@@ -1,0 +1,56 @@
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:133:91: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func finishScan(_ scan: VNDocumentCameraScan, target: ScanTarget, library: Library = .shared) {
+                                                                                          ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:105:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:156:51: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func answerOCR(now: Bool, library: Library = .shared, jobs: JobCenter = .shared) {
+                                                  ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:105:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:156:78: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func answerOCR(now: Bool, library: Library = .shared, jobs: JobCenter = .shared) {
+                                                                             ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/JobCenter.swift:7:16: note: static property declared here
+    static let shared = JobCenter()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:170:108: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func insertScannedPages(_ pending: PendingScanInsert, at position: InsertPosition, library: Library = .shared) {
+                                                                                                           ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:105:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:194:55: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func handleIncoming(url: URL, library: Library = .shared) {
+                                                      ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:105:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:245:44: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+                       library: Library = .shared) async -> [PDFItem] {
+                                           ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:105:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Backup.swift:121:9: warning: stored property 'wrapper' of 'Sendable'-conforming struct 'LibraryFolderDocument' has non-Sendable type 'FileWrapper'
+    let wrapper: FileWrapper
+        ^
+/Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSFileWrapper.h:37:12: note: class 'FileWrapper' does not conform to the 'Sendable' protocol
+@interface NSFileWrapper : NSObject<NSSecureCoding>
+           ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/JobCenter.swift:26:56: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func startOCR(_ item: PDFItem, library: Library = .shared, flow: AppFlow = .shared) {
+                                                       ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/Core/Library.swift:105:16: note: static property declared here
+    static let shared = Library()
+               ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/JobCenter.swift:26:81: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    func startOCR(_ item: PDFItem, library: Library = .shared, flow: AppFlow = .shared) {
+                                                                                ^
+/Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/PrumoPDF/App/AppFlow.swift:55:16: note: static property declared here
+    static let shared = AppFlow()
+               ^
+note: Using codesigning identity override: 
+-rw-r--r--  1 runner  staff  31025436 Oct 30 04:36 /Users/runner/work/prumo-pdf-ios/prumo-pdf-ios/ci-output/PrumoPDF.ipa
