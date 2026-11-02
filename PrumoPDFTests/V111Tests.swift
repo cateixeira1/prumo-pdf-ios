@@ -62,13 +62,12 @@ final class V111Tests: XCTestCase {
         XCTAssertEqual(OCRLanguage.parse(nil), ["por"])
         XCTAssertEqual(OCRLanguage.join(["deu", "fra", "deu", "spa", "jpn", "fin"]), "deu+fra+spa+jpn")
         let ids = Set(OCRLanguage.all.map(\.id))
-        XCTAssertTrue(["deu", "fra", "spa", "eng", "jpn", "chi_sim", "chi_tra", "nor", "swe", "dan", "fin", "sme"].allSatisfy(ids.contains))
-        // O que o aparelho não reconhece (sueco aqui, e sempre o sami) não vai para o Vision.
+        XCTAssertTrue(["deu", "fra", "spa", "eng", "jpn", "chi_sim", "chi_tra", "nor", "swe", "dan", "fin"].allSatisfy(ids.contains))
+        // O que o aparelho não reconhece (sueco aqui) não vai para o Vision.
         let supported = ["pt-BR", "en-US", "de-DE", "fr-FR", "es-ES", "ja-JP", "zh-Hans", "zh-Hant"]
-        XCTAssertEqual(OCRLanguage.visionCodes(stored: "por+swe+deu+sme", supported: supported), ["pt-BR", "de-DE"])
+        XCTAssertEqual(OCRLanguage.visionCodes(stored: "por+swe+deu+fin", supported: supported), ["pt-BR", "de-DE"])
         XCTAssertEqual(OCRLanguage.visionCodes(stored: "swe", supported: supported), ["pt-BR"], "sempre sobra algum idioma")
         XCTAssertTrue(OCRLanguage.unavailable(supported: supported).map(\.id).contains("swe"))
-        XCTAssertTrue(OCRLanguage.unavailable(supported: supported).map(\.id).contains("sme"))
     }
 
     func testTranslationsAreBundled() throws {

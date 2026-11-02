@@ -8,7 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 MAP = {"en": "en", "es": "es", "fr": "fr", "de": "de", "ja": "ja", "zh-CN": "zh-Hans", "zh-TW": "zh-Hant",
-       "nb": "nb", "se": "se", "sv": "sv", "da": "da", "fi": "fi"}
+       "nb": "nb", "sv": "sv", "da": "da", "fi": "fi"}
 
 
 def esc(s: str) -> str:

@@ -382,7 +382,7 @@ struct SettingsScreen: View {
                     Button("Abrir os Ajustes do iPhone") {
                         if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
                     }
-                    Text("Idiomas: português, inglês, espanhol, francês, alemão, japonês, chinês (simplificado e tradicional), norueguês, sami do norte, sueco, dinamarquês e finlandês. O que não estiver traduzido aparece em inglês. As traduções, em especial a do sami, pedem revisão por quem fala a língua.")
+                    Text("Idiomas: português, inglês, espanhol, francês, alemão, japonês, chinês (simplificado e tradicional), norueguês, sueco, dinamarquês e finlandês. O que não estiver traduzido aparece em inglês. As traduções pedem revisão por quem fala a língua.")
                         .font(.system(size: 13))
                         .foregroundStyle(Theme.secondaryText)
                 }

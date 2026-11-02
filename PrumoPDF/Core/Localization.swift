@@ -11,8 +11,8 @@ enum AppLanguages {
     static let all: [(lproj: String, name: String)] = [
         ("pt-BR", "Português"), ("en", "English"), ("es", "Español"), ("fr", "Français"), ("de", "Deutsch"),
         ("ja", "日本語"), ("zh-Hans", "中文 (简体)"), ("zh-Hant", "中文 (繁體, 台灣)"), ("nb", "Norsk bokmål"),
-        ("se", "Davvisámegiella"), ("sv", "Svenska"), ("da", "Dansk"), ("fi", "Suomi"),
+        ("sv", "Svenska"), ("da", "Dansk"), ("fi", "Suomi"),
     ]
     /// Traduções que ainda pedem revisão por quem fala a língua.
-    static let needsReview: Set<String> = ["se"]
+    static let needsReview: Set<String> = []
 }

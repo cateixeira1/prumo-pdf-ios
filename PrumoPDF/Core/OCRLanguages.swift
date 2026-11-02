@@ -5,7 +5,7 @@ import Vision
 /// significa a mesma coisa nos dois. O Vision não reconhece todos os idiomas, e a lista muda com a versão
 /// do iOS; por isso o que vale é o que o próprio aparelho informa (`supportedRecognitionLanguages`).
 struct OCRLanguage: Identifiable, Hashable {
-    let id: String              // por, eng, spa, fra, deu, jpn, chi_sim, chi_tra, nor, swe, dan, fin, sme
+    let id: String              // por, eng, spa, fra, deu, jpn, chi_sim, chi_tra, nor, swe, dan, fin
     let name: String            // no próprio idioma
     let vision: String?         // código do Vision; nil = o Vision não tem
     var storageKey: String { id }
@@ -23,7 +23,6 @@ struct OCRLanguage: Identifiable, Hashable {
         OCRLanguage(id: "swe", name: "Svenska", vision: "sv-SE"),
         OCRLanguage(id: "dan", name: "Dansk", vision: "da-DK"),
         OCRLanguage(id: "fin", name: "Suomi", vision: "fi-FI"),
-        OCRLanguage(id: "sme", name: "Davvisámegiella", vision: nil),
     ]
     static let maxSelected = 4
 
