@@ -138,7 +138,7 @@ struct PagePickerScreen: View {
 
     private func smallButton(_ title: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            Text(title)
+            Text(verbatim: L(title))
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(Theme.text)
                 .padding(.horizontal, 12)

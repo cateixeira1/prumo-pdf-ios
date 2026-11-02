@@ -432,15 +432,22 @@ struct NumberSheet: View {
         working = true
         Task {
             do {
-                let data = try await Task.detached(priority: .userInitiated) {
-                    try PageTools.numberedData(try PDFOps.open(url), options: options)
+                let result = try await Task.detached(priority: .userInitiated) {
+                    try PageTools.numberedResult(try PDFOps.open(url), options: options)
                 }.value
-                try await library.replaceContents(item, with: data, keepReview: true)
+                try await library.replaceContents(item, with: result.data, keepReview: true)
                 working = false
                 onDone()
                 dismiss()
                 let n = total - firstPage + 1
-                flow.toast("\(n == 1 ? "1 página numerada" : "\(n) páginas numeradas"). Use “Desfazer última alteração” se precisar.")
+                var msg = n == 1 ? "1 página numerada" : "\(n) páginas numeradas"
+                if !result.report.moved.isEmpty {
+                    msg += ". Em \(PageSelection.format(result.report.moved)) o número subiu um pouco, para não ficar por cima de texto ou de outro número"
+                }
+                if !result.report.crowded.isEmpty {
+                    msg += ". Em \(PageSelection.format(result.report.crowded)) não achei espaço livre: confira"
+                }
+                flow.toast(msg + ". Use “Desfazer última alteração” se precisar.")
             } catch {
                 working = false
                 flow.show(error: error)

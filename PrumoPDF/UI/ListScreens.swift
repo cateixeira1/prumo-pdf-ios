@@ -222,7 +222,7 @@ struct DocumentGridScreen: View {
     @ViewBuilder private var emptyState: some View {
         switch source {
         case .list(.pendingOCR):
-            EmptyStateView(systemImage: "checkmark.seal", title: "Nada aguardando OCR",
+            EmptyStateView(systemImage: "checkmark.seal", title: "Nenhum PDF sem OCR",
                            message: "PDFs escaneados ou em imagem aparecem aqui até você fazer o OCR.")
         case .list(.favorites):
             EmptyStateView(systemImage: "star", title: "Nenhum favorito",

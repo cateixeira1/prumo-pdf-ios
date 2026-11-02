@@ -1,3 +1,4 @@
+import CoreText
 import CryptoKit
 import Foundation
 import LocalAuthentication
@@ -257,7 +258,9 @@ struct SignOptions: Equatable {
 enum PDFSigner {
     static let suffix = " - assinado"
     static let reserved = 20_000          // bytes reservados para a assinatura CMS
-    static let stampSize = CGSize(width: 230, height: 48)
+    static let stampSize = CGSize(width: 230, height: 62)
+    static let stampPadX: CGFloat = 6
+    static let stampPadY: CGFloat = 4
 
     struct Prepared {
         var bytes: [UInt8]
@@ -473,23 +476,70 @@ enum PDFSigner {
         return "D:" + f.string(from: d) + String(format: "%@%02d'%02d'", sign, hh, mm)
     }
 
+    /// Largura de um texto em Helvetica, no corpo `size`.
+    static func textWidth(_ text: String, size: CGFloat) -> CGFloat {
+        let font = CTFontCreateWithName("Helvetica" as CFString, size, nil)
+        let attr = NSAttributedString(string: text, attributes: [NSAttributedString.Key(kCTFontAttributeName as String): font])
+        return CGFloat(CTLineGetTypographicBounds(CTLineCreateWithAttributedString(attr as CFAttributedString), nil, nil, nil))
+    }
+
+    /// Quebra o texto em linhas de até `width`, sem cortar palavras (palavra maior que a linha é partida).
+    static func wrap(_ text: String, size: CGFloat, width: CGFloat) -> [String] {
+        var lines: [String] = []
+        var cur = ""
+        for word in text.split(separator: " ").map(String.init) {
+            var w = word
+            while textWidth(w, size: size) > width, w.count > 1 {
+                var cut = w.count - 1
+                while cut > 1, textWidth(String(w.prefix(cut)), size: size) > width { cut -= 1 }
+                if !cur.isEmpty { lines.append(cur); cur = "" }
+                lines.append(String(w.prefix(cut)))
+                w = String(w.dropFirst(cut))
+            }
+            let tryLine = cur.isEmpty ? w : cur + " " + w
+            if textWidth(tryLine, size: size) <= width { cur = tryLine } else { lines.append(cur); cur = w }
+        }
+        if !cur.isEmpty { lines.append(cur) }
+        return lines
+    }
+
+    /// Corpo da letra, entrelinha e linhas do carimbo. Nome longo (comum em maiúsculas na ICP-Brasil)
+    /// quebra em até duas linhas e, se preciso, reduz a letra até caber; nada é cortado nem comprimido.
+    static func stampLayout(name: String, dateText: String) -> (size: CGFloat, lead: CGFloat, lines: [String]) {
+        let innerW = stampSize.width - 2 * stampPadX
+        let innerH = stampSize.height - 2 * stampPadY
+        let title = "Assinado digitalmente por"
+        var last: (CGFloat, CGFloat, [String]) = (6, 7.5, [title, name, dateText])
+        for size: CGFloat in [9, 8, 7, 6] {
+            let lead = size * 1.25
+            var nameLines = wrap(name, size: size, width: innerW)
+            if nameLines.count > 2 && size > 6 { last = (size, lead, [title] + nameLines + [dateText]); continue }
+            if nameLines.count > 2 {
+                nameLines = Array(nameLines.prefix(2))
+                nameLines[1] = String(nameLines[1].dropLast()) + "…"
+            }
+            let lines = [title] + nameLines + [dateText]
+            last = (size, lead, lines)
+            if CGFloat(lines.count) * lead <= innerH, lines.allSatisfy({ textWidth($0, size: size) <= innerW }) { return last }
+        }
+        return last
+    }
+
     /// Texto do carimbo: "Assinado digitalmente por / NOME / em DATA".
     static func stampContent(name: String, date: Date) -> [UInt8] {
         let df = DateFormatter()
         df.locale = Locale(identifier: "pt_BR")
         df.dateFormat = "dd/MM/yyyy HH:mm:ss"
         let h = Double(stampSize.height), w = Double(stampSize.width)
-        var s = "q 0.16 0.47 0.96 RG 0.8 w 0.5 0.5 \(f(w - 1)) \(f(h - 1)) re S Q\n"
-        s += "BT 0.15 0.15 0.15 rg /F1 7.5 Tf 6 \(f(h - 13)) Td "
-        var out = Array(s.utf8)
-        let lines = ["Assinado digitalmente por", name, "em \(df.string(from: date))"]
-        for (k, line) in lines.enumerated() {
-            if k > 0 { out += Array(" 0 -12 Td ".utf8) }
-            if k == 1 { out += Array("/F1 9 Tf ".utf8) }
-            if k == 2 { out += Array("/F1 7.5 Tf ".utf8) }
-            out += winAnsi(line) + Array(" Tj".utf8)
+        let layout = stampLayout(name: name, dateText: "em \(df.string(from: date))")
+        let total = Double(layout.lines.count) * Double(layout.lead)
+        var y = (h + total) / 2 - Double(layout.lead) * 0.8
+        var out = Array("q 0.16 0.47 0.96 RG 0.8 w 0.5 0.5 \(f(w - 1)) \(f(h - 1)) re S Q\nBT 0.15 0.15 0.15 rg /F1 \(f(Double(layout.size))) Tf\n".utf8)
+        for line in layout.lines {
+            out += Array("1 0 0 1 \(f(Double(stampPadX))) \(f(y)) Tm ".utf8) + winAnsi(line) + Array(" Tj\n".utf8)
+            y -= Double(layout.lead)
         }
-        out += Array(" ET".utf8)
+        out += Array("ET".utf8)
         return out
     }
 

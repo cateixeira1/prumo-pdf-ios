@@ -91,7 +91,7 @@ enum DocList: String, Hashable, CaseIterable {
         switch self {
         case .all: return "Todos os PDFs"
         case .recent: return "Recentes"
-        case .pendingOCR: return "Aguardando OCR"
+        case .pendingOCR: return "Sem OCR"
         case .ocr: return "Com OCR"
         case .favorites: return "Favoritos"
         }

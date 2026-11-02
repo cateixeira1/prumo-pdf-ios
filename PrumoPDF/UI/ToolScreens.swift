@@ -244,6 +244,20 @@ struct SettingsScreen: View {
     @AppStorage(AppLock.enabledKey) private var lockEnabled = false
     @State private var lockToggle = false
     @State private var exportDocument: LibraryFolderDocument?
+
+    /// Liga ou desliga um idioma do OCR; passa de OCRLanguage.maxSelected, a escolha não vale.
+    private func ocrBinding(_ id: String) -> Binding<Bool> {
+        Binding(
+            get: { OCRLanguage.parse(ocrLanguage).contains(id) },
+            set: { on in
+                var ids = OCRLanguage.parse(ocrLanguage).filter { $0 != id }
+                if on {
+                    guard ids.count < OCRLanguage.maxSelected else { return }
+                    ids.append(id)
+                }
+                ocrLanguage = OCRLanguage.join(ids.isEmpty ? ["por"] : ids)
+            })
+    }
     @State private var showExporter = false
     @State private var showRestore = false
     @State private var showCloud = false
@@ -359,17 +373,39 @@ struct SettingsScreen: View {
                 }
             }
             SettingsSignatureSection()
+            SectionTitle(text: "Idioma do aplicativo")
+            TileCard {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("O Prumo segue o idioma do iPhone. Para usar outro só no Prumo, abra os Ajustes do iPhone, toque em Prumo PDF e em Idioma.")
+                        .font(.system(size: 13))
+                        .foregroundStyle(Theme.secondaryText)
+                    Button("Abrir os Ajustes do iPhone") {
+                        if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
+                    }
+                    Text("Idiomas: português, inglês, espanhol, francês, alemão, japonês, chinês (simplificado e tradicional), norueguês, sami do norte, sueco, dinamarquês e finlandês. O que não estiver traduzido aparece em inglês. As traduções, em especial a do sami, pedem revisão por quem fala a língua.")
+                        .font(.system(size: 13))
+                        .foregroundStyle(Theme.secondaryText)
+                }
+            }
             SectionTitle(text: "OCR")
             TileCard {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Idioma dos documentos")
+                    Text("Idiomas dos documentos")
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundStyle(Theme.text)
-                    Picker("Idioma", selection: $ocrLanguage) {
-                        Text("Português").tag("por")
-                        Text("Português + Inglês").tag("por+eng")
+                    Text("Marque até \(OCRLanguage.maxSelected). Idiomas demais juntos deixam o OCR mais lento e menos preciso.")
+                        .font(.system(size: 13))
+                        .foregroundStyle(Theme.secondaryText)
+                    ForEach(OCRLanguage.available()) { lang in
+                        Toggle(lang.name, isOn: ocrBinding(lang.id))
+                            .tint(Theme.blue)
                     }
-                    .pickerStyle(.segmented)
+                    let missing = OCRLanguage.unavailable()
+                    if !missing.isEmpty {
+                        Text("Este iPhone não reconhece: \(missing.map(\.name).joined(separator: ", ")). A Apple não oferece esses idiomas no OCR do iOS. Para eles, faça o OCR no Prumo para Windows: o PDF com OCR volta para cá pela mesma nuvem.")
+                            .font(.system(size: 13))
+                            .foregroundStyle(Theme.secondaryText)
+                    }
                     Text("O OCR usa o reconhecimento de texto da Apple e roda inteiramente neste iPhone. Páginas com baixa confiança são marcadas para revisão; mesmo assim, confira nomes, datas, números e valores no original.")
                         .font(.system(size: 13))
                         .foregroundStyle(Theme.secondaryText)
@@ -620,7 +656,7 @@ struct DewarpSheet: View {
 
     private func previewColumn(_ title: String, _ image: UIImage?) -> some View {
         VStack(spacing: 4) {
-            Text(title).font(.system(size: 12, weight: .semibold)).foregroundStyle(Theme.secondaryText)
+            Text(verbatim: L(title)).font(.system(size: 12, weight: .semibold)).foregroundStyle(Theme.secondaryText)
             ZStack {
                 RoundedRectangle(cornerRadius: 6).fill(Color.white)
                 if let image {

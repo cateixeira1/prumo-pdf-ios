@@ -123,7 +123,7 @@ struct Badge: View {
     let color: Color
     var inverted = false
     var body: some View {
-        Text(text)
+        Text(verbatim: L(text))
             .font(.system(size: 10, weight: .bold))
             .lineLimit(1)
             .fixedSize()   // o selo nunca quebra em duas linhas; quem encolhe é o nome da pasta
@@ -521,7 +521,7 @@ struct PrimaryButton: View {
 
     var body: some View {
         Button(action: action) {
-            Text(title)
+            Text(verbatim: L(title))
                 .font(.system(size: 17, weight: .semibold))
                 .foregroundStyle(Color.white)
                 .frame(maxWidth: .infinity, minHeight: 50)
@@ -542,7 +542,7 @@ struct BottomOverlays: View {
         VStack(spacing: 8) {
             if let toast = flow.toastMessage {
                 HStack(alignment: .center, spacing: 10) {
-                    Text(toast.text)
+                    Text(verbatim: L(toast.text))
                         .font(.system(size: 14.5, weight: .medium))
                         .foregroundStyle(Color.white)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -617,7 +617,7 @@ struct BusyOverlay: View {
             Color.black.opacity(0.18).ignoresSafeArea()
             VStack(spacing: 12) {
                 ProgressView().controlSize(.large)
-                Text(message)
+                Text(verbatim: L(message))
                     .font(.system(size: 15, weight: .medium))
                     .foregroundStyle(Theme.text)
                     .multilineTextAlignment(.center)
@@ -675,10 +675,10 @@ struct EmptyStateView: View {
             Image(systemName: systemImage)
                 .font(.system(size: 40, weight: .regular))
                 .foregroundStyle(Theme.secondaryText)
-            Text(title)
+            Text(verbatim: L(title))
                 .font(.system(size: 17, weight: .semibold))
                 .foregroundStyle(Theme.text)
-            Text(message)
+            Text(verbatim: L(message))
                 .font(.system(size: 14))
                 .foregroundStyle(Theme.secondaryText)
                 .multilineTextAlignment(.center)

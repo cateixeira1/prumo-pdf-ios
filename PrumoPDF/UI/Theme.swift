@@ -114,13 +114,13 @@ struct TileLabel: View {
                 }
             }
             Spacer(minLength: 6)
-            Text(title)
+            Text(verbatim: L(title))
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundStyle(highlighted ? Color.white : Theme.text)
                 .lineLimit(1)
                 .minimumScaleFactor(0.75)
             if let subtitle {
-                Text(subtitle)
+                Text(verbatim: L(subtitle))
                     .font(.system(size: 11.5, weight: .medium))
                     .foregroundStyle(highlighted ? Color.white.opacity(0.9) : Theme.secondaryText)
                     .lineLimit(1)
@@ -165,12 +165,12 @@ struct WideTileLabel: View {
                 TileIcon(systemImage: systemImage, color: highlighted ? Color.white.opacity(0.28) : color, size: 28)
             }
             VStack(alignment: .leading, spacing: 2) {
-                Text(title)
+                Text(verbatim: L(title))
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(highlighted ? Color.white : Theme.text)
                     .lineLimit(1)
                 if let subtitle {
-                    Text(subtitle)
+                    Text(verbatim: L(subtitle))
                         .font(.system(size: 12, weight: .medium))
                         .foregroundStyle(highlighted ? Color.white.opacity(0.9) : Theme.secondaryText)
                         .lineLimit(2)
@@ -267,7 +267,7 @@ struct TileGrid<Content: View>: View {
 struct SectionTitle: View {
     let text: String
     var body: some View {
-        Text(text)
+        Text(verbatim: L(text))
             .font(.system(size: 13, weight: .semibold))
             .foregroundStyle(Theme.secondaryText)
             .textCase(.uppercase)

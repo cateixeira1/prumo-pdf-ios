@@ -192,6 +192,41 @@ enum PageTools {
     /// Novo PDF com o número escrito em cada página (texto de verdade, em Helvetica). As páginas são
     /// redesenhadas com o mesmo tamanho, recorte e giro; destaques e outras anotações são copiados.
     static func numberedData(_ doc: PDFDocument, options o: NumberOptions) throws -> Data {
+        try numberedResult(doc, options: o).data
+    }
+
+    /// Páginas (começando em 1) onde o número precisou sair do lugar escolhido por haver texto ou um
+    /// número impresso ali, e páginas onde nem assim achou um lugar livre.
+    struct NumberReport {
+        var moved: [Int] = []
+        var crowded: [Int] = []
+    }
+
+    /// O trecho (em coordenadas da página como aparece) tem texto ou tinta? Evita escrever o número por
+    /// cima de um número já impresso, de um número que o Prumo pôs antes ou do texto do documento.
+    private static func isOccupied(_ page: PDFPage, displayRect r: CGRect, crop: CGRect, rotation rot: Int,
+                                   thumb: CGImage?, displaySize: CGSize) -> Bool {
+        let a = displayToUser(crop: crop, rotation: rot, x: r.minX, y: r.minY)
+        let b = displayToUser(crop: crop, rotation: rot, x: r.maxX, y: r.maxY)
+        let userRect = CGRect(x: min(a.x, b.x), y: min(a.y, b.y), width: abs(a.x - b.x), height: abs(a.y - b.y))
+        if let text = page.selection(for: userRect)?.string,
+           !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { return true }
+        guard let cg = thumb, displaySize.width > 0 else { return false }
+        let k = CGFloat(cg.width) / displaySize.width
+        let px = CGRect(x: r.minX * k, y: r.minY * k, width: r.width * k, height: r.height * k).integral
+            .intersection(CGRect(x: 0, y: 0, width: cg.width, height: cg.height))
+        guard px.width >= 1, px.height >= 1, let piece = cg.cropping(to: px) else { return false }
+        let w = piece.width, h = piece.height
+        var gray = [UInt8](repeating: 255, count: w * h)
+        guard let ctx = CGContext(data: &gray, width: w, height: h, bitsPerComponent: 8, bytesPerRow: w,
+                                  space: CGColorSpaceCreateDeviceGray(), bitmapInfo: CGImageAlphaInfo.none.rawValue) else { return false }
+        ctx.draw(piece, in: CGRect(x: 0, y: 0, width: w, height: h))
+        let dark = gray.reduce(0) { $0 + ($1 < 140 ? 1 : 0) }
+        return Double(dark) / Double(w * h) > 0.004
+    }
+
+    static func numberedResult(_ doc: PDFDocument, options o: NumberOptions) throws -> (data: Data, report: NumberReport) {
+        var report = NumberReport()
         let out = NSMutableData()
         guard let consumer = CGDataConsumer(data: out as CFMutableData),
               let ctx = CGContext(consumer: consumer, mediaBox: nil, nil) else {
@@ -223,7 +258,26 @@ enum PageTools {
                 case 1: dx = size.width - o.margin - tw
                 default: dx = (size.width - tw) / 2
                 }
-                let dy = o.position.isTop ? o.margin + o.size * 0.72 : size.height - o.margin
+                var dy = o.position.isTop ? o.margin + o.size * 0.72 : size.height - o.margin
+                // Se o lugar já está ocupado, sobe (ou desce, no alto) aos poucos até achar espaço livre.
+                let scale: CGFloat = 2
+                let thumb = page.thumbnail(of: CGSize(width: size.width * scale, height: size.height * scale),
+                                           for: .cropBox).cgImage
+                func box(_ baseline: CGFloat) -> CGRect {
+                    CGRect(x: dx - 1.5, y: baseline - o.size * 0.85, width: tw + 3, height: o.size * 1.2)
+                }
+                var steps = 0
+                while steps < 5, isOccupied(page, displayRect: box(dy), crop: crop, rotation: rot, thumb: thumb, displaySize: size) {
+                    dy += (o.position.isTop ? 1 : -1) * o.size * 1.5
+                    steps += 1
+                }
+                if steps > 0 {
+                    if steps == 5 && isOccupied(page, displayRect: box(dy), crop: crop, rotation: rot, thumb: thumb, displaySize: size) {
+                        report.crowded.append(i + 1)
+                    } else {
+                        report.moved.append(i + 1)
+                    }
+                }
                 let p = displayToUser(crop: crop, rotation: rot, x: dx, y: dy)
                 ctx.saveGState()
                 ctx.translateBy(x: p.x, y: p.y)
@@ -251,6 +305,6 @@ enum PageTools {
         guard let data = numbered.dataRepresentation() else {
             throw UserFacingError("Não foi possível gravar o PDF numerado.")
         }
-        return data
+        return (data, report)
     }
 }

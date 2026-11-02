@@ -14,7 +14,7 @@ enum AppSettings {
     }
 
     static var ocrLanguages: [String] {
-        UserDefaults.standard.string(forKey: ocrLanguageKey) == "por+eng" ? ["pt-BR", "en-US"] : ["pt-BR"]
+        OCRLanguage.visionCodes(stored: UserDefaults.standard.string(forKey: ocrLanguageKey))
     }
 }
 

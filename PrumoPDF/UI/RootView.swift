@@ -139,7 +139,7 @@ struct HomeView: View {
                          count: "\(library.count(for: .recent))") {
                         flow.open(.list(.recent))
                     }
-                    Tile(title: "Aguardando OCR", systemImage: "text.viewfinder", color: Theme.orange,
+                    Tile(title: "Sem OCR", systemImage: "text.viewfinder", color: Theme.orange,
                          count: "\(library.count(for: .pendingOCR))", shape: .rounded) {
                         flow.open(.list(.pendingOCR))
                     }

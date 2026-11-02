@@ -239,7 +239,7 @@ final class AppFlow: ObservableObject {
         Task { await runConversion(p.urls, folder: p.folder, combine: combine) }
     }
 
-    /// Converte e guarda na biblioteca. Fotos: pergunta "Usar OCR agora?" (ou deixam aguardando OCR).
+    /// Converte e guarda na biblioteca. Fotos: pergunta "Usar OCR agora?" (ou ficam em “Sem OCR”).
     @discardableResult
     func runConversion(_ urls: [URL], folder: String, combine: Bool, askOCR: Bool = true,
                        library: Library = .shared) async -> [PDFItem] {
@@ -274,7 +274,7 @@ final class AppFlow: ObservableObject {
         } else {
             for item in imageItems { library.setPendingOCR(item, true) }
             var msg = items.count == 1 ? "PDF criado: \(items[0].name)" : "\(items.count) PDFs criados"
-            if !imageItems.isEmpty && askOCR { msg += ". Os de fotos estão em Aguardando OCR." }
+            if !imageItems.isEmpty && askOCR { msg += ". Os de fotos estão em Sem OCR." }
             if !failed.isEmpty { msg += " \(failed.count) não \(failed.count == 1 ? "foi convertido" : "foram convertidos")." }
             let first = items[0]
             if items.count == 1 {
