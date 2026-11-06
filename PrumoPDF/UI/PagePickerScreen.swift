@@ -40,7 +40,7 @@ struct PagePickerScreen: View {
                 VStack(spacing: Theme.spacing) {
                     selectionCard
                     if let loadError {
-                        EmptyStateView(systemImage: "exclamationmark.triangle", title: "Não foi possível abrir", message: loadError)
+                        EmptyStateView(systemImage: "exclamationmark.triangle", title: L("Não foi possível abrir"), message: loadError)
                     } else if pageCount == 0 {
                         ProgressView().padding(40)
                     } else {
@@ -121,13 +121,13 @@ struct PagePickerScreen: View {
                         .foregroundStyle(Theme.red)
                 }
                 HStack(spacing: 8) {
-                    smallButton("Todas") { setSelection(Set(1...max(pageCount, 1)).filter { $0 <= pageCount }) }
-                    smallButton("Nenhuma") { setSelection([]) }
-                    smallButton("Inverter") {
+                    smallButton(L("Todas")) { setSelection(Set(1...max(pageCount, 1)).filter { $0 <= pageCount }) }
+                    smallButton(L("Nenhuma")) { setSelection([]) }
+                    smallButton(L("Inverter")) {
                         setSelection(Set((1...max(pageCount, 1)).filter { !selected.contains($0) && $0 <= pageCount }))
                     }
                     Spacer()
-                    Text("\(selected.count) de \(pageCount)")
+                    Text(LF("{} de {}", selected.count, pageCount))
                         .font(.system(size: 13, weight: .semibold))
                         .foregroundStyle(Theme.secondaryText)
                 }
@@ -178,7 +178,7 @@ struct PagePickerScreen: View {
             }
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Página \(n)")
+        .accessibilityLabel(LF("Página {}", n))
         .accessibilityAddTraits(isOn ? .isSelected : [])
     }
 
@@ -216,24 +216,24 @@ struct PagePickerScreen: View {
 
     private var navigationTitle: String {
         switch mode {
-        case .insert: return "Escolher páginas"
-        case .remove: return "Remover páginas"
-        case .extract: return "Extrair páginas"
+        case .insert: return L("Escolher páginas")
+        case .remove: return L("Remover páginas")
+        case .extract: return L("Extrair páginas")
         }
     }
 
     private var confirmTitle: String {
         let n = selected.count
-        let pages = n == 1 ? "1 página" : "\(n) páginas"
+        let pages = n == 1 ? L("1 página") : LF("{} páginas", n)
         switch mode {
-        case .insert: return n == 0 ? "Escolha as páginas" : "Incluir \(pages)"
-        case .remove: return n == 0 ? "Escolha as páginas" : "Remover \(pages)"
-        case .extract: return n == 0 ? "Escolha as páginas" : "Extrair \(pages) para um novo PDF"
+        case .insert: return n == 0 ? L("Escolha as páginas") : LF("Incluir {}", pages)
+        case .remove: return n == 0 ? L("Escolha as páginas") : LF("Remover {}", pages)
+        case .extract: return n == 0 ? L("Escolha as páginas") : LF("Extrair {} para um novo PDF", pages)
         }
     }
 
     private var removeTitle: String {
-        "Remover \(selected.count == 1 ? "1 página" : "\(selected.count) páginas")?"
+        LF("Remover {}?", selected.count.pagesText)
     }
 
     private var canConfirm: Bool {
@@ -246,7 +246,7 @@ struct PagePickerScreen: View {
         selected = s
         rangeText = PageSelection.format(Array(s))
         rangeError = (mode == .remove && !s.isEmpty && s.count >= pageCount)
-            ? "Não é possível remover todas as páginas. Para isso, exclua o documento." : nil
+            ? L("Não é possível remover todas as páginas. Para isso, exclua o documento.") : nil
     }
 
     private func applyText(_ text: String) {
@@ -259,7 +259,7 @@ struct PagePickerScreen: View {
             let pages = try PageSelection.parse(text, pageCount: pageCount)
             selected = Set(pages)
             rangeError = (mode == .remove && pages.count >= pageCount)
-                ? "Não é possível remover todas as páginas. Para isso, exclua o documento." : nil
+                ? L("Não é possível remover todas as páginas. Para isso, exclua o documento.") : nil
         } catch {
             rangeError = error.localizedDescription
         }
@@ -278,7 +278,7 @@ struct PagePickerScreen: View {
                 setSelection(Set(pages))
             }
         } else {
-            loadError = "O PDF pode estar protegido por senha ou corrompido."
+            loadError = L("O PDF pode estar protegido por senha ou corrompido.")
         }
     }
 

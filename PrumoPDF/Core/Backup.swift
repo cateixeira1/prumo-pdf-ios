@@ -35,7 +35,7 @@ extension Library {
         let f = DateFormatter()
         f.locale = Locale(identifier: "pt_BR")
         f.dateFormat = "yyyy-MM-dd HH'h'mm"
-        return "Prumo PDF - cópia \(f.string(from: date))"
+        return LF("Prumo PDF - cópia {}", f.string(from: date))
     }
 
     nonisolated static func digest(_ url: URL) -> String? {
@@ -79,7 +79,7 @@ extension Library {
         let base = source.standardizedFileURL.resolvingSymlinksInPath()
         guard let en = fm.enumerator(at: base, includingPropertiesForKeys: [.isRegularFileKey, .fileSizeKey],
                                      options: [.skipsHiddenFiles]) else {
-            throw UserFacingError("Não foi possível ler a pasta escolhida.")
+            throw UserFacingError(L("Não foi possível ler a pasta escolhida."))
         }
         var restoredFavorites: [String] = []
         for case let url as URL in en {

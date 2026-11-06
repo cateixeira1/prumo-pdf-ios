@@ -42,7 +42,7 @@ struct OCRReport {
 enum OCRError: LocalizedError {
     case nothingToDo
     var errorDescription: String? {
-        "Todas as páginas já têm texto selecionável. O OCR não é necessário."
+        L("Todas as páginas já têm texto selecionável. O OCR não é necessário.")
     }
 }
 

@@ -8,11 +8,11 @@ enum HighlightColor: String, CaseIterable, Identifiable {
 
     var label: String {
         switch self {
-        case .yellow: return "Amarelo"
-        case .green: return "Verde"
-        case .blue: return "Azul"
-        case .pink: return "Rosa"
-        case .orange: return "Laranja"
+        case .yellow: return L("Amarelo")
+        case .green: return L("Verde")
+        case .blue: return L("Azul")
+        case .pink: return L("Rosa")
+        case .orange: return L("Laranja")
         }
     }
 

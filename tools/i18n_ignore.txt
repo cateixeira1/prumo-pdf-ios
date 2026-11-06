@@ -1,0 +1,78 @@
+# Textos entre aspas que não são da interface (nomes do formato PDF, formatos de data, nomes próprios).
+# Um por linha; linhas que começam com "# " são comentários.
+Resources
+Subtype
+Image
+Width
+Height
+Form
+Prev
+Root
+Size
+Index
+Length
+First
+Filter
+Predictor
+Columns
+Encrypt
+Pages
+Type
+Page
+Kids
+Parent
+Fields
+Sig
+Perms
+Reference
+Info
+Rotate
+Annots
+Highlight
+Helvetica
+Inbox
+{} {} obj\n
+{} 0 obj\n{}\nstream\n
+startxref\n{}\n%%EOF\n
+trailer\n{}\nstartxref\n{}\n%%EOF\n
+q 0.16 0.47 0.96 RG 0.8 w 0.5 0.5 {} {} re S Q\nBT 0.15 0.15 0.15 rg /F1 {} Tf\n
+table{border-collapse:collapse}td,th{border:1px solid #999;padding:4px}</style>
+yyyy-MM-dd HH'h'mm
+dd-MM-yyyy HH'h'mm
+id:{}
+new:{}
+insert:{}
+Prumo PDF
+Color Software
+Face ID
+Touch ID
+Optic ID
+iCloud Drive
+Dropbox
+Google Drive
+OneDrive
+mobile documents
+Português
+English
+Español
+Français
+Deutsch
+Norsk
+Svenska
+Dansk
+Suomi
+{}.pdf
+Foto %02d.jpg
+init(coder:) não é usado
+{} - OCR
+OCR: {}
+BYTERANGE_1 BYTERANGE_2 BYTERANGE_3
+Prumo PDF {}
+Assinatura{}
+última
+{}/{}.pdf
+# Texto do PDF de demonstração (capturas de tela), não da interface
+febre persistente
+febre persistente, dor abdominal intensa
+# Nome do certificado nas Chaves do iPhone (não aparece no Prumo)
+Prumo PDF – {}

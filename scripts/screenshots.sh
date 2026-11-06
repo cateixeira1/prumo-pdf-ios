@@ -24,10 +24,15 @@ xcrun simctl status_bar "$SIM" override --time "9:41" --dataNetwork wifi --wifiB
 xcrun simctl install "$SIM" "$APP"
 
 shot() {
-  local name="$1"; local screen="$2"; local wait="${3:-6}"
+  # 4.º parâmetro: idioma do app (pasta .lproj); sem ele, português
+  local name="$1"; local screen="$2"; local wait="${3:-6}"; local lang="${4:-pt-BR}"
+  local locale
+  case "$lang" in
+    pt-BR) locale=pt_BR ;; en) locale=en_US ;; de) locale=de_DE ;; ja) locale=ja_JP ;; *) locale="$lang" ;;
+  esac
   wait=$((wait + ${EXTRA_WAIT:-0}))
   xcrun simctl terminate "$SIM" "$BUNDLE" 2>/dev/null || true
-  xcrun simctl launch "$SIM" "$BUNDLE" -demo -screen "$screen" >/dev/null
+  xcrun simctl launch "$SIM" "$BUNDLE" -demo -screen "$screen" -AppleLanguages "($lang)" -AppleLocale "$locale" >/dev/null
   sleep "$wait"
   # No simulador Intel o app às vezes ainda está abrindo: a tela de abertura (toda branca) dá um PNG
   # pequeno. Nesse caso, espera mais e tira de novo; quando a tela aparece, espera as folhas abrirem.
@@ -85,3 +90,13 @@ shot 15-inicio-escuro home 7
 shot 16-documento-escuro detail
 xcrun simctl ui "$SIM" appearance light
 exit 0
+
+# O mesmo app em outros idiomas (conferência das traduções): SHOT_LANGS="en de ja"
+for lang in ${SHOT_LANGS:-}; do
+  shot "$lang-01-inicio" home 7 "$lang"
+  shot "$lang-05-documento" detail 6 "$lang"
+  shot "$lang-06-organizar" organize 7 "$lang"
+  shot "$lang-08-leitor" reader 7 "$lang"
+  shot "$lang-09-aguardando-ocr" pending 6 "$lang"
+  shot "$lang-12-ajustes" settings 6 "$lang"
+done

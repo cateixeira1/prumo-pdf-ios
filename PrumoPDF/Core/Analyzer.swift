@@ -10,10 +10,10 @@ enum TextStatus: String, Codable {
 
     var label: String {
         switch self {
-        case .digital: return "Texto digital"
-        case .scanned: return "Escaneado"
-        case .mixed: return "Misto"
-        case .empty: return "Vazio"
+        case .digital: return L("Texto digital")
+        case .scanned: return L("Escaneado")
+        case .mixed: return L("Misto")
+        case .empty: return L("Vazio")
         }
     }
 

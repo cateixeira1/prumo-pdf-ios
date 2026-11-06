@@ -37,11 +37,11 @@ struct SignSheet: View {
                     } else {
                         Picker("Certificado", selection: $selected) {
                             ForEach(certs) { c in
-                                Text(c.name + (c.expired ? " (vencido)" : "")).tag(c.id)
+                                Text(c.name + (c.expired ? L(" (vencido)") : "")).tag(c.id)
                             }
                         }
                         if let c = cert {
-                            Text("Emitido por \(c.issuer). Válido até \(c.certificate.notAfter.formatted(date: .numeric, time: .omitted)).")
+                            Text(LF("Emitido por {}. Válido até {}.", c.issuer, c.certificate.notAfter.dayText))
                                 .font(.system(size: 13))
                                 .foregroundStyle(c.expired ? Theme.red : Theme.secondaryText)
                         }
@@ -64,7 +64,7 @@ struct SignSheet: View {
                     TextField("Ex.: Sou o autor deste documento", text: $reason)
                 }
                 Section {
-                    PrimaryButton(title: working ? "Assinando…" : "Assinar", color: Theme.blue,
+                    PrimaryButton(title: working ? L("Assinando…") : L("Assinar"), color: Theme.blue,
                                   enabled: cert != nil && !working) { sign() }
                 } footer: {
                     Text("Formato PAdES, reconhecido pelo Adobe Reader e por outros leitores de PDF. O Face ID (ou o código) confirma que é você. Com certificado ICP-Brasil, a assinatura tem a mesma validade jurídica da assinatura de próprio punho (MP 2.200-2/2001).")
@@ -78,7 +78,7 @@ struct SignSheet: View {
                 Button("Voltar", role: .cancel) {}
                 Button("Assinar no nível 1", role: .destructive) { start() }
             } message: {
-                Text("Este PDF tem \(fieldCount) campos de assinatura. No nível 1, depois da sua assinatura ninguém mais poderá assinar os outros campos sem invalidar a sua. Para os outros poderem assinar, use o nível 2.")
+                Text(LF("Este PDF tem {} campos de assinatura. No nível 1, depois da sua assinatura ninguém mais poderá assinar os outros campos sem invalidar a sua. Para os outros poderem assinar, use o nível 2.", fieldCount))
             }
         }
         .interactiveDismissDisabled(working)
@@ -93,8 +93,9 @@ struct SignSheet: View {
     @ViewBuilder private var levelSection: some View {
         Section {
             if why == .signed {
-                Text(lockedLevel.map { "O nível de proteção foi definido pela primeira assinatura (\($0.title.components(separatedBy: ":")[0].lowercased())) e não muda mais." }
-                     ?? "O nível de proteção foi definido pela primeira assinatura e não muda mais.")
+                Text(lockedLevel.map { LF("O nível de proteção foi definido pela primeira assinatura ({}) e não muda mais.",
+                                         $0.title.components(separatedBy: CharacterSet(charactersIn: ":："))[0]) }
+                     ?? L("O nível de proteção foi definido pela primeira assinatura e não muda mais."))
                     .font(.system(size: 13))
                     .foregroundStyle(Theme.secondaryText)
             } else {
@@ -102,7 +103,7 @@ struct SignSheet: View {
                     ForEach(ProtectionLevel.allCases) { Text($0.title).tag($0) }
                 }
                 if fieldCount > 1 {
-                    Text("Este PDF tem \(fieldCount) campos de assinatura: o Prumo escolheu o nível 2, para os outros signatários ainda poderem assinar. Você pode mudar para o nível 1 ou 3.")
+                    Text(LF("Este PDF tem {} campos de assinatura: o Prumo escolheu o nível 2, para os outros signatários ainda poderem assinar. Você pode mudar para o nível 1 ou 3.", fieldCount))
                         .font(.system(size: 13, weight: .medium))
                         .foregroundStyle(Theme.orange)
                 }
@@ -125,10 +126,10 @@ struct SignSheet: View {
 
     private var warning: String {
         if already > 0 {
-            let n = already == 1 ? "1 assinatura" : "\(already) assinaturas"
-            return "Este PDF já tem \(n). A nova assinatura entra no próprio arquivo, sem mudar o conteúdo: as anteriores continuam válidas. O PDF continua sem poder ser alterado."
+            let n = already == 1 ? L("1 assinatura") : LF("{} assinaturas", already)
+            return LF("Este PDF já tem {}. A nova assinatura entra no próprio arquivo, sem mudar o conteúdo: as anteriores continuam válidas. O PDF continua sem poder ser alterado.", n)
         }
-        return "Depois de assinado, o PDF não pode mais ser alterado: qualquer mudança (destaque, corte, numeração, páginas) invalida a assinatura. Por isso o Prumo assina uma cópia, “\(item.name)\(PDFSigner.suffix)”, e o original continua como está."
+        return LF("Depois de assinado, o PDF não pode mais ser alterado: qualquer mudança (destaque, corte, numeração, páginas) invalida a assinatura. Por isso o Prumo assina uma cópia, “{}”, e o original continua como está.", LF(PDFSigner.nameTemplate, item.name))
     }
 
     private func reload(select id: String?) {
@@ -165,7 +166,7 @@ struct SignSheet: View {
             do {
                 let result = try await library.sign(item, with: c, options: options)
                 dismiss()
-                flow.toast("PDF assinado: \(result.name)", actionTitle: "Abrir") { flow.open(.document(result.id)) }
+                flow.toast(LF("PDF assinado: {}", result.name), actionTitle: L("Abrir")) { flow.open(.document(result.id)) }
             } catch {
                 flow.show(error: error)
             }
@@ -218,7 +219,7 @@ struct CertificateImportModifier: ViewModifier {
         do {
             let c = try CertificateStore.importP12(data, password: importer.password)
             importer.password = ""
-            flow.toast("Certificado adicionado: \(c.name)" + (c.expired ? " (vencido)" : ""))
+            flow.toast(LF("Certificado adicionado: {}", c.name) + (c.expired ? L(" (vencido)") : ""))
             onImported(c.id)
         } catch {
             importer.password = ""
@@ -245,13 +246,13 @@ struct CertificatesCard: View {
                         HStack(alignment: .top) {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(c.name).font(.system(size: 15, weight: .semibold)).foregroundStyle(Theme.text)
-                                Text("Emitido por \(c.issuer) · válido até \(c.certificate.notAfter.formatted(date: .numeric, time: .omitted))" + (c.expired ? " · VENCIDO" : ""))
+                                Text(LF("Emitido por {} · válido até {}", c.issuer, c.certificate.notAfter.dayText) + (c.expired ? " · " + L("VENCIDO") : ""))
                                     .font(.system(size: 12.5))
                                     .foregroundStyle(c.expired ? Theme.red : Theme.secondaryText)
                             }
                             Spacer()
                             Button(role: .destructive) { removing = c } label: { Image(systemName: "trash") }
-                                .accessibilityLabel("Remover o certificado de \(c.name)")
+                                .accessibilityLabel(LF("Remover o certificado de {}", c.name))
                         }
                     }
                 }
@@ -273,7 +274,7 @@ struct CertificatesCard: View {
             }
             Button("Cancelar", role: .cancel) {}
         } message: { c in
-            Text("O certificado de \(c.name) sai deste iPhone. O arquivo .pfx que você tem continua onde estava, e os PDFs já assinados continuam válidos.")
+            Text(LF("O certificado de {} sai deste iPhone. O arquivo .pfx que você tem continua onde estava, e os PDFs já assinados continuam válidos.", c.name))
         }
         .onAppear { certs = CertificateStore.all() }
     }

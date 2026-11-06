@@ -1,0 +1,50 @@
+{
+ "pt": {
+  "NSCameraUsageDescription": "A câmera é usada para escanear documentos. As imagens ficam só neste iPhone.",
+  "NSFaceIDUsageDescription": "O Face ID destrava o Prumo PDF, se você ligar a trava em Ajustes, e confirma as assinaturas digitais."
+ },
+ "en": {
+  "NSCameraUsageDescription": "The camera is used to scan documents. The images stay only on this iPhone.",
+  "NSFaceIDUsageDescription": "Face ID unlocks Prumo PDF, if you turn on the lock in Settings, and confirms digital signatures."
+ },
+ "es": {
+  "NSCameraUsageDescription": "La cámara se usa para escanear documentos. Las imágenes se quedan solo en este iPhone.",
+  "NSFaceIDUsageDescription": "Face ID desbloquea Prumo PDF, si activas el bloqueo en Ajustes, y confirma las firmas digitales."
+ },
+ "fr": {
+  "NSCameraUsageDescription": "L’appareil photo sert à numériser des documents. Les images restent uniquement sur cet iPhone.",
+  "NSFaceIDUsageDescription": "Face ID déverrouille Prumo PDF, si vous activez le verrouillage dans Réglages, et confirme les signatures numériques."
+ },
+ "de": {
+  "NSCameraUsageDescription": "Die Kamera wird zum Scannen von Dokumenten verwendet. Die Bilder bleiben nur auf diesem iPhone.",
+  "NSFaceIDUsageDescription": "Face ID entsperrt Prumo PDF, wenn Sie die Sperre in den Einstellungen einschalten, und bestätigt digitale Signaturen."
+ },
+ "ja": {
+  "NSCameraUsageDescription": "カメラは書類のスキャンに使います。画像はこのiPhoneにだけ保存されます。",
+  "NSFaceIDUsageDescription": "Face IDは、設定でロックをオンにした場合にPrumo PDFのロックを解除し、電子署名を確認します。"
+ },
+ "zh-Hans": {
+  "NSCameraUsageDescription": "相机用于扫描文档。图像只保存在这台 iPhone 上。",
+  "NSFaceIDUsageDescription": "如果你在“设置”中开启了锁定，面容 ID 会用来解锁 Prumo PDF，并确认数字签名。"
+ },
+ "zh-Hant": {
+  "NSCameraUsageDescription": "相機用於掃描文件。影像只會存放在這部 iPhone 上。",
+  "NSFaceIDUsageDescription": "如果你在「設定」中開啟了鎖定，Face ID 會用來解鎖 Prumo PDF，並確認數位簽章。"
+ },
+ "nb": {
+  "NSCameraUsageDescription": "Kameraet brukes til å skanne dokumenter. Bildene blir bare på denne iPhonen.",
+  "NSFaceIDUsageDescription": "Face ID låser opp Prumo PDF, hvis du slår på låsen i Innstillinger, og bekrefter digitale signaturer."
+ },
+ "sv": {
+  "NSCameraUsageDescription": "Kameran används för att skanna dokument. Bilderna finns bara kvar på den här iPhonen.",
+  "NSFaceIDUsageDescription": "Face ID låser upp Prumo PDF, om du slår på låset i Inställningar, och bekräftar digitala signaturer."
+ },
+ "da": {
+  "NSCameraUsageDescription": "Kameraet bruges til at scanne dokumenter. Billederne bliver kun på denne iPhone.",
+  "NSFaceIDUsageDescription": "Face ID låser Prumo PDF op, hvis du slår låsen til i Indstillinger, og bekræfter digitale signaturer."
+ },
+ "fi": {
+  "NSCameraUsageDescription": "Kameraa käytetään asiakirjojen skannaamiseen. Kuvat pysyvät vain tässä iPhonessa.",
+  "NSFaceIDUsageDescription": "Face ID avaa Prumo PDF:n lukituksen, jos otat lukituksen käyttöön Asetuksissa, ja vahvistaa sähköiset allekirjoitukset."
+ }
+}

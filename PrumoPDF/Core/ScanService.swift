@@ -76,6 +76,6 @@ enum ScanService {
         let f = DateFormatter()
         f.locale = Locale(identifier: "pt_BR")
         f.dateFormat = "dd-MM-yyyy HH'h'mm"
-        return "Escaneado \(f.string(from: date))"
+        return LF("Escaneado {}", f.string(from: date))
     }
 }

@@ -1,0 +1,3 @@
+/* Gerado por scripts/build_strings.py a partir de scripts/locales. Não editar à mão. */
+"NSCameraUsageDescription" = "カメラは書類のスキャンに使います。画像はこのiPhoneにだけ保存されます。";
+"NSFaceIDUsageDescription" = "Face IDは、設定でロックをオンにした場合にPrumo PDFのロックを解除し、電子署名を確認します。";

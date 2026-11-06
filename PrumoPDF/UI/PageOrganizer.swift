@@ -97,7 +97,7 @@ struct PageOrganizerScreen: View {
             }
         }
         .background(Theme.background.ignoresSafeArea())
-        .navigationTitle(model.entries.isEmpty ? "Organizar páginas" : "Organizar \(model.entries.count) páginas")
+        .navigationTitle(model.entries.isEmpty ? L("Organizar páginas") : LF("Organizar {} páginas", model.entries.count))
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(model.hasChanges || saving)
         .toolbar {
@@ -139,11 +139,11 @@ struct PageOrganizerScreen: View {
             }
             Button("Continuar editando", role: .cancel) {}
         }
-        .confirmationDialog("Excluir \(model.selected.count == 1 ? "1 página" : "\(model.selected.count) páginas")?",
+        .confirmationDialog(LF("Excluir {}?", model.selected.count.pagesText),
                             isPresented: $confirmDelete, titleVisibility: .visible) {
             Button("Excluir", role: .destructive) {
                 if !model.deleteSelected() {
-                    flow.toast("O documento precisa ter pelo menos uma página.")
+                    flow.toast(L("O documento precisa ter pelo menos uma página."))
                 }
             }
             Button("Cancelar", role: .cancel) {}
@@ -219,7 +219,7 @@ struct PageOrganizerScreen: View {
                 saving = false
                 model.reset()
                 dismiss()
-                flow.toast("Páginas reorganizadas e salvas.")
+                flow.toast(L("Páginas reorganizadas e salvas."))
             } catch {
                 saving = false
                 flow.show(error: error)
@@ -700,10 +700,10 @@ struct OrganizerPagePreview: View {
     }
 
     private var title: String {
-        guard entries.indices.contains(current) else { return "Página" }
+        guard entries.indices.contains(current) else { return L("Página") }
         let e = entries[current]
-        var t = "Página \(current + 1) de \(entries.count)"
-        if e.sourceIndex != current { t += " · era a \(e.sourceIndex + 1)" }
+        var t = LF("Página {} de {}", current + 1, entries.count)
+        if e.sourceIndex != current { t += LF(" · era a {}", e.sourceIndex + 1) }
         return t
     }
 

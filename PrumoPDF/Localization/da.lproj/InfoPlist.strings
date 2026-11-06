@@ -1,0 +1,3 @@
+/* Gerado por scripts/build_strings.py a partir de scripts/locales. Não editar à mão. */
+"NSCameraUsageDescription" = "Kameraet bruges til at scanne dokumenter. Billederne bliver kun på denne iPhone.";
+"NSFaceIDUsageDescription" = "Face ID låser Prumo PDF op, hvis du slår låsen til i Indstillinger, og bekræfter digitale signaturer.";

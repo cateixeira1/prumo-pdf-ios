@@ -16,7 +16,7 @@ struct SplitSheet: View {
     private var parts: Int? { Int(partsText.trimmingCharacters(in: .whitespaces)) }
 
     private var validation: String? {
-        guard let parts else { return partsText.isEmpty ? nil : "Digite um número inteiro." }
+        guard let parts else { return partsText.isEmpty ? nil : L("Digite um número inteiro.") }
         do {
             _ = try SplitPlan.sizes(pageCount: pageCount, parts: parts)
             return nil
@@ -30,7 +30,7 @@ struct SplitSheet: View {
             Screen {
                 TileCard {
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("“\(item.name)” tem \(pageCount.pagesText).")
+                        Text(LF("“{}” tem {}.", item.name, pageCount.pagesText))
                             .font(.system(size: 15, weight: .medium))
                             .foregroundStyle(Theme.text)
                         Text("Em quantas partes você quer dividir?")
@@ -53,7 +53,7 @@ struct SplitSheet: View {
                         }
                     }
                 }
-                PrimaryButton(title: working ? "Dividindo…" : "Dividir", color: Theme.pink,
+                PrimaryButton(title: working ? L("Dividindo…") : L("Dividir"), color: Theme.pink,
                               enabled: parts != nil && validation == nil && !working) {
                     split()
                 }
@@ -82,11 +82,11 @@ struct SplitSheet: View {
                 }
                 HStack {
                     Image(systemName: "doc").foregroundStyle(Theme.secondaryText)
-                    Text("\(item.name) - Parte \(pair.offset + 1)")
+                    Text(LF("{} - Parte {}", item.name, pair.offset + 1))
                         .lineLimit(1)
                         .foregroundStyle(Theme.text)
                     Spacer()
-                    Text("págs. \(pair.element.lowerBound)–\(pair.element.upperBound)")
+                    Text(LF("págs. {}–{}", pair.element.lowerBound, pair.element.upperBound))
                         .foregroundStyle(Theme.secondaryText)
                 }
                 .font(.system(size: 13))
@@ -108,11 +108,11 @@ struct SplitSheet: View {
                 }.value
                 var created: [PDFItem] = []
                 for (i, doc) in docs.enumerated() {
-                    created.append(try await library.save(newDocument: doc, name: "\(name) - Parte \(i + 1)", folder: folder))
+                    created.append(try await library.save(newDocument: doc, name: LF("{} - Parte {}", name, i + 1), folder: folder))
                 }
                 working = false
                 dismiss()
-                flow.toast("\(created.count) arquivos criados em \(item.folderName).", actionTitle: "Ver") {
+                flow.toast(LF("{} arquivos criados em {}.", created.count, item.folderName), actionTitle: L("Ver")) {
                     flow.open(.folder(folder))
                 }
             } catch {
@@ -129,7 +129,7 @@ struct MergeScreen: View {
     @EnvironmentObject private var library: Library
     @EnvironmentObject private var flow: AppFlow
     @State private var chosen: [String] = []
-    @State private var name = "PDF combinado"
+    @State private var name = L("PDF combinado")
     @State private var showChooser = false
     @State private var working = false
 
@@ -162,7 +162,7 @@ struct MergeScreen: View {
                 Button {
                     showChooser = true
                 } label: {
-                    Label(chosen.isEmpty ? "Escolher PDFs" : "Adicionar mais PDFs", systemImage: "plus.circle.fill")
+                    Label(chosen.isEmpty ? L("Escolher PDFs") : L("Adicionar mais PDFs"), systemImage: "plus.circle.fill")
                         .font(.system(size: 16, weight: .semibold))
                 }
                 .listRowBackground(tileBackground)
@@ -174,7 +174,7 @@ struct MergeScreen: View {
                     .listRowBackground(tileBackground)
             }
             Section {
-                PrimaryButton(title: working ? "Combinando…" : "Combinar", color: Theme.purple,
+                PrimaryButton(title: working ? L("Combinando…") : L("Combinar"), color: Theme.purple,
                               enabled: chosen.count >= 2 && !working) { merge() }
                     .listRowInsets(EdgeInsets())
                     .listRowBackground(Color.clear)
@@ -187,7 +187,7 @@ struct MergeScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showChooser) {
             NavigationStack {
-                DocumentChooser(title: "Escolher PDFs", multiple: true, excluding: Set(chosen), allowImport: true,
+                DocumentChooser(title: L("Escolher PDFs"), multiple: true, excluding: Set(chosen), allowImport: true,
                                 onDone: { items in
                                     chosen.append(contentsOf: items.map(\.id))
                                     showChooser = false
@@ -213,7 +213,7 @@ struct MergeScreen: View {
     private func merge() {
         let urls = chosenItems.map(\.url)
         let folder = chosenItems.first?.folder ?? ""
-        let finalName = name.trimmingCharacters(in: .whitespaces).isEmpty ? "PDF combinado" : name
+        let finalName = name.trimmingCharacters(in: .whitespaces).isEmpty ? L("PDF combinado") : name
         working = true
         Task {
             do {
@@ -223,7 +223,7 @@ struct MergeScreen: View {
                 let saved = try await library.save(newDocument: doc, name: finalName, folder: folder)
                 working = false
                 chosen = []
-                flow.toast("PDF combinado: \(saved.name)", actionTitle: "Abrir") { flow.open(.document(saved.id)) }
+                flow.toast(LF("PDF combinado: {}", saved.name), actionTitle: L("Abrir")) { flow.open(.document(saved.id)) }
             } catch {
                 working = false
                 flow.show(error: error)
@@ -238,7 +238,7 @@ struct SettingsScreen: View {
     @EnvironmentObject private var library: Library
     @EnvironmentObject private var flow: AppFlow
     @AppStorage(AppSettings.includeInBackupKey) private var includeInBackup = true
-    @AppStorage(AppSettings.ocrLanguageKey) private var ocrLanguage = "por"
+    @AppStorage(AppSettings.ocrLanguageKey) private var ocrLanguage = OCRLanguage.defaultID
     @AppStorage("lastBackup") private var lastBackup: Double = 0
     @AppStorage(AppSettings.dewarpPhotosKey) private var dewarpPhotos = false
     @AppStorage(AppLock.enabledKey) private var lockEnabled = false
@@ -255,7 +255,7 @@ struct SettingsScreen: View {
                     guard ids.count < OCRLanguage.maxSelected else { return }
                     ids.append(id)
                 }
-                ocrLanguage = OCRLanguage.join(ids.isEmpty ? ["por"] : ids)
+                ocrLanguage = OCRLanguage.join(ids.isEmpty ? [OCRLanguage.defaultID] : ids)
             })
     }
     @State private var showExporter = false
@@ -263,27 +263,24 @@ struct SettingsScreen: View {
     @State private var showCloud = false
 
     private var lastBackupText: String {
-        guard lastBackup > 0 else { return "Nenhuma cópia feita ainda." }
-        let f = DateFormatter()
-        f.locale = Locale(identifier: "pt_BR")
-        f.dateFormat = "dd/MM/yyyy, HH:mm"
-        return "Última cópia: \(f.string(from: Date(timeIntervalSince1970: lastBackup)))."
+        guard lastBackup > 0 else { return L("Nenhuma cópia feita ainda.") }
+        return LF("Última cópia: {}.", Date(timeIntervalSince1970: lastBackup).shortText)
     }
 
     var body: some View {
         Screen {
-            SectionTitle(text: "Backup e sincronização")
+            SectionTitle(text: L("Backup e sincronização"))
             TileCard {
                 VStack(alignment: .leading, spacing: 10) {
                     if let cloud = library.cloudName {
-                        Label("Backup e sincronização no \(cloud)", systemImage: "checkmark.icloud.fill")
+                        Label(LF("Backup e sincronização no {}", cloud), systemImage: "checkmark.icloud.fill")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundStyle(Theme.green)
-                        Text("Os PDFs ficam na pasta “\(library.root.lastPathComponent)” do \(cloud). O que você salva aqui aparece no Prumo do Windows (e em outros iPhones) que usam a mesma pasta, e vice-versa.")
+                        Text(LF("Os PDFs ficam na pasta “{}” do {}. O que você salva aqui aparece no Prumo do Windows (e em outros iPhones) que usam a mesma pasta, e vice-versa.", library.root.lastPathComponent, cloud))
                             .font(.system(size: 13))
                             .foregroundStyle(Theme.secondaryText)
                         if library.downloadingCount > 0 {
-                            Label("Baixando \(library.downloadingCount) PDF\(library.downloadingCount == 1 ? "" : "s") da nuvem…",
+                            Label(LN(library.downloadingCount, "Baixando 1 PDF da nuvem…", "Baixando {} PDFs da nuvem…"),
                                   systemImage: "icloud.and.arrow.down")
                                 .font(.system(size: 13, weight: .semibold))
                                 .foregroundStyle(Theme.blue)
@@ -299,7 +296,7 @@ struct SettingsScreen: View {
                     if let problem = library.cloudProblem {
                         Text(problem).font(.system(size: 13, weight: .semibold)).foregroundStyle(Theme.red)
                     }
-                    PrimaryButton(title: library.isLocal ? "Escolher nuvem…" : "Trocar de nuvem…", color: Theme.blue) {
+                    PrimaryButton(title: library.isLocal ? L("Escolher nuvem…") : L("Trocar de nuvem…"), color: Theme.blue) {
                         showCloud = true
                     }
                     if library.isLocal {
@@ -309,17 +306,17 @@ struct SettingsScreen: View {
                                 .foregroundStyle(Theme.text)
                         }
                         Text(includeInBackup
-                             ? "Os PDFs entram no backup do iPhone no iCloud, se ele estiver ligado nos Ajustes do iPhone. Se você trocar ou perder o aparelho, eles voltam com o backup (mas não aparecem no Windows)."
-                             : "Os PDFs ficam só neste iPhone e não entram em nenhum backup. Se o aparelho for perdido ou apagado, os PDFs se perdem junto.")
+                             ? L("Os PDFs entram no backup do iPhone no iCloud, se ele estiver ligado nos Ajustes do iPhone. Se você trocar ou perder o aparelho, eles voltam com o backup (mas não aparecem no Windows).")
+                             : L("Os PDFs ficam só neste iPhone e não entram em nenhum backup. Se o aparelho for perdido ou apagado, os PDFs se perdem junto."))
                             .font(.system(size: 13))
                             .foregroundStyle(Theme.secondaryText)
                     }
                 }
             }
-            SectionTitle(text: "Cópia de segurança")
+            SectionTitle(text: L("Cópia de segurança"))
             TileCard {
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Uma cópia completa (PDFs, pastas e favoritos) numa pasta comum, onde você escolher: iCloud Drive, Google Drive, OneDrive, pendrive… A cópia abre também no Prumo para Windows. \(lastBackupText)")
+                    Text(LF("Uma cópia completa (PDFs, pastas e favoritos) numa pasta comum, onde você escolher: iCloud Drive, Google Drive, OneDrive, pendrive… A cópia abre também no Prumo para Windows. {}", lastBackupText))
                         .font(.system(size: 13.5))
                         .foregroundStyle(Theme.text)
                     HStack(spacing: 10) {
@@ -336,7 +333,7 @@ struct SettingsScreen: View {
                     .font(.system(size: 15, weight: .semibold))
                 }
             }
-            SectionTitle(text: "Fotos e páginas escaneadas")
+            SectionTitle(text: L("Fotos e páginas escaneadas"))
             TileCard {
                 VStack(alignment: .leading, spacing: 8) {
                     Toggle(isOn: $dewarpPhotos) {
@@ -349,11 +346,11 @@ struct SettingsScreen: View {
                         .foregroundStyle(Theme.secondaryText)
                 }
             }
-            SectionTitle(text: "Segurança")
+            SectionTitle(text: L("Segurança"))
             TileCard {
                 VStack(alignment: .leading, spacing: 8) {
                     Toggle(isOn: $lockToggle) {
-                        Text("Pedir \(AppLock.methodName) para abrir")
+                        Text(LF("Pedir {} para abrir", AppLock.methodName))
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundStyle(Theme.text)
                     }
@@ -367,13 +364,13 @@ struct SettingsScreen: View {
                             }
                         }
                     }
-                    Text("O Prumo bloqueia ao sair do app e pede \(AppLock.methodName) (ou o código do iPhone) ao voltar. Para proteger um PDF em si, por exemplo antes de enviar, use “Proteger com senha” na tela dele: a senha vai junto com o arquivo e vale em qualquer leitor de PDF.")
+                    Text(LF("O Prumo bloqueia ao sair do app e pede {} (ou o código do iPhone) ao voltar. Para proteger um PDF em si, por exemplo antes de enviar, use “Proteger com senha” na tela dele: a senha vai junto com o arquivo e vale em qualquer leitor de PDF.", AppLock.methodName))
                         .font(.system(size: 13))
                         .foregroundStyle(Theme.secondaryText)
                 }
             }
             SettingsSignatureSection()
-            SectionTitle(text: "Idioma do aplicativo")
+            SectionTitle(text: L("Idioma do aplicativo"))
             TileCard {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("O Prumo segue o idioma do iPhone. Para usar outro só no Prumo, abra os Ajustes do iPhone, toque em Prumo PDF e em Idioma.")
@@ -382,7 +379,7 @@ struct SettingsScreen: View {
                     Button("Abrir os Ajustes do iPhone") {
                         if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
                     }
-                    Text("Idiomas: português, inglês, espanhol, francês, alemão, japonês, chinês (simplificado e tradicional), norueguês, sueco, dinamarquês e finlandês. O que não estiver traduzido aparece em inglês. As traduções pedem revisão por quem fala a língua.")
+                    Text("Idiomas: português, inglês, espanhol, francês, alemão, japonês, chinês (simplificado e tradicional), norueguês, sueco, dinamarquês e finlandês. Em outro idioma do iPhone, o Prumo aparece em inglês. As traduções pedem revisão por quem fala a língua.")
                         .font(.system(size: 13))
                         .foregroundStyle(Theme.secondaryText)
                 }
@@ -393,7 +390,7 @@ struct SettingsScreen: View {
                     Text("Idiomas dos documentos")
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundStyle(Theme.text)
-                    Text("Marque até \(OCRLanguage.maxSelected). Idiomas demais juntos deixam o OCR mais lento e menos preciso.")
+                    Text(LF("Marque até {}. Idiomas demais juntos deixam o OCR mais lento e menos preciso.", OCRLanguage.maxSelected))
                         .font(.system(size: 13))
                         .foregroundStyle(Theme.secondaryText)
                     ForEach(OCRLanguage.available()) { lang in
@@ -402,7 +399,7 @@ struct SettingsScreen: View {
                     }
                     let missing = OCRLanguage.unavailable()
                     if !missing.isEmpty {
-                        Text("Este iPhone não reconhece: \(missing.map(\.name).joined(separator: ", ")). A Apple não oferece esses idiomas no OCR do iOS. Para eles, faça o OCR no Prumo para Windows: o PDF com OCR volta para cá pela mesma nuvem.")
+                        Text(LF("Este iPhone não reconhece: {}. A Apple não oferece esses idiomas no OCR do iOS. Para eles, faça o OCR no Prumo para Windows: o PDF com OCR volta para cá pela mesma nuvem.", missing.map(\.name).joined(separator: ", ")))
                             .font(.system(size: 13))
                             .foregroundStyle(Theme.secondaryText)
                     }
@@ -411,15 +408,15 @@ struct SettingsScreen: View {
                         .foregroundStyle(Theme.secondaryText)
                 }
             }
-            SectionTitle(text: "Sobre")
+            SectionTitle(text: L("Sobre"))
             TileCard {
                 VStack(alignment: .leading, spacing: 8) {
                     Label("Tudo é processado neste iPhone. O app não envia arquivos para a internet; só o que você compartilhar sai do aparelho.",
                           systemImage: "lock.shield.fill")
                         .font(.system(size: 14))
                         .foregroundStyle(Theme.text)
-                    Label(library.isLocal ? "Os PDFs ficam no app Arquivos, em No meu iPhone › Prumo PDF."
-                                          : "Os PDFs ficam no app Arquivos, em \(library.cloudName ?? "nuvem") › \(library.root.lastPathComponent).",
+                    Label(library.isLocal ? L("Os PDFs ficam no app Arquivos, em No meu iPhone › Prumo PDF.")
+                                          : LF("Os PDFs ficam no app Arquivos, em {} › {}.", library.cloudName ?? L("nuvem"), library.root.lastPathComponent),
                           systemImage: "folder.fill")
                         .font(.system(size: 14))
                         .foregroundStyle(Theme.text)
@@ -440,7 +437,7 @@ struct SettingsScreen: View {
             switch result {
             case .success:
                 lastBackup = Date().timeIntervalSince1970
-                flow.toast("Cópia salva: \(library.items.count) PDF\(library.items.count == 1 ? "" : "s").")
+                flow.toast(LN(library.items.count, "Cópia salva: 1 PDF.", "Cópia salva: {} PDFs."))
             case .failure(let error):
                 flow.show(error: error)
             }
@@ -451,9 +448,9 @@ struct SettingsScreen: View {
             guard case .success(let url) = result else { return }
             do {
                 let r = try library.restore(from: url)
-                var msg = "\(r.added) PDF\(r.added == 1 ? "" : "s") restaurado\(r.added == 1 ? "" : "s")"
-                if r.skipped > 0 { msg += "; \(r.skipped) já estava\(r.skipped == 1 ? "" : "m") aqui" }
-                flow.toast(msg + ".")
+                var msg = LN(r.added, "1 PDF restaurado.", "{} PDFs restaurados.")
+                if r.skipped > 0 { msg = sentences(msg, LN(r.skipped, "1 já estava aqui.", "{} já estavam aqui.")) }
+                flow.toast(msg)
             } catch { flow.show(error: error) }
         }
     }
@@ -481,11 +478,11 @@ struct CloudChooserSheet: View {
     }
     private let others = [
         CloudApp(name: "Dropbox", appStore: "https://apps.apple.com/br/app/id327630330",
-                 note: "Funciona se o app do Dropbox deixar escolher a pasta no app Arquivos. No Windows, instale o Dropbox para computador."),
+                 note: L("Funciona se o app do Dropbox deixar escolher a pasta no app Arquivos. No Windows, instale o Dropbox para computador.")),
         CloudApp(name: "Google Drive", appStore: "https://apps.apple.com/br/app/id507874739",
-                 note: "No iPhone, o app do Google Drive não deixa outros apps usarem uma pasta dele (só arquivos avulsos). Para sincronizar com o iPhone, prefira o iCloud Drive."),
+                 note: L("No iPhone, o app do Google Drive não deixa outros apps usarem uma pasta dele (só arquivos avulsos). Para sincronizar com o iPhone, prefira o iCloud Drive.")),
         CloudApp(name: "OneDrive", appStore: "https://apps.apple.com/br/app/id477537958",
-                 note: "No iPhone, o app do OneDrive não deixa outros apps usarem uma pasta dele (só arquivos avulsos). Para sincronizar com o iPhone, prefira o iCloud Drive."),
+                 note: L("No iPhone, o app do OneDrive não deixa outros apps usarem uma pasta dele (só arquivos avulsos). Para sincronizar com o iPhone, prefira o iCloud Drive.")),
     ]
 
     var body: some View {
@@ -506,7 +503,7 @@ struct CloudChooserSheet: View {
                         Text("Para entrar: Ajustes do iPhone › seu nome › iCloud › iCloud Drive (ligado). No Windows: instale o iCloud para Windows e entre com a mesma conta Apple.")
                             .font(.system(size: 13))
                             .foregroundStyle(Theme.secondaryText)
-                        PrimaryButton(title: "Usar o iCloud Drive…", color: Theme.blue) { pickFolder = true }
+                        PrimaryButton(title: L("Usar o iCloud Drive…"), color: Theme.blue) { pickFolder = true }
                         Text("No seletor, toque em “iCloud Drive” e depois em “Abrir”. O Prumo cria a pasta “Prumo PDF” lá dentro.")
                             .font(.system(size: 12))
                             .foregroundStyle(Theme.secondaryText)
@@ -566,9 +563,9 @@ struct CloudChooserSheet: View {
         picked = nil
         do {
             let r = try library.useCloudFolder(url, bringLocal: bring)
-            var msg = "Pronto: a biblioteca agora está no \(library.cloudName ?? "nuvem")"
-            if bring, r.added + r.skipped > 0 { msg += " (\(r.added) PDF\(r.added == 1 ? "" : "s") levado\(r.added == 1 ? "" : "s"))" }
-            flow.toast(msg + ".")
+            var msg = LF("Pronto: a biblioteca agora está no {}.", library.cloudName ?? L("nuvem"))
+            if bring, r.added + r.skipped > 0 { msg = sentences(msg, LN(r.added, "1 PDF levado.", "{} PDFs levados.")) }
+            flow.toast(msg)
             dismiss()
         } catch { flow.show(error: error) }
     }
@@ -576,7 +573,7 @@ struct CloudChooserSheet: View {
     private func backToLocal(bring: Bool) {
         do {
             let r = try library.useLocalStorage(bringCloud: bring)
-            flow.toast(bring ? "Pronto: \(r.added) PDF\(r.added == 1 ? "" : "s") copiado\(r.added == 1 ? "" : "s") para o iPhone." : "Pronto: os PDFs ficam só neste iPhone.")
+            flow.toast(bring ? LN(r.added, "Pronto: 1 PDF copiado para o iPhone.", "Pronto: {} PDFs copiados para o iPhone.") : L("Pronto: os PDFs ficam só neste iPhone."))
             dismiss()
         } catch { flow.show(error: error) }
     }
@@ -612,14 +609,14 @@ struct DewarpSheet: View {
                         .foregroundStyle(Theme.secondaryText)
                 }
                 HStack(spacing: 10) {
-                    previewColumn("Antes", before)
-                    previewColumn("Depois", after)
+                    previewColumn(L("Antes"), before)
+                    previewColumn(L("Depois"), after)
                 }
                 .frame(height: 300)
                 HStack {
                     Button { page -= 1 } label: { Image(systemName: "chevron.left") }.disabled(page <= 1)
                     Spacer()
-                    Text("Prévia da página \(page) de \(total)").font(.system(size: 14, weight: .semibold))
+                    Text(LF("Prévia da página {} de {}", page, total)).font(.system(size: 14, weight: .semibold))
                     Spacer()
                     Button { page += 1 } label: { Image(systemName: "chevron.right") }.disabled(page >= total)
                 }
@@ -629,19 +626,19 @@ struct DewarpSheet: View {
                         Text("Quais páginas corrigir? Em branco = todas. Ex.: 1, 3-5")
                             .font(.system(size: 13))
                             .foregroundStyle(Theme.secondaryText)
-                        TextField("Todas (1-\(total))", text: $pagesText)
+                        TextField(LF("Todas (1-{})", total), text: $pagesText)
                             .keyboardType(.numbersAndPunctuation)
                             .textFieldStyle(.roundedBorder)
                         switch selection {
                         case .success(let pages):
-                            Text(pagesText.isEmpty ? "Todas as páginas serão corrigidas." : "\(pages.count) página\(pages.count == 1 ? "" : "s") será\(pages.count == 1 ? "" : "ão") corrigida\(pages.count == 1 ? "" : "s").")
+                            Text(pagesText.isEmpty ? L("Todas as páginas serão corrigidas.") : LN(pages.count, "1 página será corrigida.", "{} páginas serão corrigidas."))
                                 .font(.system(size: 13, weight: .medium)).foregroundStyle(Theme.teal)
                         case .failure(let e):
                             Text(e.localizedDescription).font(.system(size: 13, weight: .medium)).foregroundStyle(Theme.red)
                         }
                     }
                 }
-                PrimaryButton(title: working ? "Corrigindo…" : "Corrigir e criar cópia", color: Theme.teal,
+                PrimaryButton(title: working ? L("Corrigindo…") : L("Corrigir e criar cópia"), color: Theme.teal,
                               enabled: !working && (try? selection.get()) != nil) { run() }
                 Text("O original não muda: o resultado é um PDF novo, com “- corrigido” no nome. Depois, o app pergunta se você quer fazer o OCR.")
                     .font(.system(size: 13))
@@ -676,7 +673,7 @@ struct DewarpSheet: View {
         after = nil
         previewError = nil
         guard let doc = PDFDocument(url: item.url), let p = doc.page(at: page - 1) else {
-            previewError = "Não foi possível abrir o PDF."
+            previewError = L("Não foi possível abrir o PDF.")
             return
         }
         let img = Dewarp.render(p, dpi: 100)
@@ -687,11 +684,11 @@ struct DewarpSheet: View {
     private func run() {
         guard let pages = try? selection.get(), let doc = PDFDocument(url: item.url) else { return }
         working = true
-        flow.busyMessage = "Corrigindo \(pages.count) página\(pages.count == 1 ? "" : "s")…"
+        flow.busyMessage = LN(pages.count, "Corrigindo 1 página…", "Corrigindo {} páginas…")
         Task {
             do {
                 let data = try Dewarp.dewarpPDF(doc, pages: pages)
-                let new = try library.save(newData: data, name: "\(item.name) - corrigido", folder: item.folder)
+                let new = try library.save(newData: data, name: LF("{} - corrigido", item.name), folder: item.folder)
                 flow.busyMessage = nil
                 working = false
                 dismiss()
@@ -717,8 +714,8 @@ struct ProtectSheet: View {
     @State private var showPassword = false
 
     private var problem: String? {
-        if !pw1.isEmpty && pw1.count < 4 { return "Use pelo menos 4 caracteres." }
-        if !pw2.isEmpty && pw1 != pw2 { return "As senhas não são iguais." }
+        if !pw1.isEmpty && pw1.count < 4 { return L("Use pelo menos 4 caracteres.") }
+        if !pw2.isEmpty && pw1 != pw2 { return L("As senhas não são iguais.") }
         return nil
     }
 
@@ -757,7 +754,7 @@ struct ProtectSheet: View {
                             .font(.system(size: 13, weight: .medium)).foregroundStyle(Theme.orange)
                     }
                 }
-                PrimaryButton(title: "Proteger", color: Theme.purple, enabled: ready) { run() }
+                PrimaryButton(title: L("Proteger"), color: Theme.purple, enabled: ready) { run() }
             }
             .navigationTitle("Proteger com senha")
             .navigationBarTitleDisplayMode(.inline)
@@ -771,7 +768,7 @@ struct ProtectSheet: View {
             if deleteOriginal, let original = library.item(id: item.id) { try library.delete([original]) }
             dismiss()
             if deleteOriginal { flow.popToRoot() }
-            flow.toast("PDF protegido: \(new.name)", actionTitle: "Abrir") { flow.open(.document(new.id)) }
+            flow.toast(LF("PDF protegido: {}", new.name), actionTitle: L("Abrir")) { flow.open(.document(new.id)) }
         } catch {
             flow.show(error: error)
         }
@@ -787,11 +784,11 @@ enum PasswordStrength {
     }
 
     static func label(_ pw: String) -> String {
-        if pw.isEmpty { return "Dica: misture letras, números e símbolos (ex.: Caso2026!Ana)." }
+        if pw.isEmpty { return L("Dica: misture letras, números e símbolos (ex.: Caso2026!Ana).") }
         let s = score(pw)
-        if pw.count < 6 || s <= 2 { return "Senha fraca: use 8 ou mais caracteres, com letras e números." }
-        if s <= 4 { return "Senha média. Fica mais forte com mais caracteres, números e símbolos." }
-        return "Senha forte."
+        if pw.count < 6 || s <= 2 { return L("Senha fraca: use 8 ou mais caracteres, com letras e números.") }
+        if s <= 4 { return L("Senha média. Fica mais forte com mais caracteres, números e símbolos.") }
+        return L("Senha forte.")
     }
 
     static func color(_ pw: String) -> Color {
@@ -806,9 +803,9 @@ enum PasswordStrength {
 /// "Assinatura digital" nos Ajustes (separada para o corpo dos Ajustes não ficar grande demais).
 struct SettingsSignatureSection: View {
     var body: some View {
-        SectionTitle(text: "Assinatura digital")
+        SectionTitle(text: L("Assinatura digital"))
         CertificatesCard()
-        SectionTitle(text: "Proteção do PDF assinado")
+        SectionTitle(text: L("Proteção do PDF assinado"))
         SignLevelCard()
     }
 }

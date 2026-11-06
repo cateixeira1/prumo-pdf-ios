@@ -42,18 +42,18 @@ enum CertificateStore {
         switch status {
         case errSecSuccess: break
         case errSecAuthFailed, errSecPkcs12VerifyFailure:
-            throw UserFacingError("Senha do certificado incorreta.")
+            throw UserFacingError(L("Senha do certificado incorreta."))
         default:
-            throw UserFacingError("Não foi possível ler o certificado (código \(status)). Use o arquivo .pfx ou .p12 do certificado A1.")
+            throw UserFacingError(LF("Não foi possível ler o certificado (código {}). Use o arquivo .pfx ou .p12 do certificado A1.", status))
         }
         guard let list = items as? [[String: Any]], let first = list.first,
               let identityRef = first[kSecImportItemIdentity as String] else {
-            throw UserFacingError("O arquivo não tem a chave do certificado.")
+            throw UserFacingError(L("O arquivo não tem a chave do certificado."))
         }
         let identity = identityRef as! SecIdentity   // swiftlint:disable:this force_cast
         var certRef: SecCertificate?
         guard SecIdentityCopyCertificate(identity, &certRef) == errSecSuccess, let cert = certRef else {
-            throw UserFacingError("O arquivo não tem o certificado.")
+            throw UserFacingError(L("O arquivo não tem o certificado."))
         }
         let der = [UInt8](SecCertificateCopyData(cert) as Data)
         let x509 = try parse(der)
@@ -75,7 +75,7 @@ enum CertificateStore {
         }
         #endif
         guard st == errSecSuccess || st == errSecDuplicateItem else {
-            throw UserFacingError("Não foi possível guardar o certificado nas Chaves do iPhone (código \(st)).")
+            throw UserFacingError(LF("Não foi possível guardar o certificado nas Chaves do iPhone (código {}).", st))
         }
         // a cadeia e os dados para mostrar a lista, num item separado
         let info: [String: Any] = ["der": Data(der).base64EncodedString(),
@@ -90,14 +90,14 @@ enum CertificateStore {
         item[kSecAttrAccessible as String] = kSecAttrAccessibleWhenUnlockedThisDeviceOnly
         let st2 = SecItemAdd(item as CFDictionary, nil)
         guard st2 == errSecSuccess else {
-            throw UserFacingError("Não foi possível guardar o certificado (código \(st2)).")
+            throw UserFacingError(LF("Não foi possível guardar o certificado (código {}).", st2))
         }
         return SigningCertificate(id: x509.sha1, certificate: x509, chain: chain)
     }
 
     static func parse(_ der: [UInt8]) throws -> X509Certificate {
         do { return try X509Certificate(der: der) } catch {
-            throw UserFacingError("O certificado não pôde ser lido.")
+            throw UserFacingError(L("O certificado não pôde ser lido."))
         }
     }
 
@@ -163,18 +163,18 @@ enum CertificateStore {
     /// Assina `data` com a chave do certificado (RSA PKCS#1 v1.5 ou ECDSA, SHA-256).
     static func signer(for cert: SigningCertificate) throws -> ([UInt8]) throws -> [UInt8] {
         guard let identity = identity(for: cert) else {
-            throw UserFacingError("A chave do certificado não está nas Chaves deste iPhone. Adicione o certificado de novo.")
+            throw UserFacingError(L("A chave do certificado não está nas Chaves deste iPhone. Adicione o certificado de novo."))
         }
         var keyRef: SecKey?
         guard SecIdentityCopyPrivateKey(identity, &keyRef) == errSecSuccess, let key = keyRef else {
-            throw UserFacingError("Não foi possível usar a chave do certificado.")
+            throw UserFacingError(L("Não foi possível usar a chave do certificado."))
         }
         let algorithm: SecKeyAlgorithm = cert.certificate.isRSA ? .rsaSignatureMessagePKCS1v15SHA256
                                                                  : .ecdsaSignatureMessageX962SHA256
         return { message in
             var error: Unmanaged<CFError>?
             guard let sig = SecKeyCreateSignature(key, algorithm, Data(message) as CFData, &error) as Data? else {
-                throw UserFacingError("A assinatura falhou: \(error?.takeRetainedValue().localizedDescription ?? "erro desconhecido").")
+                throw UserFacingError(LF("A assinatura falhou: {}.", error?.takeRetainedValue().localizedDescription ?? L("erro desconhecido")))
             }
             return [UInt8](sig)
         }
@@ -190,20 +190,20 @@ enum ProtectionLevel: Int, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .noChanges: return "Nível 1: nenhuma mudança"
-        case .forms: return "Nível 2: novas assinaturas e preenchimento de campos"
-        case .comments: return "Nível 3: assinaturas, campos e comentários"
+        case .noChanges: return L("Nível 1: nenhuma mudança")
+        case .forms: return L("Nível 2: novas assinaturas e preenchimento de campos")
+        case .comments: return L("Nível 3: assinaturas, campos e comentários")
         }
     }
 
     var explanation: String {
         switch self {
         case .noChanges:
-            return "Depois de assinado, nada pode ser mudado e ninguém mais pode assinar: qualquer mudança invalida a assinatura. Serve para documento com um só signatário."
+            return L("Depois de assinado, nada pode ser mudado e ninguém mais pode assinar: qualquer mudança invalida a assinatura. Serve para documento com um só signatário.")
         case .forms:
-            return "Outras pessoas ainda podem assinar e preencher campos de formulário sem invalidar a sua assinatura. Texto, páginas e anotações continuam travados. É o padrão do Prumo e o mais usado em contratos."
+            return L("Outras pessoas ainda podem assinar e preencher campos de formulário sem invalidar a sua assinatura. Texto, páginas e anotações continuam travados. É o padrão do Prumo e o mais usado em contratos.")
         case .comments:
-            return "Além do nível 2, permite comentários e anotações (como destaques) feitos por outros leitores, sem invalidar a assinatura. O texto e as páginas continuam travados."
+            return L("Além do nível 2, permite comentários e anotações (como destaques) feitos por outros leitores, sem invalidar a assinatura. O texto e as páginas continuam travados.")
         }
     }
 
@@ -230,7 +230,7 @@ struct SignOptions: Equatable {
     enum Page: String, CaseIterable, Identifiable {
         case last, first
         var id: String { rawValue }
-        var label: String { self == .last ? "Última página" : "Primeira página" }
+        var label: String { self == .last ? L("Última página") : L("Primeira página") }
     }
 
     enum Position: String, CaseIterable, Identifiable {
@@ -238,9 +238,9 @@ struct SignOptions: Equatable {
         var id: String { rawValue }
         var label: String {
             switch self {
-            case .bottomLeft: return "Embaixo, à esquerda"
-            case .bottomRight: return "Embaixo, à direita"
-            case .topRight: return "Em cima, à direita"
+            case .bottomLeft: return L("Embaixo, à esquerda")
+            case .bottomRight: return L("Embaixo, à direita")
+            case .topRight: return L("Em cima, à direita")
             }
         }
     }
@@ -256,7 +256,7 @@ struct SignOptions: Equatable {
 /// SubFilter ETSI.CAdES.detached; a primeira assinatura é de certificação (DocMDP, nível 1, 2 ou 3); as seguintes travam o próprio campo (FieldMDP). O verificador do ITI exige DocMDP
 /// ou FieldMDP. Gravada como atualização incremental: o que já estava no arquivo não muda.
 enum PDFSigner {
-    static let suffix = " - assinado"
+    static let nameTemplate = "{} - assinado"   // i18n: no idioma do app, como no Windows
     static let reserved = 20_000          // bytes reservados para a assinatura CMS
     static let stampSize = CGSize(width: 230, height: 62)
     static let stampPadX: CGFloat = 6
@@ -282,10 +282,10 @@ enum PDFSigner {
                                 chain: certificate.chain, sign: sign)
         let hex = Array(cms.map { String(format: "%02X", $0) }.joined().utf8)
         let room = prepared.contentsEnd - prepared.contentsStart - 2
-        guard hex.count <= room else { throw UserFacingError("A assinatura ficou maior que o espaço reservado.") }
+        guard hex.count <= room else { throw UserFacingError(L("A assinatura ficou maior que o espaço reservado.")) }
         for (k, c) in hex.enumerated() { prepared.bytes[prepared.contentsStart + 1 + k] = c }
         guard PDFDocument(data: Data(prepared.bytes)) != nil else {
-            throw UserFacingError("O PDF assinado não pôde ser conferido; nada foi alterado.")
+            throw UserFacingError(L("O PDF assinado não pôde ser conferido; nada foi alterado."))
         }
         return Data(prepared.bytes)
     }
@@ -294,19 +294,19 @@ enum PDFSigner {
     static func prepare(_ data: Data, certificate: SigningCertificate, options: SignOptions, date: Date) throws -> Prepared {
         let file: PDFFile
         do { file = try PDFFile(data) } catch {
-            throw UserFacingError("A estrutura deste PDF não pôde ser lida para assinar.")
+            throw UserFacingError(L("A estrutura deste PDF não pôde ser lida para assinar."))
         }
         guard !file.isEncrypted else {
-            throw UserFacingError("PDF com senha não pode ser assinado. Remova a senha antes.")
+            throw UserFacingError(L("PDF com senha não pode ser assinado. Remova a senha antes."))
         }
         if file.docMDPLevel == 1 {
-            throw UserFacingError("A primeira assinatura deste PDF não permite mais nenhuma mudança, nem novas assinaturas.")
+            throw UserFacingError(L("A primeira assinatura deste PDF não permite mais nenhuma mudança, nem novas assinaturas."))
         }
         guard let rootRef = file.rootRef, var catalog = file.catalog else {
-            throw UserFacingError("PDF sem catálogo.")
+            throw UserFacingError(L("PDF sem catálogo."))
         }
         let pages = file.pageRefs()
-        guard !pages.isEmpty else { throw UserFacingError("PDF sem páginas.") }
+        guard !pages.isEmpty else { throw UserFacingError(L("PDF sem páginas.")) }
         let existing = file.signatureCount
         let names = Set(file.fields().compactMap { f -> String? in
             if case .string(let s)? = f["T"] { return PDFText.decode(s) }
@@ -320,7 +320,7 @@ enum PDFSigner {
         let sigNum = up.reserve()
         let fieldNum = up.reserve()
         let pageRef = options.page == .first ? pages[0] : pages[pages.count - 1]
-        guard var pageDict = (try? file.object(pageRef.0))?.dictValue else { throw UserFacingError("Página inválida.") }
+        guard var pageDict = (try? file.object(pageRef.0))?.dictValue else { throw UserFacingError(L("Página inválida.")) }
 
         // carimbo visível (opcional)
         var rect = "[0 0 0 0]"
@@ -414,14 +414,14 @@ enum PDFSigner {
         var out = up.output()
         guard let sigStart = find(out, "/ByteRange [0 BYTERANGE_1", from: file.bytes.count),
               let open = find(out, "/Contents <", from: sigStart) else {
-            throw UserFacingError("Falha ao montar a assinatura.")
+            throw UserFacingError(L("Falha ao montar a assinatura."))
         }
         let contentsStart = open + 10
         let contentsEnd = contentsStart + 2 + reserved * 2
         let placeholder = "BYTERANGE_1 BYTERANGE_2 BYTERANGE_3"
         let values = [contentsStart, contentsEnd, out.count - contentsEnd]
         var filled = values.map { String($0) }.joined(separator: " ")
-        guard filled.count <= placeholder.count else { throw UserFacingError("PDF grande demais para assinar.") }
+        guard filled.count <= placeholder.count else { throw UserFacingError(L("PDF grande demais para assinar.")) }
         filled += String(repeating: " ", count: placeholder.count - filled.count)
         let at = sigStart + "/ByteRange [0 ".count
         for (k, c) in filled.utf8.enumerated() { out[at + k] = c }
@@ -508,7 +508,7 @@ enum PDFSigner {
     static func stampLayout(name: String, dateText: String) -> (size: CGFloat, lead: CGFloat, lines: [String]) {
         let innerW = stampSize.width - 2 * stampPadX
         let innerH = stampSize.height - 2 * stampPadY
-        let title = "Assinado digitalmente por"
+        let title = LD("Assinado digitalmente por")
         var last: (CGFloat, CGFloat, [String]) = (6, 7.5, [title, name, dateText])
         for size: CGFloat in [9, 8, 7, 6] {
             let lead = size * 1.25
@@ -528,10 +528,10 @@ enum PDFSigner {
     /// Texto do carimbo: "Assinado digitalmente por / NOME / em DATA".
     static func stampContent(name: String, date: Date) -> [UInt8] {
         let df = DateFormatter()
-        df.locale = Locale(identifier: "pt_BR")
-        df.dateFormat = "dd/MM/yyyy HH:mm:ss"
+        df.locale = Locale(identifier: "en_US_POSIX")
+        df.dateFormat = AppLanguages.stampDateFormat
         let h = Double(stampSize.height), w = Double(stampSize.width)
-        let layout = stampLayout(name: name, dateText: "em \(df.string(from: date))")
+        let layout = stampLayout(name: name, dateText: LDF("em {}", df.string(from: date)))
         let total = Double(layout.lines.count) * Double(layout.lead)
         var y = (h + total) / 2 - Double(layout.lead) * 0.8
         var out = Array("q 0.16 0.47 0.96 RG 0.8 w 0.5 0.5 \(f(w - 1)) \(f(h - 1)) re S Q\nBT 0.15 0.15 0.15 rg /F1 \(f(Double(layout.size))) Tf\n".utf8)
@@ -582,7 +582,7 @@ extension Library {
     /// editável). Já assinado: acrescenta a nova assinatura no próprio arquivo. Devolve o PDF assinado.
     func sign(_ item: PDFItem, with cert: SigningCertificate, options: SignOptions) async throws -> PDFItem {
         guard item.meta.locked != true else {
-            throw UserFacingError("PDF com senha não pode ser assinado. Remova a senha antes.")
+            throw UserFacingError(L("PDF com senha não pode ser assinado. Remova a senha antes."))
         }
         let signer = try CertificateStore.signer(for: cert)
         let url = item.url
@@ -603,7 +603,7 @@ extension Library {
             markSigned(item.id, count: count)
             return self.item(id: item.id) ?? item
         }
-        let result = try save(newData: signed, name: item.name + PDFSigner.suffix, folder: item.folder) {
+        let result = try save(newData: signed, name: LF(PDFSigner.nameTemplate, item.name), folder: item.folder) {
             $0.signed = count
         }
         return self.item(id: result.id) ?? result
@@ -618,6 +618,6 @@ enum SignConfirmation {
         var err: NSError?
         guard ctx.canEvaluatePolicy(.deviceOwnerAuthentication, error: &err) else { return true }
         return (try? await ctx.evaluatePolicy(.deviceOwnerAuthentication,
-                                              localizedReason: "Confirme para assinar o PDF com o seu certificado")) ?? false
+                                              localizedReason: L("Confirme para assinar o PDF com o seu certificado"))) ?? false
     }
 }

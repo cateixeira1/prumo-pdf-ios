@@ -1,0 +1,3 @@
+/* Gerado por scripts/build_strings.py a partir de scripts/locales. Não editar à mão. */
+"NSCameraUsageDescription" = "L’appareil photo sert à numériser des documents. Les images restent uniquement sur cet iPhone.";
+"NSFaceIDUsageDescription" = "Face ID déverrouille Prumo PDF, si vous activez le verrouillage dans Réglages, et confirme les signatures numériques.";

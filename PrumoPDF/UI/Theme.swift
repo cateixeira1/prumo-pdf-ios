@@ -221,7 +221,7 @@ struct TileCard<Content: View>: View {
 
 struct SearchField: View {
     @Binding var text: String
-    var placeholder = "Buscar"
+    var placeholder = L("Buscar")
     @FocusState private var focused: Bool
 
     var body: some View {
@@ -295,7 +295,7 @@ struct Screen<Content: View>: View {
 }
 
 extension Int {
-    var pagesText: String { self == 1 ? "1 página" : "\(self) páginas" }
+    var pagesText: String { self == 1 ? L("1 página") : LF("{} páginas", self) }
 }
 
 extension Int64 {
@@ -307,7 +307,7 @@ extension Int64 {
 extension Date {
     var shortText: String {
         let f = DateFormatter()
-        f.locale = Locale(identifier: "pt_BR")
+        f.locale = AppLanguages.locale
         f.dateStyle = .short
         f.timeStyle = .short
         return f.string(from: self)

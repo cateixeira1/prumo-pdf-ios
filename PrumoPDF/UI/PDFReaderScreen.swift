@@ -174,7 +174,7 @@ final class ReaderModel: NSObject, ObservableObject, UIGestureRecognizerDelegate
         let added = Highlights.add(selection, color: c, in: doc)
         guard !added.isEmpty else { return }
         let pairs = added.compactMap { a in a.page.map { (doc.index(for: $0), a) } }
-        onEdit?("Destaque", .marks(docID: docID, removed: [], added: pairs))
+        onEdit?(L("Destaque"), .marks(docID: docID, removed: [], added: pairs))
     }
 
     /// Destaca o texto selecionado (sem o marca-texto).
@@ -191,7 +191,7 @@ final class ReaderModel: NSObject, ObservableObject, UIGestureRecognizerDelegate
         guard let doc = pdfView?.document else { return }
         let change = Highlights.unmark(selectionRanges(), in: doc)
         guard !change.removed.isEmpty else { return }
-        onEdit?("Desfazer destaque", .marks(docID: docID, removed: change.removed, added: change.added))
+        onEdit?(L("Desfazer destaque"), .marks(docID: docID, removed: change.removed, added: change.added))
         pdfView?.clearSelection()
         selectionChanged()
     }
@@ -200,14 +200,14 @@ final class ReaderModel: NSObject, ObservableObject, UIGestureRecognizerDelegate
         guard let doc = pdfView?.document, let page = a.page else { return }
         let p = doc.index(for: page)
         Highlights.remove(a)
-        onEdit?("Apagar destaque", .marks(docID: docID, removed: [(p, a)], added: []))
+        onEdit?(L("Apagar destaque"), .marks(docID: docID, removed: [(p, a)], added: []))
     }
 
     func recolorMark(_ a: PDFAnnotation, _ c: HighlightColor) {
         guard let doc = pdfView?.document, let page = a.page else { return }
         let from = a.color
         Highlights.recolor(a, c)
-        onEdit?("Cor do destaque", .recolor(docID: docID, page: doc.index(for: page), mark: a, from: from, to: c.uiColor))
+        onEdit?(L("Cor do destaque"), .recolor(docID: docID, page: doc.index(for: page), mark: a, from: from, to: c.uiColor))
     }
 
     func copySelection() -> Bool {
@@ -497,7 +497,7 @@ struct PDFReaderScreen: View {
                 Button("Cancelar", role: .cancel) {}
                 Button("Ir") { goToTypedPage() }
             } message: {
-                Text("O documento tem \(totalPages.pagesText).")
+                Text(LF("O documento tem {}.", totalPages.pagesText))
             }
             .confirmationDialog("Destaque", isPresented: markDialogShown, titleVisibility: .visible,
                                 presenting: tappedMark) { mark in
@@ -518,14 +518,14 @@ struct PDFReaderScreen: View {
     @ViewBuilder private func markActions(_ mark: PDFAnnotation) -> some View {
         Button("Apagar o destaque", role: .destructive) { guardEditable { removeMark(mark) } }
         ForEach(HighlightColor.allCases) { c in
-            Button("Mudar para \(c.label.lowercased())") { guardEditable { recolorMark(mark, c) } }
+            Button(LF("Mudar para {}", inSentence(c.label))) { guardEditable { recolorMark(mark, c) } }
         }
         Button("Cancelar", role: .cancel) {}
     }
 
     private func markMessage(_ mark: PDFAnnotation) -> String {
         let text = mark.contents ?? ""
-        return text.isEmpty ? "Trecho destacado." : "“\(text.prefix(120))”"
+        return text.isEmpty ? L("Trecho destacado.") : "“\(text.prefix(120))”"
     }
 
     private var toolsSheet: some View {
@@ -587,7 +587,7 @@ struct PDFReaderScreen: View {
             try library.undo(target)
             history.clear()
             reloadDocument()
-            flow.toast("Alteração desfeita.")
+            flow.toast(L("Alteração desfeita."))
         } catch {
             flow.show(error: error)
         }
@@ -597,7 +597,7 @@ struct PDFReaderScreen: View {
         guard let item else { return }
         do {
             let new = try library.unprotect(item, password: unprotectText)
-            flow.toast("Cópia sem senha: \(new.name)", actionTitle: "Abrir") { flow.open(.reader(new.id)) }
+            flow.toast(LF("Cópia sem senha: {}", new.name), actionTitle: L("Abrir")) { flow.open(.reader(new.id)) }
         } catch {
             flow.show(error: error)
         }
@@ -703,17 +703,17 @@ struct PDFReaderScreen: View {
             VStack(spacing: 14) {
                 Image(systemName: "lock.fill").font(.system(size: 40)).foregroundStyle(Theme.purple)
                 Text("Este PDF tem senha").font(.system(size: 18, weight: .semibold)).foregroundStyle(Theme.text)
-                PrimaryButton(title: "Digitar a senha", color: Theme.blue) { askPassword = true }
+                PrimaryButton(title: L("Digitar a senha"), color: Theme.blue) { askPassword = true }
                     .padding(.horizontal, 60)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onAppear { askPassword = true }
-            .alert(wrongPassword ? "Senha incorreta" : "Senha do PDF", isPresented: $askPassword) {
+            .alert(wrongPassword ? L("Senha incorreta") : L("Senha do PDF"), isPresented: $askPassword) {
                 SecureField("Senha", text: $passwordText)
                 Button("Cancelar", role: .cancel) {}
                 Button("Abrir") { tryPassword(item) }
             } message: {
-                Text(wrongPassword ? "Tente de novo (maiúsculas e minúsculas fazem diferença)." : "Digite a senha para abrir.")
+                Text(wrongPassword ? L("Tente de novo (maiúsculas e minúsculas fazem diferença).") : L("Digite a senha para abrir."))
             }
         } else if let item {
             PDFKitView(url: item.url, model: model, password: password, showThumbnails: showThumbs,
@@ -751,7 +751,7 @@ struct PDFReaderScreen: View {
         .padding(.top, searchShown ? 64 : 8)
         .padding(.trailing, 10)
         .opacity(totalPages > 0 ? 1 : 0)
-        .accessibilityLabel("Página \(shownPage) de \(totalPages). Toque para ir para outra página.")
+        .accessibilityLabel(LF("Página {} de {}. Toque para ir para outra página.", shownPage, totalPages))
     }
 
     /// Desfazer (sempre à mão, no lugar onde ficava o número da página) e refazer (logo acima, quando houver).
@@ -759,10 +759,10 @@ struct PDFReaderScreen: View {
         HStack(alignment: .bottom, spacing: 10) {
             VStack(spacing: 10) {
                 if history.canRedo {
-                    circleButton("arrow.uturn.forward", label: "Refazer") { redo() }
+                    circleButton("arrow.uturn.forward", label: L("Refazer")) { redo() }
                         .transition(.scale.combined(with: .opacity))
                 }
-                circleButton("arrow.uturn.backward", label: "Desfazer") { undo() }
+                circleButton("arrow.uturn.backward", label: L("Desfazer")) { undo() }
                     .opacity(history.canUndo ? 1 : 0.4)
                     .disabled(!history.canUndo)
             }
@@ -789,7 +789,7 @@ struct PDFReaderScreen: View {
 
     private var resultsPill: some View {
         HStack(spacing: 14) {
-            Text(model.results.isEmpty ? "Nada encontrado" : "\(model.resultIndex + 1) de \(model.results.count)")
+            Text(model.results.isEmpty ? L("Nada encontrado") : LF("{} de {}", model.resultIndex + 1, model.results.count))
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(Theme.text)
             if !model.results.isEmpty {
@@ -908,7 +908,7 @@ struct PDFReaderScreen: View {
     private var selectionBar: some View {
         HStack(spacing: 4) {
             Button {
-                if copySelection() { flow.toast("Texto copiado.") }
+                if copySelection() { flow.toast(L("Texto copiado.")) }
             } label: { Label("Copiar", systemImage: "doc.on.doc") }
             Divider().frame(height: 20)
             // tocar abre todas as cores; escolher uma destaca e fecha tudo (como a barra do Word)
@@ -947,13 +947,13 @@ struct PDFReaderScreen: View {
         } label: {
             Image(systemName: showThumbs ? "sidebar.left" : "sidebar.squares.left")
         }
-        .accessibilityLabel(showThumbs ? "Esconder as miniaturas" : "Mostrar as miniaturas")
+        .accessibilityLabel(showThumbs ? L("Esconder as miniaturas") : L("Mostrar as miniaturas"))
         Spacer()
         Menu {
             Button {
                 guardEditable { setMarking(!marking) }
             } label: {
-                Label(marking ? "Desligar o marca-texto" : "Ligar o marca-texto", systemImage: "highlighter")
+                Label(marking ? L("Desligar o marca-texto") : L("Ligar o marca-texto"), systemImage: "highlighter")
             }
             Picker("Cor", selection: $model.color) {
                 ForEach(HighlightColor.allCases) { c in Text(c.label).tag(c) }
@@ -1027,10 +1027,10 @@ struct PDFReaderScreen: View {
             Section {
                 Button {
                     UIPasteboard.general.string = textModel.document?.plainText ?? ""
-                    AppFlow.shared.toast("Texto copiado.")
+                    AppFlow.shared.toast(L("Texto copiado."))
                 } label: { Label("Copiar todo o texto", systemImage: "doc.on.doc") }
                 if let text = textModel.document?.plainText {
-                    ShareLink(item: text, preview: SharePreview(item?.name ?? "Texto")) {
+                    ShareLink(item: text, preview: SharePreview(item?.name ?? L("Texto"))) {
                         Label("Compartilhar o texto", systemImage: "square.and.arrow.up")
                     }
                 }
@@ -1046,9 +1046,9 @@ struct PDFReaderScreen: View {
     /// Destaques, cortes e numeração mudam o arquivo: não valem para PDF com senha nem para PDF assinado.
     private func guardEditable(_ action: () -> Void) {
         if let target = activeItem, target.meta.isSigned {
-            flow.toast("Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura.")
+            flow.toast(L("Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura."))
         } else if locked && mode == .original {
-            flow.toast("Este PDF tem senha. Para destacar, crie antes uma cópia sem senha (Ferramentas › Remover senha).")
+            flow.toast(L("Este PDF tem senha. Para destacar, crie antes uma cópia sem senha (Ferramentas › Remover senha)."))
         } else {
             action()
         }
@@ -1058,11 +1058,11 @@ struct PDFReaderScreen: View {
         guard let source = activeItem else { return }
         let ex = mode == .original ? model.excerpt() : textModel.excerpt()
         guard let ex else {
-            flow.toast("Selecione o trecho (toque e segure no texto) e depois toque em “Resumo”.")
+            flow.toast(L("Selecione o trecho (toque e segure no texto) e depois toque em “Resumo”."))
             return
         }
         addingSummary = true
-        let rel = Summary.relativePath(for: source)
+        let rel = Summary.relativePath(for: source, in: library)
         let storeURL = Summary.storeURL(root: library.root, rel: rel)
         let existing = Summary.find(in: library, for: source)
         let before = existing.flatMap { try? Data(contentsOf: $0.url) }
@@ -1071,13 +1071,13 @@ struct PDFReaderScreen: View {
             do {
                 let s = try await Summary.add([ex], from: source, library: library)
                 if let after = try? Data(contentsOf: s.url) {
-                    history.record("Adicionar ao resumo", .summary(summaryID: s.id, rel: s.relativePath, folder: s.folder,
+                    history.record(L("Adicionar ao resumo"), .summary(summaryID: s.id, rel: s.relativePath, folder: s.folder,
                                                                     name: s.name, before: before, after: after,
                                                                     storeBefore: storeBefore,
                                                                     storeAfter: try? Data(contentsOf: storeURL)))
                 }
                 if mode == .original { model.clearSelection() } else { textModel.clearSelection() }
-                flow.toast("Trecho adicionado a “\(s.name)”.", actionTitle: "Abrir") { flow.open(.reader(s.id)) }
+                flow.toast(LF("Trecho adicionado a “{}”.", s.name), actionTitle: L("Abrir")) { flow.open(.reader(s.id)) }
             } catch {
                 flow.show(error: error)
             }
@@ -1096,7 +1096,7 @@ struct PDFReaderScreen: View {
             do {
                 try await apply(s.change, forward: forward)
                 if forward { history.pushUndo(s) } else { history.pushRedo(s) }
-                flow.toast(forward ? "Refeito: \(s.label.lowercased())." : "Desfeito: \(s.label.lowercased()).")
+                flow.toast(forward ? LF("Refeito: {}.", inSentence(s.label)) : LF("Desfeito: {}.", inSentence(s.label)))
             } catch {
                 flow.show(error: error)
             }
@@ -1112,7 +1112,7 @@ struct PDFReaderScreen: View {
     private func apply(_ change: ReaderHistory.Change, forward: Bool) async throws {
         switch change {
         case .marks(let docID, _, _), .recolor(let docID, _, _, _, _):
-            guard let doc = document(for: docID) else { throw UserFacingError("O PDF desse destaque não está aberto.") }
+            guard let doc = document(for: docID) else { throw UserFacingError(L("O PDF desse destaque não está aberto.")) }
             ReaderHistory.apply(change, forward: forward, in: doc)
             model.pdfView?.setNeedsDisplay()
             model.pdfView?.layoutDocumentView()
@@ -1225,7 +1225,7 @@ struct PDFReaderScreen: View {
             }
         case .split, .dewarp, .protect:
             if action != .split, target.meta.isSigned {
-                flow.toast("Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura.")
+                flow.toast(L("Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura."))
             } else {
                 sheetAction = action
             }
@@ -1236,9 +1236,9 @@ struct PDFReaderScreen: View {
             }
         case .ocr:
             if jobs.isBusy(with: target.id) {
-                flow.toast("O OCR deste PDF já está em andamento.")
+                flow.toast(L("O OCR deste PDF já está em andamento."))
             } else if target.meta.textStatus == .digital {
-                flow.toast("Todas as páginas já têm texto selecionável. O OCR não é necessário.")
+                flow.toast(L("Todas as páginas já têm texto selecionável. O OCR não é necessário."))
             } else {
                 jobs.startOCR(target, library: library, flow: flow)
             }
@@ -1252,11 +1252,11 @@ struct PDFReaderScreen: View {
         case .unprotect: askUnprotect = true
         case .duplicate:
             do {
-                if let copy = try library.duplicate(target) { flow.toast("Cópia criada: \(copy.name)") }
+                if let copy = try library.duplicate(target) { flow.toast(LF("Cópia criada: {}", copy.name)) }
             } catch { flow.show(error: error) }
         case .favorite:
             library.setFavorite(target, !target.meta.favorite)
-            flow.toast(target.meta.favorite ? "Removido dos Favoritos." : "Adicionado aos Favoritos.")
+            flow.toast(target.meta.favorite ? L("Removido dos Favoritos.") : L("Adicionado aos Favoritos."))
         case .rename: actions.rename(target)
         case .move: actions.move([target])
         case .details: flow.open(.document(target.id))
@@ -1272,7 +1272,7 @@ struct PDFReaderScreen: View {
         guard let before = fileBefore, let target = activeItem else { return }
         fileBefore = nil
         if let after = try? Data(contentsOf: target.url), after != before {
-            history.record("Corte ou numeração", .file(itemID: target.id, before: before, after: after))
+            history.record(L("Corte ou numeração"), .file(itemID: target.id, before: before, after: after))
         }
     }
 
@@ -1313,45 +1313,45 @@ struct ReaderToolsSheet: View {
     var body: some View {
         NavigationStack {
             List {
-                Section(mode == .original ? "Página" : "Texto") {
+                Section(mode == .original ? L("Página") : L("Texto")) {
                     if mode == .text {
-                        row("Ver as páginas (original)", "doc", .pageMode)
+                        row(L("Ver as páginas (original)"), "doc", .pageMode)
                     } else if hasTextMode {
-                        row("Modo leitor (só o texto)", "text.alignleft", .textMode)
+                        row(L("Modo leitor (só o texto)"), "text.alignleft", .textMode)
                     }
-                    row("Ir para a página…", "arrow.right.doc.on.clipboard", .goToPage)
-                    row("Cortar e girar páginas", "crop.rotate", .crop, disabled: locked || signed)
-                    row("Numerar páginas", "number", .number, disabled: locked || signed)
-                    if hasSummary { row("Abrir o resumo deste PDF", "doc.text", .openSummary) }
+                    row(L("Ir para a página…"), "arrow.right.doc.on.clipboard", .goToPage)
+                    row(L("Cortar e girar páginas"), "crop.rotate", .crop, disabled: locked || signed)
+                    row(L("Numerar páginas"), "number", .number, disabled: locked || signed)
+                    if hasSummary { row(L("Abrir o resumo deste PDF"), "doc.text", .openSummary) }
                 }
                 Section("Documento") {
-                    row(signed ? "Assinar de novo (outra assinatura)" : "Assinar digitalmente", "signature", .sign,
+                    row(signed ? L("Assinar de novo (outra assinatura)") : L("Assinar digitalmente"), "signature", .sign,
                         disabled: locked)
-                    row("Fazer OCR", "text.viewfinder", .ocr, disabled: locked || signed)
-                    row("Organizar páginas", "rectangle.grid.2x2", .organize, disabled: locked || signed)
-                    row("Incluir páginas", "plus.rectangle.on.rectangle", .insert, disabled: locked || signed)
-                    row("Remover páginas", "minus.rectangle", .remove, disabled: locked || signed)
-                    row("Extrair páginas", "doc.badge.plus", .extract, disabled: locked)
-                    row("Dividir em partes", "scissors", .split, disabled: locked)
-                    row("Combinar com outros PDFs", "square.stack.3d.down.right", .merge)
-                    row("Corrigir páginas curvas", "book.pages", .dewarp, disabled: locked || signed)
+                    row(L("Fazer OCR"), "text.viewfinder", .ocr, disabled: locked || signed)
+                    row(L("Organizar páginas"), "rectangle.grid.2x2", .organize, disabled: locked || signed)
+                    row(L("Incluir páginas"), "plus.rectangle.on.rectangle", .insert, disabled: locked || signed)
+                    row(L("Remover páginas"), "minus.rectangle", .remove, disabled: locked || signed)
+                    row(L("Extrair páginas"), "doc.badge.plus", .extract, disabled: locked)
+                    row(L("Dividir em partes"), "scissors", .split, disabled: locked)
+                    row(L("Combinar com outros PDFs"), "square.stack.3d.down.right", .merge)
+                    row(L("Corrigir páginas curvas"), "book.pages", .dewarp, disabled: locked || signed)
                     if locked {
-                        row("Remover senha", "lock.open", .unprotect)
+                        row(L("Remover senha"), "lock.open", .unprotect)
                     } else {
-                        row("Proteger com senha", "lock", .protect, disabled: signed)
+                        row(L("Proteger com senha"), "lock", .protect, disabled: signed)
                     }
-                    row("Duplicar", "plus.square.on.square", .duplicate)
+                    row(L("Duplicar"), "plus.square.on.square", .duplicate)
                 }
                 Section("Arquivo") {
                     if let item {
                         ShareLink(item: item.url) { Label("Compartilhar", systemImage: "square.and.arrow.up") }
-                        row(item.meta.favorite ? "Remover dos favoritos" : "Favoritar",
+                        row(item.meta.favorite ? L("Remover dos favoritos") : L("Favoritar"),
                             item.meta.favorite ? "star.slash" : "star", .favorite)
                     }
-                    row("Renomear", "pencil", .rename)
-                    row("Mover para pasta", "folder", .move)
-                    row("Ver detalhes do PDF", "info.circle", .details)
-                    row("Desfazer última alteração", "arrow.uturn.backward", .undo, disabled: !canUndo)
+                    row(L("Renomear"), "pencil", .rename)
+                    row(L("Mover para pasta"), "folder", .move)
+                    row(L("Ver detalhes do PDF"), "info.circle", .details)
+                    row(L("Desfazer última alteração"), "arrow.uturn.backward", .undo, disabled: !canUndo)
                     Button(role: .destructive) { onPick(.delete) } label: { Label("Excluir", systemImage: "trash") }
                 }
             }

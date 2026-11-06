@@ -11,7 +11,8 @@ import UIKit
 /// Prumo para Windows), para o resumo ser refeito inteiro a cada trecho novo. Se o resumo foi mudado
 /// em outro programa, as páginas que ele já tem ficam como estão e os trechos novos entram depois.
 enum Summary {
-    static let suffix = " - resumo"
+    /// Modelo do nome do resumo; no idioma do app ("Laudo - resumo", "Laudo - summary"…), como no Windows.
+    static let nameTemplate = "{} - resumo"   // i18n
 
     struct Excerpt: Codable, Equatable {
         var pages: [Int]
@@ -33,23 +34,33 @@ enum Summary {
         }
     }
 
-    static func name(for item: PDFItem) -> String { "\(item.name)\(suffix)" }
+    static func name(for item: PDFItem) -> String { LF(nameTemplate, item.name) }
 
-    static func relativePath(for item: PDFItem) -> String {
-        let file = "\(name(for: item)).pdf"
-        return item.folder.isEmpty ? file : "\(item.folder)/\(file)"
+    private static func rel(_ item: PDFItem, _ name: String) -> String {
+        item.folder.isEmpty ? "\(name).pdf" : "\(item.folder)/\(name).pdf"
     }
 
+    /// Caminho do resumo: o que já existe (com o nome em qualquer idioma) ou o nome novo no idioma do app.
+    @MainActor
+    static func relativePath(for item: PDFItem, in library: Library) -> String {
+        find(in: library, for: item)?.relativePath ?? rel(item, name(for: item))
+    }
+
+    /// O resumo deste PDF, se já existir na mesma pasta (com o nome em qualquer idioma do app, no iPhone
+    /// ou no Windows).
     @MainActor
     static func find(in library: Library, for item: PDFItem) -> PDFItem? {
-        let rel = relativePath(for: item).lowercased()
-        return library.items.first { $0.relativePath.lowercased() == rel }
+        for name in AppLanguages.suffixedNames(item.name, template: nameTemplate) {
+            let r = rel(item, name).lowercased()
+            if let found = library.items.first(where: { $0.relativePath.lowercased() == r }) { return found }
+        }
+        return nil
     }
 
     static func pagesLabel(_ pages: [Int]) -> String {
         let p = Array(Set(pages)).sorted()
-        guard let a = p.first, let b = p.last else { return "Trecho extraído" }
-        return a == b ? "Trecho extraído da página \(a)" : "Trecho extraído das páginas \(a)-\(b)"
+        guard let a = p.first, let b = p.last else { return LD("Trecho extraído") }
+        return a == b ? LDF("Trecho extraído da página {}", a) : LDF("Trecho extraído das páginas {}-{}", a, b)
     }
 
     static func sha1Hex(_ data: Data) -> String {
@@ -128,9 +139,9 @@ enum Summary {
             return p
         }
         if header {
-            body.append(NSAttributedString(string: "Resumo de “\(sourceName)”\n", attributes: [
+            body.append(NSAttributedString(string: LDF("Resumo de “{}”", sourceName) + "\n", attributes: [
                 .font: bold, .foregroundColor: UIColor(white: 0.16, alpha: 1), .paragraphStyle: para(spacing: 4)]))
-            body.append(NSAttributedString(string: "Trechos selecionados no Prumo PDF, na ordem em que foram adicionados.\n",
+            body.append(NSAttributedString(string: LD("Trechos selecionados no Prumo PDF, na ordem em que foram adicionados.") + "\n",
                                            attributes: [.font: small, .foregroundColor: UIColor(white: 0.47, alpha: 1),
                                                         .paragraphStyle: para(spacing: 18)]))
         }
@@ -161,7 +172,7 @@ enum Summary {
             if NSMaxRange(range) >= layout.numberOfGlyphs { break }
         } while containers.count < 5000
         let format = UIGraphicsPDFRendererFormat()
-        format.documentInfo = [kCGPDFContextTitle as String: "Resumo de \(sourceName)",
+        format.documentInfo = [kCGPDFContextTitle as String: LDF("Resumo de {}", sourceName),
                                kCGPDFContextCreator as String: "Prumo PDF"]
         let renderer = UIGraphicsPDFRenderer(bounds: page, format: format)
         return renderer.pdfData { ctx in
@@ -179,14 +190,14 @@ enum Summary {
         let generated = buildPDF(sourceName: sourceName, excerpts: excerpts, header: basePages == 0)
         guard basePages > 0, let current else { return generated }
         guard let base = PDFDocument(url: current), let gen = PDFDocument(data: generated) else {
-            throw UserFacingError("Não foi possível abrir o resumo atual.")
+            throw UserFacingError(L("Não foi possível abrir o resumo atual."))
         }
-        if base.isLocked { throw UserFacingError("O resumo atual tem senha; remova a senha antes.") }
+        if base.isLocked { throw UserFacingError(L("O resumo atual tem senha; remova a senha antes.")) }
         while base.pageCount > basePages { base.removePage(at: base.pageCount - 1) }
         for i in 0..<gen.pageCount {
             if let p = gen.page(at: i)?.copy() as? PDFPage { base.insert(p, at: base.pageCount) }
         }
-        guard let data = base.dataRepresentation() else { throw UserFacingError("Não foi possível gravar o resumo.") }
+        guard let data = base.dataRepresentation() else { throw UserFacingError(L("Não foi possível gravar o resumo.")) }
         return data
     }
 
@@ -200,7 +211,7 @@ enum Summary {
         let entries = new.map { Excerpt(pages: $0.pages, text: $0.text.trimmingCharacters(in: .whitespacesAndNewlines),
                                         added: stamp) }
             .filter { !$0.text.isEmpty }
-        guard !entries.isEmpty else { throw UserFacingError("Selecione um trecho com texto para adicionar ao resumo.") }
+        guard !entries.isEmpty else { throw UserFacingError(L("Selecione um trecho com texto para adicionar ao resumo.")) }
         let root = library.root
         let current = find(in: library, for: item)
         var basePages = 0

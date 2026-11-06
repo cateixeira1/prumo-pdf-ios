@@ -6,3 +6,4 @@ DerivedData/
 Payload/
 ci-output/
 .DS_Store
+__pycache__/

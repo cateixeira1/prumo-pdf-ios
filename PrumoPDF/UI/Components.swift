@@ -67,7 +67,7 @@ struct DocTileLabel: View {
                         Text("\(n)")
                             .font(.system(size: 24, weight: .bold, design: .rounded))
                             .foregroundStyle(highlighted ? Color.white : Theme.text)
-                        Text(n == 1 ? "página" : "páginas")
+                        Text(n == 1 ? L("página") : L("páginas"))
                             .font(.system(size: 10.5, weight: .medium))
                             .foregroundStyle(highlighted ? Color.white.opacity(0.9) : Theme.secondaryText)
                     }
@@ -100,13 +100,13 @@ struct DocTileLabel: View {
         if (item.meta.favorite && !reserveActions) || item.meta.isOCRResult || needsOCR || review || showFolder
             || item.meta.locked == true {
             HStack(spacing: 4) {
-                if item.meta.locked == true { Badge(text: "Com senha", color: Theme.purple, inverted: highlighted) }
+                if item.meta.locked == true { Badge(text: L("Com senha"), color: Theme.purple, inverted: highlighted) }
                 if item.meta.favorite && !reserveActions {
                     Image(systemName: "star.fill").font(.system(size: 10)).foregroundStyle(highlighted ? Color.white : Theme.yellow)
                 }
                 if item.meta.isOCRResult { Badge(text: "OCR", color: Theme.green, inverted: highlighted) }
-                if review { Badge(text: "Revisar", color: Theme.orange, inverted: highlighted) }
-                if needsOCR { Badge(text: "Sem OCR", color: Theme.orange, inverted: highlighted) }
+                if review { Badge(text: L("Revisar"), color: Theme.orange, inverted: highlighted) }
+                if needsOCR { Badge(text: L("Sem OCR"), color: Theme.orange, inverted: highlighted) }
                 if showFolder {
                     Text(item.folderName)
                         .font(.system(size: 10.5, weight: .medium))
@@ -170,7 +170,7 @@ struct DocTile: View {
                             .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel(item.meta.favorite ? "Remover dos favoritos" : "Favoritar")
+                    .accessibilityLabel(item.meta.favorite ? L("Remover dos favoritos") : L("Favoritar"))
                     Menu { menuItems } label: {
                         Image(systemName: "ellipsis")
                             .font(.system(size: 17, weight: .bold))
@@ -190,7 +190,7 @@ struct DocTile: View {
     private func toggleFavorite() {
         let on = !item.meta.favorite
         library.setFavorite(item, on)
-        flow.toast(on ? "Adicionado aos Favoritos." : "Removido dos Favoritos.")
+        flow.toast(on ? L("Adicionado aos Favoritos.") : L("Removido dos Favoritos."))
     }
 
     @ViewBuilder private var menuItems: some View {
@@ -208,7 +208,7 @@ struct DocTile: View {
             Label("Organizar páginas", systemImage: "rectangle.grid.2x2")
         }
         Button { toggleFavorite() } label: {
-            Label(item.meta.favorite ? "Remover dos favoritos" : "Favoritar",
+            Label(item.meta.favorite ? L("Remover dos favoritos") : L("Favoritar"),
                   systemImage: item.meta.favorite ? "star.slash" : "star")
         }
         if let actions {
@@ -230,7 +230,7 @@ struct FolderTile: View {
         Button(action: onTap) {
             TileLabel(title: folder.name, systemImage: "folder.fill", color: Theme.indigo,
                       count: "\(folder.totalDocCount)", shape: .rounded,
-                      subtitle: folder.subfolderCount > 0 ? "\(folder.subfolderCount) subpasta\(folder.subfolderCount == 1 ? "" : "s")" : nil)
+                      subtitle: folder.subfolderCount > 0 ? LN(folder.subfolderCount, "1 subpasta", "{} subpastas") : nil)
         }
         .buttonStyle(TileButtonStyle(color: Theme.indigo))
         .contextMenu {
@@ -282,11 +282,11 @@ struct ItemActionsModifier: ViewModifier {
                 }
             }
             .sheet(item: $actions.moving) { request in
-                FolderPickerView(title: "Mover \(request.items.count == 1 ? "PDF" : "\(request.items.count) PDFs")",
+                FolderPickerView(title: request.items.count == 1 ? L("Mover PDF") : LF("Mover {} PDFs", request.items.count),
                                  current: request.items.count == 1 ? request.items[0].folder : nil) { folder in
                     do {
                         try library.move(request.items, toFolder: folder)
-                        flow.toast("Movido para \(folder.isEmpty ? "Sem pasta" : (folder as NSString).lastPathComponent).")
+                        flow.toast(LF("Movido para {}.", folder.isEmpty ? L("Sem pasta") : (folder as NSString).lastPathComponent))
                     } catch {
                         flow.show(error: error)
                     }
@@ -312,7 +312,7 @@ struct ItemActionsModifier: ViewModifier {
 
     private var deleteTitle: String {
         let n = actions.deleting?.count ?? 0
-        return n == 1 ? "Excluir “\(actions.deleting?.first?.name ?? "")”?" : "Excluir \(n) PDFs?"
+        return n == 1 ? LF("Excluir “{}”?", actions.deleting?.first?.name ?? "") : LF("Excluir {} PDFs?", n)
     }
 }
 
@@ -364,19 +364,19 @@ struct FolderActionsModifier: ViewModifier {
                     do { try library.renameFolder(folder.path, to: actions.renameText) } catch { flow.show(error: error) }
                 }
             }
-            .confirmationDialog("Excluir a pasta “\(actions.deleting?.name ?? "")”?",
+            .confirmationDialog(LF("Excluir a pasta “{}”?", actions.deleting?.name ?? ""),
                                 isPresented: Binding(get: { actions.deleting != nil },
                                                      set: { if !$0 { actions.deleting = nil } }),
                                 titleVisibility: .visible, presenting: actions.deleting) { folder in
-                Button(folder.totalDocCount > 0 ? "Excluir pasta e \(folder.totalDocCount) PDF\(folder.totalDocCount == 1 ? "" : "s")" : "Excluir pasta",
+                Button(folder.totalDocCount > 0 ? LN(folder.totalDocCount, "Excluir pasta e 1 PDF", "Excluir pasta e {} PDFs") : L("Excluir pasta"),
                        role: .destructive) {
                     do { try library.deleteFolder(folder.path) } catch { flow.show(error: error) }
                 }
                 Button("Cancelar", role: .cancel) {}
             } message: { folder in
                 Text(folder.totalDocCount > 0
-                     ? "Todos os PDFs dentro dela serão apagados deste iPhone. Esta ação não pode ser desfeita."
-                     : "A pasta está vazia.")
+                     ? L("Todos os PDFs dentro dela serão apagados deste iPhone. Esta ação não pode ser desfeita.")
+                     : L("A pasta está vazia."))
             }
     }
 }
@@ -394,19 +394,19 @@ struct FolderPickerView: View {
     var body: some View {
         NavigationStack {
             Screen {
-                WideTile(title: "Sem pasta", systemImage: "tray.fill", color: Theme.gray,
-                         subtitle: current == "" ? "Pasta atual" : nil) {
+                WideTile(title: L("Sem pasta"), systemImage: "tray.fill", color: Theme.gray,
+                         subtitle: current == "" ? L("Pasta atual") : nil) {
                     pick("")
                 }
                 ForEach(library.folders) { folder in
                     WideTile(title: folder.name, systemImage: "folder.fill", color: Theme.indigo,
                              count: "\(folder.docCount)",
-                             subtitle: current == folder.path ? "Pasta atual" : (folder.parent.isEmpty ? nil : folder.parent)) {
+                             subtitle: current == folder.path ? L("Pasta atual") : (folder.parent.isEmpty ? nil : folder.parent)) {
                         pick(folder.path)
                     }
                     .padding(.leading, CGFloat(folder.depth) * 18)
                 }
-                WideTile(title: "Nova pasta", systemImage: "folder.badge.plus", color: Theme.blue) {
+                WideTile(title: L("Nova pasta"), systemImage: "folder.badge.plus", color: Theme.blue) {
                     folderActions.create(in: "")
                 }
             }
@@ -459,7 +459,7 @@ struct PositionPicker: View {
                         .labelsHidden()
                     Spacer()
                 }
-                Text("O documento tem \(pageCount.pagesText).")
+                Text(LF("O documento tem {}.", pageCount.pagesText))
                     .font(.footnote)
                     .foregroundStyle(Theme.secondaryText)
             }
@@ -492,13 +492,13 @@ struct InsertPositionSheet: View {
             Screen {
                 TileCard {
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Onde incluir \(pending.pageCount == 1 ? "a página escaneada" : "as \(pending.pageCount) páginas escaneadas")?")
+                        Text(LN(pending.pageCount, "Onde incluir a página escaneada?", "Onde incluir as {} páginas escaneadas?"))
                             .font(.headline)
                             .foregroundStyle(Theme.text)
                         PositionPicker(choice: $choice, afterPage: $afterPage, pageCount: targetPageCount)
                     }
                 }
-                PrimaryButton(title: "Incluir \(pending.pageCount.pagesText)") {
+                PrimaryButton(title: LF("Incluir {}", pending.pageCount.pagesText)) {
                     onConfirm(PositionPicker.position(choice, afterPage: afterPage))
                 }
             }
@@ -585,7 +585,7 @@ struct JobBanner: View {
                 if running.total > 0 {
                     ProgressView(value: Double(running.done), total: Double(running.total))
                         .tint(Theme.orange)
-                    Text("\(running.done) de \(running.total) página\(running.total == 1 ? "" : "s")")
+                    Text(LF("{} de {}", running.done, running.total.pagesText))
                         .font(.system(size: 11.5, weight: .medium))
                         .foregroundStyle(Theme.secondaryText)
                 } else {

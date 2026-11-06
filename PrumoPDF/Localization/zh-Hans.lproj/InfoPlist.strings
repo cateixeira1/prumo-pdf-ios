@@ -1,0 +1,3 @@
+/* Gerado por scripts/build_strings.py a partir de scripts/locales. Não editar à mão. */
+"NSCameraUsageDescription" = "相机用于扫描文档。图像只保存在这台 iPhone 上。";
+"NSFaceIDUsageDescription" = "如果你在“设置”中开启了锁定，面容 ID 会用来解锁 Prumo PDF，并确认数字签名。";

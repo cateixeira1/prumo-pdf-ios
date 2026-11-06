@@ -66,7 +66,7 @@ struct PDFItem: Identifiable, Hashable {
 
     var name: String { ((relativePath as NSString).lastPathComponent as NSString).deletingPathExtension }
     var folder: String { (relativePath as NSString).deletingLastPathComponent }
-    var folderName: String { folder.isEmpty ? "Sem pasta" : (folder as NSString).lastPathComponent }
+    var folderName: String { folder.isEmpty ? L("Sem pasta") : (folder as NSString).lastPathComponent }
     /// Muda sempre que o arquivo muda (usado no cache de miniaturas).
     var version: String { "\(size)-\(Int(modified.timeIntervalSince1970 * 1000))" }
     var pageCount: Int? { meta.pageCount }
@@ -89,11 +89,11 @@ enum DocList: String, Hashable, CaseIterable {
 
     var title: String {
         switch self {
-        case .all: return "Todos os PDFs"
-        case .recent: return "Recentes"
-        case .pendingOCR: return "Sem OCR"
-        case .ocr: return "Com OCR"
-        case .favorites: return "Favoritos"
+        case .all: return L("Todos os PDFs")
+        case .recent: return L("Recentes")
+        case .pendingOCR: return L("Sem OCR")
+        case .ocr: return L("Com OCR")
+        case .favorites: return L("Favoritos")
         }
     }
 }
@@ -193,11 +193,11 @@ final class Library: ObservableObject {
         guard let data = UserDefaults.standard.data(forKey: Self.cloudBookmarkKey) else { return }
         var stale = false
         guard let url = try? URL(resolvingBookmarkData: data, bookmarkDataIsStale: &stale) else {
-            cloudProblem = "Não foi possível abrir a pasta da nuvem. Escolha a pasta de novo em Ajustes › Escolher nuvem."
+            cloudProblem = L("Não foi possível abrir a pasta da nuvem. Escolha a pasta de novo em Ajustes › Escolher nuvem.")
             return
         }
         guard url.startAccessingSecurityScopedResource() else {
-            cloudProblem = "O Prumo perdeu a permissão para a pasta da nuvem (Ajustes do iPhone › Privacidade › Arquivos e Pastas). Escolha a pasta de novo em Ajustes › Escolher nuvem."
+            cloudProblem = L("O Prumo perdeu a permissão para a pasta da nuvem (Ajustes do iPhone › Privacidade › Arquivos e Pastas). Escolha a pasta de novo em Ajustes › Escolher nuvem.")
             return
         }
         cloudAccessURL = url
@@ -235,7 +235,7 @@ final class Library: ObservableObject {
     @discardableResult
     func useCloudFolder(_ picked: URL, bringLocal: Bool) throws -> RestoreResult {
         guard picked.startAccessingSecurityScopedResource() || fm.isReadableFile(atPath: picked.path) else {
-            throw UserFacingError("O app Arquivos não deu acesso a essa pasta. Escolha outra (por exemplo, no iCloud Drive).")
+            throw UserFacingError(L("O app Arquivos não deu acesso a essa pasta. Escolha outra (por exemplo, no iCloud Drive)."))
         }
         let sub = picked.lastPathComponent == "Prumo PDF" ? "" : "Prumo PDF"
         let folder = sub.isEmpty ? picked : picked.appendingPathComponent(sub, isDirectory: true)
@@ -246,7 +246,7 @@ final class Library: ObservableObject {
             try? fm.removeItem(at: probe)
         } catch {
             picked.stopAccessingSecurityScopedResource()
-            throw UserFacingError("O Prumo não consegue gravar nessa pasta. Nem todo app de nuvem deixa outros apps usarem pastas dele; o iCloud Drive deixa.")
+            throw UserFacingError(L("O Prumo não consegue gravar nessa pasta. Nem todo app de nuvem deixa outros apps usarem pastas dele; o iCloud Drive deixa."))
         }
         let bookmark = try picked.bookmarkData(options: .minimalBookmark, includingResourceValuesForKeys: nil, relativeTo: nil)
         let previous = root
@@ -298,7 +298,7 @@ final class Library: ObservableObject {
             let size = Int64((try? url.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0)
             let d = Self.digest(url)
             guard let same = bySize[size], same.contains(where: { Self.digest($0) == d }) else {
-                throw UserFacingError("“\(url.lastPathComponent)” não chegou à nuvem. Nada foi apagado do iPhone.")
+                throw UserFacingError(LF("“{}” não chegou à nuvem. Nada foi apagado do iPhone.", url.lastPathComponent))
             }
             toDelete.append(url)
         }
@@ -583,7 +583,7 @@ final class Library: ObservableObject {
             .trimmingCharacters(in: .whitespacesAndNewlines)
         while s.hasPrefix(".") { s.removeFirst() }
         if s.lowercased().hasSuffix(".pdf") { s = String(s.dropLast(4)) }
-        if s.isEmpty { s = "Documento" }
+        if s.isEmpty { s = L("Documento") }
         return String(s.prefix(150))
     }
 
@@ -606,7 +606,7 @@ final class Library: ObservableObject {
         let clean = Self.sanitize(name).replacingOccurrences(of: ".pdf", with: "")
         let path = parent.isEmpty ? clean : parent + "/" + clean
         let url = folderURL(path)
-        guard !fm.fileExists(atPath: url.path) else { throw UserFacingError("Já existe uma pasta chamada “\(clean)”.") }
+        guard !fm.fileExists(atPath: url.path) else { throw UserFacingError(LF("Já existe uma pasta chamada “{}”.", clean)) }
         try fm.createDirectory(at: url, withIntermediateDirectories: true)
         BackupPolicy.apply(to: url)
         reload()
@@ -619,7 +619,7 @@ final class Library: ObservableObject {
         let newPath = parent.isEmpty ? clean : parent + "/" + clean
         guard newPath != path else { return }
         guard !fm.fileExists(atPath: folderURL(newPath).path) else {
-            throw UserFacingError("Já existe uma pasta chamada “\(clean)”.")
+            throw UserFacingError(LF("Já existe uma pasta chamada “{}”.", clean))
         }
         try fm.moveItem(at: folderURL(path), to: folderURL(newPath))
         let prefix = path + "/"
@@ -646,7 +646,7 @@ final class Library: ObservableObject {
         guard dest.path != item.url.path else { return }
         if fm.fileExists(atPath: dest.path),
            dest.path.lowercased() != item.url.path.lowercased() {
-            throw UserFacingError("Já existe um PDF chamado “\(clean)” nesta pasta.")
+            throw UserFacingError(LF("Já existe um PDF chamado “{}” nesta pasta.", clean))
         }
         try fm.moveItem(at: item.url, to: dest)
         updateMeta(item.id) { $0.path = self.relativePath(of: dest) }
@@ -673,7 +673,7 @@ final class Library: ObservableObject {
 
     @discardableResult
     func duplicate(_ item: PDFItem) throws -> PDFItem? {
-        let dest = uniqueURL(folder: item.folder, baseName: "\(item.name) (cópia)")
+        let dest = uniqueURL(folder: item.folder, baseName: LF("{} (cópia)", item.name))
         try fm.copyItem(at: item.url, to: dest)
         return register(dest) { _ in }
     }
@@ -735,7 +735,7 @@ final class Library: ObservableObject {
             try PDFOps.write(doc, to: dest)
         }.value
         guard let item = register(dest, configure: configure) else {
-            throw UserFacingError("O arquivo foi salvo, mas não apareceu na biblioteca.")
+            throw UserFacingError(L("O arquivo foi salvo, mas não apareceu na biblioteca."))
         }
         return item
     }
@@ -745,7 +745,7 @@ final class Library: ObservableObject {
         let dest = uniqueURL(folder: folder, baseName: name)
         try data.write(to: dest, options: .atomic)
         guard let item = register(dest, configure: configure) else {
-            throw UserFacingError("O arquivo foi salvo, mas não apareceu na biblioteca.")
+            throw UserFacingError(L("O arquivo foi salvo, mas não apareceu na biblioteca."))
         }
         return item
     }
@@ -756,7 +756,7 @@ final class Library: ObservableObject {
         let dest = uniqueURL(folder: folder, baseName: name)
         try fm.moveItem(at: tmp, to: dest)
         guard let item = register(dest, configure: configure) else {
-            throw UserFacingError("O arquivo foi salvo, mas não apareceu na biblioteca.")
+            throw UserFacingError(L("O arquivo foi salvo, mas não apareceu na biblioteca."))
         }
         return item
     }
@@ -797,7 +797,7 @@ final class Library: ObservableObject {
         let backup = versionsDir.appendingPathComponent("\(item.id).pdf")
         try await Task.detached(priority: .userInitiated) {
             guard let check = PDFDocument(data: data), check.pageCount > 0 else {
-                throw UserFacingError("O PDF gerado não pôde ser conferido; nada foi alterado.")
+                throw UserFacingError(L("O PDF gerado não pôde ser conferido; nada foi alterado."))
             }
             let fm = FileManager.default
             try? fm.removeItem(at: backup)
@@ -812,7 +812,7 @@ final class Library: ObservableObject {
     /// Grava o documento aberto no leitor (com destaques novos), guardando a versão anterior.
     func saveEdited(_ item: PDFItem, document: PDFDocument) async throws {
         guard let data = document.dataRepresentation() else {
-            throw UserFacingError("Não foi possível salvar os destaques.")
+            throw UserFacingError(L("Não foi possível salvar os destaques."))
         }
         try await replaceContents(item, with: data, keepReview: true)
     }
@@ -843,7 +843,7 @@ final class Library: ObservableObject {
     func undo(_ item: PDFItem) throws {
         let backup = versionsDir.appendingPathComponent("\(item.id).pdf")
         guard fm.fileExists(atPath: backup.path) else {
-            throw UserFacingError("Não há alteração para desfazer.")
+            throw UserFacingError(L("Não há alteração para desfazer."))
         }
         _ = try fm.replaceItemAt(item.url, withItemAt: backup)
         BackupPolicy.apply(to: item.url)

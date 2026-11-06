@@ -29,10 +29,10 @@ enum PDFOps {
 
     static func open(_ url: URL) throws -> PDFDocument {
         guard let doc = PDFDocument(url: url) else {
-            throw UserFacingError("Não foi possível abrir o PDF. O arquivo pode estar corrompido.")
+            throw UserFacingError(L("Não foi possível abrir o PDF. O arquivo pode estar corrompido."))
         }
         if doc.isLocked {
-            throw UserFacingError("Este PDF está protegido por senha. Remova a senha antes de editar.")
+            throw UserFacingError(L("Este PDF está protegido por senha. Remova a senha antes de editar."))
         }
         return doc
     }
@@ -62,7 +62,7 @@ enum PDFOps {
         let valid = Set(pages.filter { $0 >= 1 && $0 <= doc.pageCount })
         guard !valid.isEmpty else { return }
         guard valid.count < doc.pageCount else {
-            throw UserFacingError("Não é possível remover todas as páginas. Para isso, exclua o documento.")
+            throw UserFacingError(L("Não é possível remover todas as páginas. Para isso, exclua o documento."))
         }
         for n in valid.sorted(by: >) {
             doc.removePage(at: n - 1)
@@ -72,16 +72,16 @@ enum PDFOps {
     /// Reorganiza o documento conforme a lista (ordem, giros e páginas excluídas).
     static func apply(arrangement: [PageArrangementEntry], to doc: PDFDocument) throws {
         guard !arrangement.isEmpty else {
-            throw UserFacingError("O documento precisa ter pelo menos uma página.")
+            throw UserFacingError(L("O documento precisa ter pelo menos uma página."))
         }
         let original = (0..<doc.pageCount).compactMap { doc.page(at: $0) }
-        guard original.count == doc.pageCount else { throw UserFacingError("Não foi possível ler todas as páginas.") }
+        guard original.count == doc.pageCount else { throw UserFacingError(L("Não foi possível ler todas as páginas.")) }
         // Cópias primeiro: a mesma página pode aparecer só uma vez, mas copiar evita qualquer
         // dependência do objeto original durante a remoção.
         let newPages: [PDFPage] = try arrangement.map { entry in
             guard entry.sourceIndex >= 0, entry.sourceIndex < original.count,
                   let copy = original[entry.sourceIndex].copy() as? PDFPage else {
-                throw UserFacingError("Página inválida na organização.")
+                throw UserFacingError(L("Página inválida na organização."))
             }
             copy.rotation = normalized(copy.rotation + entry.extraRotation)
             return copy
@@ -134,12 +134,12 @@ enum PDFOps {
             .appendingPathComponent(".\(UUID().uuidString).tmp.pdf")
         guard doc.write(to: tmp) else {
             try? FileManager.default.removeItem(at: tmp)
-            throw UserFacingError("Não foi possível salvar o PDF.")
+            throw UserFacingError(L("Não foi possível salvar o PDF."))
         }
         // Confere que o resultado abre antes de substituir o arquivo.
         guard let check = PDFDocument(url: tmp), check.pageCount == doc.pageCount else {
             try? FileManager.default.removeItem(at: tmp)
-            throw UserFacingError("O PDF salvo não pôde ser conferido; nada foi alterado.")
+            throw UserFacingError(L("O PDF salvo não pôde ser conferido; nada foi alterado."))
         }
         if FileManager.default.fileExists(atPath: url.path) {
             _ = try FileManager.default.replaceItemAt(url, withItemAt: tmp)

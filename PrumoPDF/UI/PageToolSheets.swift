@@ -60,7 +60,7 @@ struct CropSheet: View {
                     HStack {
                         Button { go(-1) } label: { Image(systemName: "chevron.left") }.disabled(page <= 1)
                         Spacer()
-                        Text(total > 0 ? "Página \(page) de \(total)" : "Carregando…")
+                        Text(total > 0 ? LF("Página {} de {}", page, total) : L("Carregando…"))
                             .font(.system(size: 14, weight: .semibold))
                         Spacer()
                         Button { go(1) } label: { Image(systemName: "chevron.right") }.disabled(page >= total)
@@ -71,10 +71,10 @@ struct CropSheet: View {
                             Text("Margens").font(.system(size: 16, weight: .semibold)).foregroundStyle(Theme.text)
                             Text("Arraste as bordas da moldura azul ou ajuste em milímetros.")
                                 .font(.system(size: 12.5)).foregroundStyle(Theme.secondaryText)
-                            marginStepper("Esquerda", \.left)
-                            marginStepper("Alto", \.top)
-                            marginStepper("Direita", \.right)
-                            marginStepper("Baixo", \.bottom)
+                            marginStepper(L("Esquerda"), \.left)
+                            marginStepper(L("Alto"), \.top)
+                            marginStepper(L("Direita"), \.right)
+                            marginStepper(L("Baixo"), \.bottom)
                             HStack(spacing: 10) {
                                 Button("Margens automáticas") { autoMargins() }.buttonStyle(.bordered)
                                 Button("Página inteira") { setMargins(.zero) }.buttonStyle(.bordered)
@@ -91,7 +91,7 @@ struct CropSheet: View {
                                 Button { rotate(180) } label: { Text("180°") }
                             }
                             .buttonStyle(.bordered)
-                            Text(rotation == 0 ? "Sem giro a aplicar." : "Giro a aplicar: \(rotation)°")
+                            Text(rotation == 0 ? L("Sem giro a aplicar.") : LF("Giro a aplicar: {}°", rotation))
                                 .font(.system(size: 12.5)).foregroundStyle(Theme.secondaryText)
                         }
                     }
@@ -110,7 +110,7 @@ struct CropSheet: View {
                             Text(scopeText).font(.system(size: 12.5, weight: .medium)).foregroundStyle(Theme.teal)
                         }
                     }
-                    PrimaryButton(title: working ? "Salvando…" : "Aplicar", color: Theme.indigo,
+                    PrimaryButton(title: working ? L("Salvando…") : L("Aplicar"), color: Theme.indigo,
                                   enabled: !working && total > 0 && (touched || rotation != 0)) { apply() }
                     Text("O corte não apaga nada do PDF: “Página inteira” mostra tudo de novo. Também dá para usar “Desfazer última alteração”.")
                         .font(.footnote).foregroundStyle(Theme.secondaryText)
@@ -130,7 +130,7 @@ struct CropSheet: View {
     private var scopeText: String {
         guard total > 0 else { return "" }
         switch Result(catching: { try scope.pages(current: page, total: total, text: customText) }) {
-        case .success(let pages): return pages.count == 1 ? "1 página" : "\(pages.count) páginas"
+        case .success(let pages): return pages.count == 1 ? L("1 página") : LF("{} páginas", pages.count)
         case .failure(let e): return e.localizedDescription
         }
     }
@@ -143,7 +143,7 @@ struct CropSheet: View {
                                    setMargins(m)
                                }),
                 in: 0...300, step: 1) {
-            Text("\(title): \(Int((margins[keyPath: key] / PageTools.mm).rounded())) mm")
+            Text(LF("{}: {} mm", title, Int((margins[keyPath: key] / PageTools.mm).rounded())))
                 .font(.system(size: 14))
                 .foregroundStyle(Theme.text)
         }
@@ -253,7 +253,7 @@ struct CropSheet: View {
         let url = item.url
         let d = await Task.detached(priority: .userInitiated) { try? PDFOps.open(url) }.value
         guard let d else {
-            flow.toast("Não foi possível abrir o PDF.")
+            flow.toast(L("Não foi possível abrir o PDF."))
             dismiss()
             return
         }
@@ -304,7 +304,7 @@ struct CropSheet: View {
 
     private func autoMargins() {
         guard let image, let m = PageTools.contentMargins(of: image, pointWidth: displaySize.width) else {
-            flow.toast("Não foi possível achar o conteúdo da página.")
+            flow.toast(L("Não foi possível achar o conteúdo da página."))
             return
         }
         setMargins(m)
@@ -330,7 +330,7 @@ struct CropSheet: View {
                 onDone()
                 dismiss()
                 let n = count
-                flow.toast("\(n == 1 ? "1 página alterada" : "\(n) páginas alteradas"). Use “Desfazer última alteração” se precisar.")
+                flow.toast(sentences(LN(n, "1 página alterada.", "{} páginas alteradas."), L("Use “Desfazer última alteração” se precisar.")))
             } catch {
                 working = false
                 flow.show(error: error)
@@ -376,17 +376,17 @@ struct NumberSheet: View {
                     Picker("Formato", selection: $format) {
                         ForEach(PageTools.NumberFormat.allCases) { Text($0.label).tag($0) }
                     }
-                    Stepper("Tamanho da letra: \(size) pt", value: $size, in: 6...28)
-                    Stepper("Distância da borda: \(marginMM) mm", value: $marginMM, in: 3...60)
+                    Stepper(LF("Tamanho da letra: {} pt", size), value: $size, in: 6...28)
+                    Stepper(LF("Distância da borda: {} mm", marginMM), value: $marginMM, in: 3...60)
                 }
                 Section {
-                    Stepper("Primeiro número: \(start)", value: $start, in: 0...99999)
-                    Stepper("Começar na página \(firstPage)", value: $firstPage, in: 1...total)
+                    Stepper(LF("Primeiro número: {}", start), value: $start, in: 0...99999)
+                    Stepper(LF("Começar na página {}", firstPage), value: $firstPage, in: 1...total)
                 } footer: {
-                    Text("\(total - firstPage + 1) página\(total - firstPage + 1 == 1 ? "" : "s"): de “\(format.text(start, total: last))” até “\(format.text(last, total: last))”. O número fica gravado como texto na página; para tirar, use “Desfazer última alteração”.")
+                    Text(LF("{}: de “{}” até “{}”. O número fica gravado como texto na página; para tirar, use “Desfazer última alteração”.", (total - firstPage + 1).pagesText, format.text(start, total: last), format.text(last, total: last)))
                 }
                 Section {
-                    PrimaryButton(title: working ? "Numerando…" : "Numerar", color: Theme.indigo, enabled: !working) { apply() }
+                    PrimaryButton(title: working ? L("Numerando…") : L("Numerar"), color: Theme.indigo, enabled: !working) { apply() }
                         .listRowInsets(EdgeInsets())
                         .listRowBackground(Color.clear)
                 }
@@ -440,14 +440,14 @@ struct NumberSheet: View {
                 onDone()
                 dismiss()
                 let n = total - firstPage + 1
-                var msg = n == 1 ? "1 página numerada" : "\(n) páginas numeradas"
+                var msg = LN(n, "1 página numerada.", "{} páginas numeradas.")
                 if !result.report.moved.isEmpty {
-                    msg += ". Em \(PageSelection.format(result.report.moved)) o número subiu um pouco, para não ficar por cima de texto ou de outro número"
+                    msg = sentences(msg, LF("Em {} o número subiu um pouco, para não ficar por cima de texto ou de outro número.", PageSelection.format(result.report.moved)))
                 }
                 if !result.report.crowded.isEmpty {
-                    msg += ". Em \(PageSelection.format(result.report.crowded)) não achei espaço livre: confira"
+                    msg = sentences(msg, LF("Em {} não achei espaço livre: confira.", PageSelection.format(result.report.crowded)))
                 }
-                flow.toast(msg + ". Use “Desfazer última alteração” se precisar.")
+                flow.toast(sentences(msg, L("Use “Desfazer última alteração” se precisar.")))
             } catch {
                 working = false
                 flow.show(error: error)

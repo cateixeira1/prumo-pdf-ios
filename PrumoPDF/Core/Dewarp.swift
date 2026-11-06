@@ -21,7 +21,7 @@ enum Dewarp {
     private static func model() throws -> VNCoreMLModel {
         if let m = cachedModel { return m }
         guard let url = Bundle.main.url(forResource: "UVDoc", withExtension: "mlmodelc") else {
-            throw UserFacingError("O modelo de correção de curvatura não está no app.")
+            throw UserFacingError(L("O modelo de correção de curvatura não está no app."))
         }
         let config = MLModelConfiguration()
         config.computeUnits = .all
@@ -49,10 +49,10 @@ enum Dewarp {
         try VNImageRequestHandler(cgImage: cg, options: [:]).perform([request])
         guard let obs = request.results?.first as? VNCoreMLFeatureValueObservation,
               let array = obs.featureValue.multiArrayValue else {
-            throw UserFacingError("O modelo não devolveu a grade da página.")
+            throw UserFacingError(L("O modelo não devolveu a grade da página."))
         }
         let count = 2 * rows * cols
-        guard array.count >= count else { throw UserFacingError("Grade da página com tamanho inesperado.") }
+        guard array.count >= count else { throw UserFacingError(L("Grade da página com tamanho inesperado.")) }
         var out = [Float](repeating: 0, count: count)
         for i in 0..<count { out[i] = array[i].floatValue }
         return out
@@ -111,9 +111,9 @@ enum Dewarp {
 
     /// Foto com a página corrigida (mesmo tamanho da original).
     static func unwarp(_ image: UIImage) throws -> UIImage {
-        guard let cg = upright(image) else { throw UserFacingError("Não foi possível ler a imagem.") }
+        guard let cg = upright(image) else { throw UserFacingError(L("Não foi possível ler a imagem.")) }
         let grid = try predictGrid(cg)
-        guard let out = remap(cg, grid: grid) else { throw UserFacingError("Não foi possível corrigir a imagem.") }
+        guard let out = remap(cg, grid: grid) else { throw UserFacingError(L("Não foi possível corrigir a imagem.")) }
         return UIImage(cgImage: out)
     }
 
@@ -139,7 +139,7 @@ enum Dewarp {
     /// Novo PDF com as páginas escolhidas (começando em 1) corrigidas; as outras ficam intactas.
     static func dewarpPDF(_ source: PDFDocument, pages: [Int], progress: ((Int, Int) -> Void)? = nil) throws -> Data {
         guard let out = PDFDocument(data: source.dataRepresentation() ?? Data()) else {
-            throw UserFacingError("Não foi possível ler o PDF.")
+            throw UserFacingError(L("Não foi possível ler o PDF."))
         }
         let chosen = Array(Set(pages)).sorted()
         for (k, n) in chosen.enumerated() {
@@ -150,13 +150,13 @@ enum Dewarp {
                 let fixed = try unwarp(render(page))
                 let jpeg = fixed.jpegData(compressionQuality: 0.88).flatMap { UIImage(data: $0) } ?? fixed
                 guard let newPage = PDFPage(image: jpeg, options: [.mediaBox: bounds, .upscaleIfSmaller: true]) else {
-                    throw UserFacingError("Não foi possível montar a página \(n).")
+                    throw UserFacingError(LF("Não foi possível montar a página {}.", n))
                 }
                 out.removePage(at: n - 1)
                 out.insert(newPage, at: n - 1)
             }
         }
-        guard let data = out.dataRepresentation() else { throw UserFacingError("Não foi possível gravar o PDF.") }
+        guard let data = out.dataRepresentation() else { throw UserFacingError(L("Não foi possível gravar o PDF.")) }
         return data
     }
 }

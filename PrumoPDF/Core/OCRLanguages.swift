@@ -26,6 +26,13 @@ struct OCRLanguage: Identifiable, Hashable {
     ]
     static let maxSelected = 4
 
+    /// Sem escolha salva, o OCR usa o idioma do app (como no Windows).
+    static var defaultID: String {
+        let byUI = ["pt": "por", "en": "eng", "es": "spa", "fr": "fra", "de": "deu", "ja": "jpn",
+                    "zh-Hans": "chi_sim", "zh-Hant": "chi_tra", "nb": "nor", "sv": "swe", "da": "dan", "fi": "fin"]
+        return byUI[AppLanguages.current] ?? "eng"
+    }
+
     /// Códigos de idioma que este iPhone reconhece agora.
     static func supportedByDevice() -> [String] {
         (try? VNRecognizeTextRequest().supportedRecognitionLanguages()) ?? ["pt-BR", "en-US"]
@@ -50,23 +57,23 @@ struct OCRLanguage: Identifiable, Hashable {
     static func parse(_ stored: String?) -> [String] {
         let ids = Set(all.map(\.id))
         var out: [String] = []
-        for part in (stored ?? "por").split(separator: "+").map(String.init) where ids.contains(part) && !out.contains(part) {
+        for part in (stored ?? defaultID).split(separator: "+").map(String.init) where ids.contains(part) && !out.contains(part) {
             out.append(part)
         }
-        return out.isEmpty ? ["por"] : out
+        return out.isEmpty ? [defaultID] : out
     }
 
     static func join(_ ids: [String]) -> String {
         var seen: [String] = []
         for i in ids where all.contains(where: { $0.id == i }) && !seen.contains(i) { seen.append(i) }
         let joined = seen.prefix(maxSelected).joined(separator: "+")
-        return joined.isEmpty ? "por" : joined
+        return joined.isEmpty ? defaultID : joined
     }
 
     /// Códigos do Vision para o que está salvo, só os que o aparelho reconhece (sempre devolve algum).
     static func visionCodes(stored: String?, supported: [String] = supportedByDevice()) -> [String] {
         let ok = Set(available(supported: supported).map(\.id))
         let codes = parse(stored).filter { ok.contains($0) }.compactMap { id in all.first { $0.id == id }?.vision }
-        return codes.isEmpty ? ["pt-BR"] : codes
+        return codes.isEmpty ? [all.first { $0.id == defaultID }?.vision ?? "en-US"] : codes
     }
 }

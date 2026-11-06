@@ -144,13 +144,13 @@ final class TextReaderModel: NSObject, ObservableObject, UITextViewDelegate, UIG
 
         for page in document.pages {
             starts.append(out.length)
-            out.append(NSAttributedString(string: "PÁGINA \(page.number)\n", attributes: headerAttrs))
+            out.append(NSAttributedString(string: LF("Página {}", page.number).uppercased(with: AppLanguages.locale) + "\n", attributes: headerAttrs))
             if reviewPages.contains(page.number) {
-                out.append(NSAttributedString(string: "Baixa confiança no OCR: confira esta página no original\n",
+                out.append(NSAttributedString(string: L("Baixa confiança no OCR: confira esta página no original") + "\n",
                                               attributes: warnAttrs))
             }
             if page.isEmpty {
-                out.append(NSAttributedString(string: "Nenhum texto nesta página.\n", attributes: emptyAttrs))
+                out.append(NSAttributedString(string: L("Nenhum texto nesta página.") + "\n", attributes: emptyAttrs))
             } else {
                 var map = positions[page.number - 1] ?? [:]
                 for (k, paragraph) in page.paragraphs.enumerated() {
@@ -277,13 +277,13 @@ final class TextReaderModel: NSObject, ObservableObject, UITextViewDelegate, UIG
                 self?.highlightSelection(c)
             }
         }
-        mine.append(UIMenu(title: "Destacar", image: UIImage(systemName: "highlighter"), children: colors))
+        mine.append(UIMenu(title: L("Destacar"), image: UIImage(systemName: "highlighter"), children: colors))
         if hasMarksInSelection {
-            mine.append(UIAction(title: "Desfazer destaque", image: UIImage(systemName: "eraser")) { [weak self] _ in
+            mine.append(UIAction(title: L("Desfazer destaque"), image: UIImage(systemName: "eraser")) { [weak self] _ in
                 self?.unmarkSelection()
             })
         }
-        mine.append(UIAction(title: "Adicionar ao resumo", image: UIImage(systemName: "text.badge.plus")) { [weak self] _ in
+        mine.append(UIAction(title: L("Adicionar ao resumo"), image: UIImage(systemName: "text.badge.plus")) { [weak self] _ in
             self?.onSummary?()
         })
         return UIMenu(children: mine + suggestedActions)
@@ -320,7 +320,7 @@ final class TextReaderModel: NSObject, ObservableObject, UITextViewDelegate, UIG
             for a in Highlights.add(sel, color: c, in: pdf) { added.append((p, a)) }
         }
         guard !added.isEmpty else { return }
-        onEdit?("Destaque", .marks(docID: docID, removed: [], added: added))
+        onEdit?(L("Destaque"), .marks(docID: docID, removed: [], added: added))
         applyMarks()
     }
 
@@ -333,7 +333,7 @@ final class TextReaderModel: NSObject, ObservableObject, UITextViewDelegate, UIG
         guard let pdf else { return }
         let change = Highlights.unmark(selectionRanges(), in: pdf)
         guard !change.removed.isEmpty else { return }
-        onEdit?("Desfazer destaque", .marks(docID: docID, removed: change.removed, added: change.added))
+        onEdit?(L("Desfazer destaque"), .marks(docID: docID, removed: change.removed, added: change.added))
         applyMarks()
         clearSelection()
     }
@@ -342,7 +342,7 @@ final class TextReaderModel: NSObject, ObservableObject, UITextViewDelegate, UIG
         guard let pdf, let page = a.page else { return }
         let p = pdf.index(for: page)
         Highlights.remove(a)
-        onEdit?("Apagar destaque", .marks(docID: docID, removed: [(p, a)], added: []))
+        onEdit?(L("Apagar destaque"), .marks(docID: docID, removed: [(p, a)], added: []))
         applyMarks()
     }
 
@@ -350,7 +350,7 @@ final class TextReaderModel: NSObject, ObservableObject, UITextViewDelegate, UIG
         guard let pdf, let page = a.page else { return }
         let from = a.color
         Highlights.recolor(a, c)
-        onEdit?("Cor do destaque", .recolor(docID: docID, page: pdf.index(for: page), mark: a, from: from, to: c.uiColor))
+        onEdit?(L("Cor do destaque"), .recolor(docID: docID, page: pdf.index(for: page), mark: a, from: from, to: c.uiColor))
         applyMarks()
     }
 
@@ -469,8 +469,8 @@ struct TextReaderPane: View {
             if model.loading {
                 ProgressView("Preparando o texto…")
             } else if let doc = model.document, doc.isEmpty {
-                EmptyStateView(systemImage: "doc.text.magnifyingglass", title: "Sem texto",
-                               message: "Este PDF não tem texto reconhecido. Faça o OCR para usar o modo leitor.")
+                EmptyStateView(systemImage: "doc.text.magnifyingglass", title: L("Sem texto"),
+                               message: L("Este PDF não tem texto reconhecido. Faça o OCR para usar o modo leitor."))
             } else {
                 ReaderTextView(model: model)
                     .ignoresSafeArea(edges: .bottom)

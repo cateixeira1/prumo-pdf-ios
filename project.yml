@@ -4,14 +4,16 @@ options:
   bundleIdPrefix: br.com.prumopdf
   deploymentTarget:
     iOS: "17.0"
-  developmentLanguage: pt-BR
+  # Inglês como idioma de desenvolvimento: iPhone em idioma sem tradução (italiano, por exemplo) vê o
+  # Prumo em inglês. O português vem de pt.lproj (as chaves das traduções já são o texto em português).
+  developmentLanguage: en
   createIntermediateGroups: true
 settings:
   base:
     SWIFT_VERSION: "5.0"
     SWIFT_STRICT_CONCURRENCY: minimal
-    MARKETING_VERSION: "1.11.0"
-    CURRENT_PROJECT_VERSION: "12"
+    MARKETING_VERSION: "1.12.0"
+    CURRENT_PROJECT_VERSION: "13"
     CODE_SIGN_STYLE: Automatic
     DEVELOPMENT_TEAM: ""
     ENABLE_USER_SCRIPT_SANDBOXING: "YES"
@@ -25,12 +27,13 @@ targets:
       path: PrumoPDF/Info.plist
       properties:
         CFBundleDisplayName: Prumo PDF
-        CFBundleDevelopmentRegion: pt-BR
+        CFBundleDevelopmentRegion: en
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true
-        NSCameraUsageDescription: A câmera é usada para escanear documentos. As imagens ficam só neste iPhone.
-        NSFaceIDUsageDescription: O Face ID destrava o Prumo PDF, se você ligar a trava em Ajustes, e confirma as assinaturas digitais.
+        # traduzidos em PrumoPDF/Localization/<idioma>.lproj/InfoPlist.strings (scripts/locales/infoplist.json)
+        NSCameraUsageDescription: The camera is used to scan documents. The images stay only on this iPhone.
+        NSFaceIDUsageDescription: Face ID unlocks Prumo PDF, if you turn on the lock in Settings, and confirms digital signatures.
         UIFileSharingEnabled: true
         LSSupportsOpeningDocumentsInPlace: true
         UILaunchScreen: {}
@@ -81,6 +84,13 @@ schemes:
       config: Debug
     test:
       config: Debug
+      # os testes rodam em português (os textos esperados estão em português); os outros idiomas são
+      # conferidos em PrumoPDFTests/I18nTests.swift
+      language: pt-BR
+      region: BR
+      commandLineArguments:
+        "-AppleLanguages (pt-BR)": true
+        "-AppleLocale pt_BR": true
       targets:
         - PrumoPDFTests
     archive:

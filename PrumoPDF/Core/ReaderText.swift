@@ -17,7 +17,7 @@ struct ReaderDocument {
 
     var plainText: String {
         pages.map { page in
-            "— Página \(page.number) —\n\n" + (page.isEmpty ? "(sem texto)" : page.paragraphs.joined(separator: "\n\n"))
+            "— " + LF("Página {}", page.number) + " —\n\n" + (page.isEmpty ? L("(sem texto)") : page.paragraphs.joined(separator: "\n\n"))
         }
         .joined(separator: "\n\n")
     }

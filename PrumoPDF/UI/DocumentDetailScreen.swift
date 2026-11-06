@@ -42,8 +42,8 @@ struct DocumentDetailScreen: View {
                 content(item)
             } else {
                 Screen {
-                    EmptyStateView(systemImage: "doc.questionmark", title: "PDF não encontrado",
-                                   message: "O arquivo foi movido ou apagado.")
+                    EmptyStateView(systemImage: "doc.questionmark", title: L("PDF não encontrado"),
+                                   message: L("O arquivo foi movido ou apagado."))
                 }
             }
         }
@@ -59,7 +59,7 @@ struct DocumentDetailScreen: View {
             if let review = item.meta.reviewPages, !review.isEmpty {
                 TileCard {
                     Label {
-                        Text("Revise as páginas \(PageSelection.format(review)): o OCR teve baixa confiança nelas. Confira nomes, datas, números e valores no original.")
+                        Text(LF("Revise as páginas {}: o OCR teve baixa confiança nelas. Confira nomes, datas, números e valores no original.", PageSelection.format(review)))
                             .font(.system(size: 13.5))
                             .foregroundStyle(Theme.text)
                     } icon: {
@@ -69,8 +69,8 @@ struct DocumentDetailScreen: View {
             }
             if item.meta.isSigned { signedCard(item) }
             TileGrid {
-                Tile(title: "Ler", systemImage: "book.fill", color: Theme.blue,
-                     subtitle: hasOCRText(item) ? "Original ou modo leitor" : nil) {
+                Tile(title: L("Ler"), systemImage: "book.fill", color: Theme.blue,
+                     subtitle: hasOCRText(item) ? L("Original ou modo leitor") : nil) {
                     library.markOpened(item)
                     if hasOCRText(item) {
                         showReadChoice = true
@@ -79,84 +79,84 @@ struct DocumentDetailScreen: View {
                     }
                 }
                 ShareLink(item: item.url) {
-                    TileLabel(title: "Compartilhar", systemImage: "square.and.arrow.up", color: Theme.green,
-                              subtitle: "E-mail, WhatsApp, Arquivos")
+                    TileLabel(title: L("Compartilhar"), systemImage: "square.and.arrow.up", color: Theme.green,
+                              subtitle: L("E-mail, WhatsApp, Arquivos"))
                 }
                 .buttonStyle(TileButtonStyle(color: Theme.green))
                 Tile(title: "OCR", systemImage: "text.viewfinder", color: Theme.orange, count: ocrCount(item),
                      shape: .rounded, subtitle: ocrSubtitle(item, busy: ocrBusy)) {
                     startOCR(item)
                 }
-                Tile(title: "Organizar páginas", systemImage: "rectangle.grid.2x2.fill", color: Theme.purple,
+                Tile(title: L("Organizar páginas"), systemImage: "rectangle.grid.2x2.fill", color: Theme.purple,
                      count: pages > 0 ? "\(pages)" : nil, shape: .rounded) {
                     edit(item) { flow.open(.organize(item.id)) }
                 }
-                Tile(title: "Incluir páginas", systemImage: "plus.rectangle.on.rectangle", color: Theme.teal,
+                Tile(title: L("Incluir páginas"), systemImage: "plus.rectangle.on.rectangle", color: Theme.teal,
                      shape: .rounded) {
                     edit(item) { showInsertMenu = true }
                 }
-                Tile(title: "Remover páginas", systemImage: "minus.rectangle", color: Theme.red, shape: .rounded) {
+                Tile(title: L("Remover páginas"), systemImage: "minus.rectangle", color: Theme.red, shape: .rounded) {
                     edit(item) {
                         pickerRequest = PagePickerRequest(kind: .remove, sourceURL: item.url,
                                                           sourceVersion: item.version, sourceTitle: item.name)
                     }
                 }
-                Tile(title: "Dividir em partes", systemImage: "scissors", color: Theme.pink) {
+                Tile(title: L("Dividir em partes"), systemImage: "scissors", color: Theme.pink) {
                     showSplit = true
                 }
-                Tile(title: "Corrigir páginas curvas", systemImage: "book.pages", color: Theme.teal, shape: .rounded,
-                     subtitle: "Fotos de livros, papel ondulado") {
+                Tile(title: L("Corrigir páginas curvas"), systemImage: "book.pages", color: Theme.teal, shape: .rounded,
+                     subtitle: L("Fotos de livros, papel ondulado")) {
                     edit(item) { showDewarp = true }
                 }
-                Tile(title: "Extrair páginas", systemImage: "doc.badge.plus", color: Theme.indigo) {
+                Tile(title: L("Extrair páginas"), systemImage: "doc.badge.plus", color: Theme.indigo) {
                     pickerRequest = PagePickerRequest(kind: .extract, sourceURL: item.url,
                                                       sourceVersion: item.version, sourceTitle: item.name)
                 }
-                Tile(title: "Cortar e girar", systemImage: "crop.rotate", color: Theme.indigo, shape: .rounded,
-                     subtitle: "Margens e orientação") {
+                Tile(title: L("Cortar e girar"), systemImage: "crop.rotate", color: Theme.indigo, shape: .rounded,
+                     subtitle: L("Margens e orientação")) {
                     if item.meta.locked == true { lockedToast() } else { edit(item) { showCrop = true } }
                 }
-                Tile(title: "Numerar páginas", systemImage: "number", color: Theme.indigo,
-                     subtitle: "Posição e formato") {
+                Tile(title: L("Numerar páginas"), systemImage: "number", color: Theme.indigo,
+                     subtitle: L("Posição e formato")) {
                     if item.meta.locked == true { lockedToast() } else { edit(item) { showNumber = true } }
                 }
                 signTile(item)
-                Tile(title: "Renomear", systemImage: "pencil", color: Theme.gray) {
+                Tile(title: L("Renomear"), systemImage: "pencil", color: Theme.gray) {
                     actions.rename(item)
                 }
-                Tile(title: "Mover", systemImage: "folder.fill", color: Theme.brown, subtitle: item.folderName) {
+                Tile(title: L("Mover"), systemImage: "folder.fill", color: Theme.brown, subtitle: item.folderName) {
                     actions.move([item])
                 }
-                Tile(title: item.meta.favorite ? "Favorito" : "Favoritar", systemImage: "star.fill",
+                Tile(title: item.meta.favorite ? L("Favorito") : L("Favoritar"), systemImage: "star.fill",
                      color: Theme.yellow, shape: .rounded, selected: item.meta.favorite) {
                     library.setFavorite(item, !item.meta.favorite)
                 }
                 if item.meta.locked == true {
-                    Tile(title: "Remover senha", systemImage: "lock.open.fill", color: Theme.purple, shape: .rounded,
-                         subtitle: "Cria uma cópia sem senha") {
+                    Tile(title: L("Remover senha"), systemImage: "lock.open.fill", color: Theme.purple, shape: .rounded,
+                         subtitle: L("Cria uma cópia sem senha")) {
                         askUnprotect = true
                     }
                 } else {
-                    Tile(title: "Proteger com senha", systemImage: "lock.fill", color: Theme.purple, shape: .rounded,
-                         subtitle: "Criptografia padrão de PDF") {
+                    Tile(title: L("Proteger com senha"), systemImage: "lock.fill", color: Theme.purple, shape: .rounded,
+                         subtitle: L("Criptografia padrão de PDF")) {
                         edit(item) { showProtect = true }
                     }
                 }
-                Tile(title: "Duplicar", systemImage: "plus.square.on.square", color: Theme.gray, shape: .rounded) {
+                Tile(title: L("Duplicar"), systemImage: "plus.square.on.square", color: Theme.gray, shape: .rounded) {
                     do {
                         if let copy = try library.duplicate(item) {
-                            flow.toast("Cópia criada: \(copy.name)")
+                            flow.toast(LF("Cópia criada: {}", copy.name))
                         }
                     } catch { flow.show(error: error) }
                 }
             }
             if library.canUndo(item) {
-                WideTile(title: "Desfazer última alteração", systemImage: "arrow.uturn.backward", color: Theme.gray,
-                         subtitle: "Volta o arquivo para como estava antes da última mudança nas páginas") {
+                WideTile(title: L("Desfazer última alteração"), systemImage: "arrow.uturn.backward", color: Theme.gray,
+                         subtitle: L("Volta o arquivo para como estava antes da última mudança nas páginas")) {
                     confirmUndo = true
                 }
             }
-            WideTile(title: "Excluir", systemImage: "trash.fill", color: Theme.red) {
+            WideTile(title: L("Excluir"), systemImage: "trash.fill", color: Theme.red) {
                 actions.delete([item])
             }
         }
@@ -179,7 +179,7 @@ struct DocumentDetailScreen: View {
             Button("Desfazer") {
                 do {
                     try library.undo(item)
-                    flow.toast("Alteração desfeita.")
+                    flow.toast(L("Alteração desfeita."))
                 } catch { flow.show(error: error) }
             }
             Button("Cancelar", role: .cancel) {}
@@ -204,7 +204,7 @@ struct DocumentDetailScreen: View {
             Button("Remover") {
                 do {
                     let new = try library.unprotect(item, password: unprotectText)
-                    flow.toast("Cópia sem senha: \(new.name)", actionTitle: "Abrir") { flow.open(.document(new.id)) }
+                    flow.toast(LF("Cópia sem senha: {}", new.name), actionTitle: L("Abrir")) { flow.open(.document(new.id)) }
                 } catch { flow.show(error: error) }
                 unprotectText = ""
             }
@@ -287,7 +287,7 @@ struct DocumentDetailScreen: View {
                     PDFOps.insert(pages: pages, from: source, into: doc, at: position)
                 }
                 try? FileManager.default.removeItem(at: src)
-                flow.toast("\(pages.count.pagesText) incluída\(pages.count == 1 ? "" : "s").")
+                flow.toast(LN(pages.count, "1 página incluída.", "{} páginas incluídas."))
             }
         case .remove:
             PagePickerScreen(mode: .remove, sourceURL: request.sourceURL, sourceVersion: request.sourceVersion,
@@ -295,7 +295,7 @@ struct DocumentDetailScreen: View {
                 try await library.modify(target) { doc in
                     try PDFOps.remove(pages: pages, from: doc)
                 }
-                flow.toast("\(pages.count.pagesText) removida\(pages.count == 1 ? "" : "s"). Use “Desfazer” se precisar.")
+                flow.toast(LN(pages.count, "1 página removida. Use “Desfazer” se precisar.", "{} páginas removidas. Use “Desfazer” se precisar."))
             }
         case .extract:
             PagePickerScreen(mode: .extract, sourceURL: request.sourceURL, sourceVersion: request.sourceVersion,
@@ -305,9 +305,9 @@ struct DocumentDetailScreen: View {
                     PDFOps.extract(pages: pages, from: try PDFOps.open(src))
                 }.value
                 let label = PageSelection.format(pages)
-                let name = label.count <= 40 ? "\(target.name) - págs. \(label)" : "\(target.name) - \(pages.count) páginas"
+                let name = label.count <= 40 ? LF("{} - págs. {}", target.name, label) : LF("{} - {} páginas", target.name, pages.count)
                 let saved = try await library.save(newDocument: newDoc, name: name, folder: target.folder)
-                flow.toast("Novo PDF: \(saved.name)", actionTitle: "Abrir") { flow.open(.document(saved.id)) }
+                flow.toast(LF("Novo PDF: {}", saved.name), actionTitle: L("Abrir")) { flow.open(.document(saved.id)) }
             }
         }
     }
@@ -332,7 +332,7 @@ struct DocumentDetailScreen: View {
                 Label(item.folderName, systemImage: "folder")
                     .font(.system(size: 13.5))
                     .foregroundStyle(Theme.secondaryText)
-                Text("Alterado em \(item.modified.shortText)")
+                Text(LF("Alterado em {}", item.modified.shortText))
                     .font(.system(size: 12.5))
                     .foregroundStyle(Theme.secondaryText)
                 HStack(spacing: 4) {
@@ -340,7 +340,7 @@ struct DocumentDetailScreen: View {
                         Badge(text: status.label, color: status.needsOCR ? Theme.orange : Theme.blue)
                     }
                     if item.meta.isOCRResult { Badge(text: "OCR", color: Theme.green) }
-                    if item.meta.isSigned { Badge(text: "Assinado", color: Theme.blue) }
+                    if item.meta.isSigned { Badge(text: L("Assinado"), color: Theme.blue) }
                 }
             }
             Spacer(minLength: 0)
@@ -352,17 +352,17 @@ struct DocumentDetailScreen: View {
     /// PDF assinado não pode ser alterado (qualquer mudança invalida a assinatura).
     private func edit(_ item: PDFItem, _ action: () -> Void) {
         if item.meta.isSigned {
-            flow.toast("Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura. Use o original, sem assinatura, para mudar páginas, cortar ou numerar.")
+            flow.toast(L("Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura. Use o original, sem assinatura, para mudar páginas, cortar ou numerar."))
         } else {
             action()
         }
     }
 
     private func signTile(_ item: PDFItem) -> some View {
-        Tile(title: "Assinar digitalmente", systemImage: "signature", color: Theme.blue, shape: .rounded,
-             subtitle: item.meta.isSigned ? "Assinado · assinar de novo" : "Certificado A1") {
+        Tile(title: L("Assinar digitalmente"), systemImage: "signature", color: Theme.blue, shape: .rounded,
+             subtitle: item.meta.isSigned ? L("Assinado · assinar de novo") : L("Certificado A1")) {
             if item.meta.locked == true {
-                flow.toast("PDF com senha não pode ser assinado. Remova a senha antes.")
+                flow.toast(L("PDF com senha não pode ser assinado. Remova a senha antes."))
             } else {
                 showSign = true
             }
@@ -374,10 +374,10 @@ struct DocumentDetailScreen: View {
 
     private func signedCard(_ item: PDFItem) -> some View {
         let n = item.meta.signed ?? 1
-        let count: String = n == 1 ? "1 assinatura" : "\(n) assinaturas"
+        let count: String = n == 1 ? L("1 assinatura") : LF("{} assinaturas", n)
         return TileCard {
             Label {
-                Text("Assinado digitalmente (\(count)). O PDF não pode ser alterado sem invalidar a assinatura. Para conferir a validade, abra no Adobe Reader ou em validar.iti.gov.br.")
+                Text(LF("Assinado digitalmente ({}). O PDF não pode ser alterado sem invalidar a assinatura. Para conferir a validade, abra no Adobe Reader ou em validar.iti.gov.br.", count))
                     .font(.system(size: 13.5))
                     .foregroundStyle(Theme.text)
             } icon: {
@@ -387,7 +387,7 @@ struct DocumentDetailScreen: View {
     }
 
     private func lockedToast() {
-        flow.toast("Este PDF tem senha. Para cortar, girar ou numerar, crie antes uma cópia sem senha (“Remover senha”).")
+        flow.toast(L("Este PDF tem senha. Para cortar, girar ou numerar, crie antes uma cópia sem senha (“Remover senha”)."))
     }
 
     /// PDF com texto vindo do OCR (o próprio arquivo com OCR, ou o escaneado que já tem cópia com OCR).
@@ -404,23 +404,23 @@ struct DocumentDetailScreen: View {
     }
 
     private func ocrSubtitle(_ item: PDFItem, busy: Bool) -> String {
-        if busy { return "Em andamento…" }
-        if item.meta.isOCRResult { return "Já tem OCR" }
-        if let copyID = item.meta.ocrCopyID, library.item(id: copyID) != nil { return "Cópia com OCR criada" }
+        if busy { return L("Em andamento…") }
+        if item.meta.isOCRResult { return L("Já tem OCR") }
+        if let copyID = item.meta.ocrCopyID, library.item(id: copyID) != nil { return L("Cópia com OCR criada") }
         switch item.meta.textStatus {
-        case .digital: return "Já tem texto"
+        case .digital: return L("Já tem texto")
         case .scanned, .mixed:
             let n = item.meta.ocrPages?.count ?? 0
-            return n == 1 ? "1 página em imagem" : "\(n) páginas em imagem"
-        default: return "Verificando…"
+            return n == 1 ? L("1 página em imagem") : LF("{} páginas em imagem", n)
+        default: return L("Verificando…")
         }
     }
 
     private func startOCR(_ item: PDFItem) {
         if jobs.isBusy(with: item.id) {
-            flow.toast("O OCR deste PDF já está em andamento.")
+            flow.toast(L("O OCR deste PDF já está em andamento."))
         } else if item.meta.textStatus == .digital {
-            flow.toast("Todas as páginas já têm texto selecionável. O OCR não é necessário.")
+            flow.toast(L("Todas as páginas já têm texto selecionável. O OCR não é necessário."))
         } else {
             jobs.startOCR(item, library: library, flow: flow)
         }
@@ -438,7 +438,7 @@ struct InsertFromLibrarySheet: View {
 
     var body: some View {
         NavigationStack(path: $path) {
-            DocumentChooser(title: "De qual PDF?", excluding: [target.id],
+            DocumentChooser(title: L("De qual PDF?"), excluding: [target.id],
                             onDone: { items in if let first = items.first { path.append(first.id) } },
                             onCancel: { dismiss() })
                 .onAppear {
@@ -456,7 +456,7 @@ struct InsertFromLibrarySheet: View {
                                 let sourceDoc = try PDFOps.open(src)
                                 PDFOps.insert(pages: pages, from: sourceDoc, into: doc, at: position)
                             }
-                            flow.toast("\(pages.count.pagesText) de “\(source.name)” incluída\(pages.count == 1 ? "" : "s").")
+                            flow.toast(LN(pages.count, "1 página de “{}” incluída.", "{} páginas de “{}” incluídas.", source.name))
                         }
                     }
                 }

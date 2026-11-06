@@ -30,7 +30,7 @@ enum PageTools {
         default: r = (x0 + m.left, y0 + m.bottom, x1 - m.right, y1 - m.top)
         }
         guard r.2 - r.0 >= 18, r.3 - r.1 >= 18 else {
-            throw UserFacingError("As margens deixam a página pequena demais.")
+            throw UserFacingError(L("As margens deixam a página pequena demais."))
         }
         return CGRect(x: r.0, y: r.1, width: r.2 - r.0, height: r.3 - r.1)
     }
@@ -68,7 +68,7 @@ enum PageTools {
     @discardableResult
     static func cropAndRotate(_ doc: PDFDocument, pages: [Int], margins: PageMargins?, rotateBy: Int) throws -> Int {
         let todo = Set(pages.filter { $0 >= 1 && $0 <= doc.pageCount }).sorted()
-        guard !todo.isEmpty else { throw UserFacingError("Nenhuma página selecionada.") }
+        guard !todo.isEmpty else { throw UserFacingError(L("Nenhuma página selecionada.")) }
         for n in todo {
             guard let page = doc.page(at: n - 1) else { continue }
             if PDFOps.normalized(rotateBy) != 0 {
@@ -129,8 +129,7 @@ enum PageTools {
         var label: String {
             switch self {
             case .n: return "1"
-            case .pagina: return "Página 1"
-            case .paginaDe: return "Página 1 de 12"
+            case .pagina, .paginaDe: return text(1, total: 12)   // no idioma gravado no PDF
             case .barra: return "1/12"
             case .tracos: return "- 1 -"
             }
@@ -138,8 +137,8 @@ enum PageTools {
         func text(_ n: Int, total: Int) -> String {
             switch self {
             case .n: return "\(n)"
-            case .pagina: return "Página \(n)"
-            case .paginaDe: return "Página \(n) de \(total)"
+            case .pagina: return LDF("Página {}", n)               // gravado no PDF
+            case .paginaDe: return LDF("Página {} de {}", n, total)
             case .barra: return "\(n)/\(total)"
             case .tracos: return "- \(n) -"
             }
@@ -151,12 +150,12 @@ enum PageTools {
         var id: String { rawValue }
         var label: String {
             switch self {
-            case .bottomCenter: return "Embaixo, no centro"
-            case .bottomRight: return "Embaixo, à direita"
-            case .bottomLeft: return "Embaixo, à esquerda"
-            case .topCenter: return "No alto, no centro"
-            case .topRight: return "No alto, à direita"
-            case .topLeft: return "No alto, à esquerda"
+            case .bottomCenter: return L("Embaixo, no centro")
+            case .bottomRight: return L("Embaixo, à direita")
+            case .bottomLeft: return L("Embaixo, à esquerda")
+            case .topCenter: return L("No alto, no centro")
+            case .topRight: return L("No alto, à direita")
+            case .topLeft: return L("No alto, à esquerda")
             }
         }
         var isTop: Bool { self == .topCenter || self == .topRight || self == .topLeft }
@@ -230,7 +229,7 @@ enum PageTools {
         let out = NSMutableData()
         guard let consumer = CGDataConsumer(data: out as CFMutableData),
               let ctx = CGContext(consumer: consumer, mediaBox: nil, nil) else {
-            throw UserFacingError("Não foi possível preparar o PDF numerado.")
+            throw UserFacingError(L("Não foi possível preparar o PDF numerado."))
         }
         let count = doc.pageCount
         let first = max(1, min(o.firstPage, count))
@@ -291,7 +290,7 @@ enum PageTools {
         }
         ctx.closePDF()
         guard let numbered = PDFDocument(data: out as Data), numbered.pageCount == count else {
-            throw UserFacingError("O PDF numerado não pôde ser conferido; nada foi alterado.")
+            throw UserFacingError(L("O PDF numerado não pôde ser conferido; nada foi alterado."))
         }
         for i in 0..<count {
             guard let old = doc.page(at: i), let new = numbered.page(at: i) else { continue }
@@ -303,7 +302,7 @@ enum PageTools {
         }
         if let attrs = doc.documentAttributes { numbered.documentAttributes = attrs }
         guard let data = numbered.dataRepresentation() else {
-            throw UserFacingError("Não foi possível gravar o PDF numerado.")
+            throw UserFacingError(L("Não foi possível gravar o PDF numerado."))
         }
         return (data, report)
     }

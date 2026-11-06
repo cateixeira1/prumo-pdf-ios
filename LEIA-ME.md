@@ -60,4 +60,10 @@ Requer iOS 17 ou mais novo (iPhone XS/XR em diante).
 
 ## Idiomas da interface
 
-Português, inglês, espanhol, francês, alemão, japonês, chinês (simplificado e tradicional), norueguês, sueco, dinamarquês e finlandês, seguindo o idioma do iPhone (ou o escolhido para o Prumo em Ajustes do iPhone > Prumo PDF > Idioma). Os catálogos são gerados por `scripts/build_strings.py` a partir de `scripts/locales/*.json`. Os textos principais estão traduzidos; o que falta aparece em inglês, e textos com números e nomes no meio ainda aparecem em português. As traduções pedem revisão por quem fala a língua.
+Português, inglês, espanhol, francês, alemão, japonês, chinês (simplificado e tradicional), norueguês, sueco, dinamarquês e finlandês, seguindo o idioma do iPhone (ou o escolhido para o Prumo em Ajustes do iPhone > Prumo PDF > Idioma). Com o iPhone em outro idioma, o Prumo aparece em inglês. As traduções pedem revisão por quem fala a língua.
+
+Como funciona (versão 1.12):
+- A chave de cada tradução é o próprio texto em português. Os catálogos ficam em `scripts/locales/<idioma>.json` (os mesmos do Prumo para Windows, mais os textos que só o iPhone tem) e viram `PrumoPDF/Localization/<idioma>.lproj/*.strings` com `python3 scripts/build_strings.py`.
+- No código: `Text("…")`, `Button("…")` e parecidos já são traduzidos pelo SwiftUI; todo outro texto passa por `L("…")`; com parte variável, `LF("Página {} de {}", n, total)`; com plural, `LN(n, "1 página", "{} páginas")` (ver `PrumoPDF/Core/Localization.swift`).
+- Nomes de cópias ("- resumo", "- assinado", "- protegido"…) saem no idioma do app, como no Windows, e o resumo já existente é achado com o nome em qualquer idioma. Carimbo da assinatura, resumo e numeração gravados no PDF saem no idioma do app; em japonês e chinês, em inglês.
+- `python3 tools/i18n_check.py` (roda no GitHub antes dos testes) falha se algum texto da interface ficar sem tradução no código ou em algum idioma. O que não é texto da interface fica em `tools/i18n_ignore.txt`.

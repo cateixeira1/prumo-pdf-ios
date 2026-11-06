@@ -38,7 +38,7 @@ struct RootView: View {
         } message: {
             Text("O OCR cria um novo PDF com o texto pesquisável, com “OCR” no nome. O arquivo escaneado continua salvo.")
         }
-        .confirmationDialog(flow.pendingConversion.map { "\($0.imageCount) imagens" } ?? "",
+        .confirmationDialog(flow.pendingConversion.map { LF("{} imagens", $0.imageCount) } ?? "",
                             isPresented: Binding(get: { flow.pendingConversion != nil },
                                                  set: { if !$0 { flow.pendingConversion = nil } }),
                             titleVisibility: .visible) {
@@ -94,16 +94,16 @@ enum HomeTool: String, Identifiable, CaseIterable {
 
     var question: String {
         switch self {
-        case .read: return "Ler qual PDF?"
-        case .ocr: return "OCR de quais PDFs?"
-        case .organize: return "Organizar qual PDF?"
-        case .insert: return "Incluir páginas em qual PDF?"
-        case .remove: return "Remover páginas de qual?"
-        case .extract: return "Extrair páginas de qual?"
-        case .split: return "Dividir qual PDF?"
-        case .crop: return "Cortar ou girar qual PDF?"
-        case .number: return "Numerar qual PDF?"
-        case .sign: return "Assinar qual PDF?"
+        case .read: return L("Ler qual PDF?")
+        case .ocr: return L("OCR de quais PDFs?")
+        case .organize: return L("Organizar qual PDF?")
+        case .insert: return L("Incluir páginas em qual PDF?")
+        case .remove: return L("Remover páginas de qual?")
+        case .extract: return L("Extrair páginas de qual?")
+        case .split: return L("Dividir qual PDF?")
+        case .crop: return L("Cortar ou girar qual PDF?")
+        case .number: return L("Numerar qual PDF?")
+        case .sign: return L("Assinar qual PDF?")
         }
     }
 }
@@ -122,67 +122,67 @@ struct HomeView: View {
 
     var body: some View {
         Screen {
-            SearchField(text: $query, placeholder: "Buscar nome ou texto")
+            SearchField(text: $query, placeholder: L("Buscar nome ou texto"))
             if query.trimmingCharacters(in: .whitespaces).isEmpty {
                 TileGrid {
-                    Tile(title: "Escanear", systemImage: "doc.viewfinder", color: Theme.yellow, shape: .rounded) {
+                    Tile(title: L("Escanear"), systemImage: "doc.viewfinder", color: Theme.yellow, shape: .rounded) {
                         flow.startScan(.newDocument(folder: ""))
                     }
-                    Tile(title: "Importar", systemImage: "square.and.arrow.down", color: Theme.blue, shape: .rounded) {
+                    Tile(title: L("Importar"), systemImage: "square.and.arrow.down", color: Theme.blue, shape: .rounded) {
                         showImporter = true
                     }
-                    Tile(title: "Todos os PDFs", systemImage: "doc.on.doc.fill", color: Theme.red,
+                    Tile(title: L("Todos os PDFs"), systemImage: "doc.on.doc.fill", color: Theme.red,
                          count: "\(library.items.count)") {
                         flow.open(.list(.all))
                     }
-                    Tile(title: "Recentes", systemImage: "clock.fill", color: Theme.gray,
+                    Tile(title: L("Recentes"), systemImage: "clock.fill", color: Theme.gray,
                          count: "\(library.count(for: .recent))") {
                         flow.open(.list(.recent))
                     }
-                    Tile(title: "Sem OCR", systemImage: "text.viewfinder", color: Theme.orange,
+                    Tile(title: L("Sem OCR"), systemImage: "text.viewfinder", color: Theme.orange,
                          count: "\(library.count(for: .pendingOCR))", shape: .rounded) {
                         flow.open(.list(.pendingOCR))
                     }
-                    Tile(title: "Com OCR", systemImage: "checkmark.seal.fill", color: Theme.green,
+                    Tile(title: L("Com OCR"), systemImage: "checkmark.seal.fill", color: Theme.green,
                          count: "\(library.count(for: .ocr))") {
                         flow.open(.list(.ocr))
                     }
-                    Tile(title: "Favoritos", systemImage: "star.fill", color: Theme.yellow,
+                    Tile(title: L("Favoritos"), systemImage: "star.fill", color: Theme.yellow,
                          count: "\(library.count(for: .favorites))", shape: .rounded) {
                         flow.open(.list(.favorites))
                     }
-                    Tile(title: "Pastas", systemImage: "folder.fill", color: Theme.indigo,
+                    Tile(title: L("Pastas"), systemImage: "folder.fill", color: Theme.indigo,
                          count: "\(library.topLevelFolders.count)") {
                         flow.open(.folders)
                     }
                 }
-                SectionTitle(text: "Ferramentas")
+                SectionTitle(text: L("Ferramentas"))
                 TileGrid {
-                    Tile(title: "Ler", systemImage: "book.fill", color: Theme.blue) { tool = .read }
-                    Tile(title: "Fazer OCR", systemImage: "text.viewfinder", color: Theme.orange, shape: .rounded) {
+                    Tile(title: L("Ler"), systemImage: "book.fill", color: Theme.blue) { tool = .read }
+                    Tile(title: L("Fazer OCR"), systemImage: "text.viewfinder", color: Theme.orange, shape: .rounded) {
                         tool = .ocr
                     }
-                    Tile(title: "Organizar páginas", systemImage: "rectangle.grid.2x2.fill", color: Theme.purple,
+                    Tile(title: L("Organizar páginas"), systemImage: "rectangle.grid.2x2.fill", color: Theme.purple,
                          shape: .rounded) { tool = .organize }
-                    Tile(title: "Incluir páginas", systemImage: "plus.rectangle.on.rectangle", color: Theme.teal,
+                    Tile(title: L("Incluir páginas"), systemImage: "plus.rectangle.on.rectangle", color: Theme.teal,
                          shape: .rounded) { tool = .insert }
-                    Tile(title: "Remover páginas", systemImage: "minus.rectangle", color: Theme.red, shape: .rounded) {
+                    Tile(title: L("Remover páginas"), systemImage: "minus.rectangle", color: Theme.red, shape: .rounded) {
                         tool = .remove
                     }
-                    Tile(title: "Extrair páginas", systemImage: "doc.badge.plus", color: Theme.indigo) { tool = .extract }
-                    Tile(title: "Dividir em partes", systemImage: "scissors", color: Theme.pink) { tool = .split }
-                    Tile(title: "Combinar PDFs", systemImage: "square.stack.3d.down.right.fill", color: Theme.purple,
+                    Tile(title: L("Extrair páginas"), systemImage: "doc.badge.plus", color: Theme.indigo) { tool = .extract }
+                    Tile(title: L("Dividir em partes"), systemImage: "scissors", color: Theme.pink) { tool = .split }
+                    Tile(title: L("Combinar PDFs"), systemImage: "square.stack.3d.down.right.fill", color: Theme.purple,
                          shape: .rounded) {
                         flow.open(.merge)
                     }
-                    Tile(title: "Cortar e girar", systemImage: "crop.rotate", color: Theme.indigo, shape: .rounded) {
+                    Tile(title: L("Cortar e girar"), systemImage: "crop.rotate", color: Theme.indigo, shape: .rounded) {
                         tool = .crop
                     }
-                    Tile(title: "Numerar páginas", systemImage: "number", color: Theme.indigo) { tool = .number }
+                    Tile(title: L("Numerar páginas"), systemImage: "number", color: Theme.indigo) { tool = .number }
                     signToolTile
                 }
-                WideTile(title: "Converter em PDF", systemImage: "arrow.triangle.2.circlepath.doc.on.clipboard",
-                         color: Theme.teal, subtitle: "Fotos, imagens, Word, Excel, PowerPoint, Pages, texto") {
+                WideTile(title: L("Converter em PDF"), systemImage: "arrow.triangle.2.circlepath.doc.on.clipboard",
+                         color: Theme.teal, subtitle: L("Fotos, imagens, Word, Excel, PowerPoint, Pages, texto")) {
                     showConvertMenu = true
                 }
                 Text("Color Software")
@@ -247,18 +247,18 @@ struct HomeView: View {
             guard !urls.isEmpty else { return }
             let imported = library.importFiles(urls)
             if imported.count == 1 {
-                flow.toast("PDF importado: \(imported[0].name)", actionTitle: "Abrir") {
+                flow.toast(LF("PDF importado: {}", imported[0].name), actionTitle: L("Abrir")) {
                     flow.open(.document(imported[0].id))
                 }
             } else if !imported.isEmpty {
-                flow.toast("\(imported.count) PDFs importados.")
+                flow.toast(LF("{} PDFs importados.", imported.count))
             }
         }
     }
 
     /// Fotos da galeria: grava cada uma numa pasta temporária e converte.
     private func convertPhotos(_ items: [PhotosPickerItem]) async {
-        flow.busyMessage = "Preparando as fotos…"
+        flow.busyMessage = L("Preparando as fotos…")
         let dir = FileManager.default.temporaryDirectory.appendingPathComponent("conv-\(UUID().uuidString)")
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         var urls: [URL] = []
@@ -269,7 +269,7 @@ struct HomeView: View {
         }
         flow.busyMessage = nil
         if urls.isEmpty {
-            flow.toast("Não foi possível ler as fotos escolhidas.")
+            flow.toast(L("Não foi possível ler as fotos escolhidas."))
         } else {
             flow.startConversion(urls, alreadyLocal: true)
         }
@@ -288,9 +288,9 @@ struct HomeView: View {
             let todo = items.filter { library.needsOCRAttention($0) }
             for i in todo { jobs.startOCR(i, library: library, flow: flow) }
             if todo.isEmpty {
-                flow.toast("Esses PDFs já têm texto selecionável. O OCR não é necessário.")
+                flow.toast(L("Esses PDFs já têm texto selecionável. O OCR não é necessário."))
             } else if todo.count > 1 {
-                flow.toast("\(todo.count) PDFs na fila do OCR.")
+                flow.toast(LF("{} PDFs na fila do OCR.", todo.count))
             }
         case .organize:
             flow.open(.organize(item.id))
@@ -314,7 +314,7 @@ struct HomeView: View {
     }
 
     private var signToolTile: some View {
-        Tile(title: "Assinar digitalmente", systemImage: "signature", color: Theme.blue, shape: .rounded) { tool = .sign }
+        Tile(title: L("Assinar digitalmente"), systemImage: "signature", color: Theme.blue, shape: .rounded) { tool = .sign }
     }
 }
 
@@ -325,10 +325,10 @@ struct SearchResultsView: View {
 
     var body: some View {
         if results.isEmpty {
-            EmptyStateView(systemImage: "magnifyingglass", title: "Nada encontrado",
-                           message: "A busca procura no nome dos arquivos e no texto dos PDFs. PDFs escaneados só aparecem pelo texto depois do OCR.")
+            EmptyStateView(systemImage: "magnifyingglass", title: L("Nada encontrado"),
+                           message: L("A busca procura no nome dos arquivos e no texto dos PDFs. PDFs escaneados só aparecem pelo texto depois do OCR."))
         } else {
-            SectionTitle(text: "\(results.count) resultado\(results.count == 1 ? "" : "s")")
+            SectionTitle(text: LN(results.count, "1 resultado", "{} resultados"))
             TileGrid {
                 ForEach(results) { item in
                     DocTile(item: item, showFolder: true) { flow.open(.document(item.id)) }

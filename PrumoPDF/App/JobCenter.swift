@@ -29,7 +29,7 @@ final class JobCenter: ObservableObject {
             run(item, library: library, flow: flow)
         } else {
             queue.append(item.id)
-            flow.toast("Na fila do OCR: \(item.name)")
+            flow.toast(LF("Na fila do OCR: {}", item.name))
         }
     }
 
@@ -73,26 +73,26 @@ final class JobCenter: ObservableObject {
             do {
                 let result = try library.adopt(fileAt: output, name: "\(item.name) - OCR", folder: item.folder)
                 library.updateAfterOCR(original: item, result: result, report: report)
-                var message = "OCR concluído: \(result.name)"
+                var message = LF("OCR concluído: {}", result.name)
                 if !report.reviewPages.isEmpty {
-                    message += ". Revise as páginas \(PageSelection.format(report.reviewPages))"
+                    message = sentences(message, LF("Revise as páginas {}.", PageSelection.format(report.reviewPages)))
                 }
                 if report.hadSignature {
-                    message += ". A cópia com OCR não mantém a assinatura digital; o original continua válido"
+                    message = sentences(message, L("A cópia com OCR não mantém a assinatura digital; o original continua válido."))
                 }
-                flow.toast(message, actionTitle: "Abrir") { flow.open(.document(result.id)) }
+                flow.toast(message, actionTitle: L("Abrir")) { flow.open(.document(result.id)) }
             } catch {
-                flow.toast("Não foi possível salvar o resultado: \(error.localizedDescription)")
+                flow.toast(LF("Não foi possível salvar o resultado: {}", error.localizedDescription))
             }
         case .failure(let error):
             try? FileManager.default.removeItem(at: output)
             if error is CancellationError {
-                flow.toast("OCR cancelado. Nada foi alterado.")
+                flow.toast(L("OCR cancelado. Nada foi alterado."))
             } else if error is OCRError {
                 library.setPendingOCR(item, false)
                 flow.toast(error.localizedDescription)
             } else {
-                flow.toast("Erro no OCR de “\(item.name)”: \(error.localizedDescription)")
+                flow.toast(LF("Erro no OCR de “{}”: {}", item.name, error.localizedDescription))
             }
         }
         running = nil

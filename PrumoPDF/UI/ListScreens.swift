@@ -36,7 +36,7 @@ struct DocumentGridScreen: View {
     private var title: String {
         switch source {
         case .list(let l): return l.title
-        case .folder(let p): return p.isEmpty ? "Sem pasta" : (p as NSString).lastPathComponent
+        case .folder(let p): return p.isEmpty ? L("Sem pasta") : (p as NSString).lastPathComponent
         }
     }
 
@@ -72,16 +72,16 @@ struct DocumentGridScreen: View {
 
     var body: some View {
         Screen {
-            SearchField(text: $query, placeholder: "Buscar em \(title)")
+            SearchField(text: $query, placeholder: LF("Buscar em {}", title))
             if folderPath != nil, query.isEmpty, !selecting {
-                WideTile(title: "Adicionar PDFs", systemImage: "plus", color: Theme.blue,
-                         subtitle: "Do app Arquivos ou de outra parte do Prumo (outra pasta, Todos os PDFs…)") {
+                WideTile(title: L("Adicionar PDFs"), systemImage: "plus", color: Theme.blue,
+                         subtitle: L("Do app Arquivos ou de outra parte do Prumo (outra pasta, Todos os PDFs…)")) {
                     showAddPDFs = true
                 }
             }
             if case .list(.pendingOCR) = source, !docs.isEmpty, !selecting {
-                WideTile(title: "Fazer OCR de todos", systemImage: "text.viewfinder", color: Theme.orange,
-                         count: "\(docs.count)", subtitle: "Um arquivo por vez; cada um gera uma cópia com “OCR” no nome") {
+                WideTile(title: L("Fazer OCR de todos"), systemImage: "text.viewfinder", color: Theme.orange,
+                         count: "\(docs.count)", subtitle: L("Um arquivo por vez; cada um gera uma cópia com “OCR” no nome")) {
                     for item in docs { jobs.startOCR(item, library: library, flow: flow) }
                 }
             }
@@ -142,7 +142,7 @@ struct DocumentGridScreen: View {
             let urls = all.filter { Converter.kind(of: $0) == .pdf }
             guard !urls.isEmpty else { return }
             let imported = library.importFiles(urls, into: folderPath ?? "")
-            if !imported.isEmpty { flow.toast("\(imported.count) PDF\(imported.count == 1 ? "" : "s") importado\(imported.count == 1 ? "" : "s").") }
+            if !imported.isEmpty { flow.toast(LN(imported.count, "1 PDF importado.", "{} PDFs importados.")) }
         }
     }
 
@@ -187,7 +187,7 @@ struct DocumentGridScreen: View {
 
     private var selectionBar: some View {
         HStack(spacing: 10) {
-            Text(selected.isEmpty ? "Toque ou deslize o dedo nos PDFs" : "\(selected.count) selecionado\(selected.count == 1 ? "" : "s")")
+            Text(selected.isEmpty ? L("Toque ou deslize o dedo nos PDFs") : LN(selected.count, "1 selecionado", "{} selecionados"))
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(Theme.text)
             Spacer()
@@ -222,20 +222,20 @@ struct DocumentGridScreen: View {
     @ViewBuilder private var emptyState: some View {
         switch source {
         case .list(.pendingOCR):
-            EmptyStateView(systemImage: "checkmark.seal", title: "Nenhum PDF sem OCR",
-                           message: "PDFs escaneados ou em imagem aparecem aqui até você fazer o OCR.")
+            EmptyStateView(systemImage: "checkmark.seal", title: L("Nenhum PDF sem OCR"),
+                           message: L("PDFs escaneados ou em imagem aparecem aqui até você fazer o OCR."))
         case .list(.favorites):
-            EmptyStateView(systemImage: "star", title: "Nenhum favorito",
-                           message: "Toque na estrela de um PDF para ele aparecer aqui.")
+            EmptyStateView(systemImage: "star", title: L("Nenhum favorito"),
+                           message: L("Toque na estrela de um PDF para ele aparecer aqui."))
         case .list(.ocr):
-            EmptyStateView(systemImage: "text.viewfinder", title: "Nenhum PDF com OCR",
-                           message: "Os arquivos criados pelo OCR aparecem aqui.")
+            EmptyStateView(systemImage: "text.viewfinder", title: L("Nenhum PDF com OCR"),
+                           message: L("Os arquivos criados pelo OCR aparecem aqui."))
         case .folder:
-            EmptyStateView(systemImage: "folder", title: "Pasta vazia",
-                           message: "Use “Adicionar PDFs”, acima, ou o menu ⋯ para escanear aqui.")
+            EmptyStateView(systemImage: "folder", title: L("Pasta vazia"),
+                           message: L("Use “Adicionar PDFs”, acima, ou o menu ⋯ para escanear aqui."))
         default:
-            EmptyStateView(systemImage: "doc", title: query.isEmpty ? "Nenhum PDF" : "Nada encontrado",
-                           message: query.isEmpty ? "Escaneie ou importe um PDF pela tela inicial." : "Tente outro termo.")
+            EmptyStateView(systemImage: "doc", title: query.isEmpty ? L("Nenhum PDF") : L("Nada encontrado"),
+                           message: query.isEmpty ? L("Escaneie ou importe um PDF pela tela inicial.") : L("Tente outro termo."))
         }
     }
 }
@@ -247,13 +247,13 @@ struct FoldersScreen: View {
 
     var body: some View {
         Screen {
-            WideTile(title: "Sem pasta", systemImage: "tray.fill", color: Theme.gray,
+            WideTile(title: L("Sem pasta"), systemImage: "tray.fill", color: Theme.gray,
                      count: "\(library.items(inFolder: "").count)") {
                 flow.open(.folder(""))
             }
             if library.topLevelFolders.isEmpty {
-                EmptyStateView(systemImage: "folder.badge.plus", title: "Nenhuma pasta",
-                               message: "Crie pastas para organizar seus PDFs, por cliente ou por processo.")
+                EmptyStateView(systemImage: "folder.badge.plus", title: L("Nenhuma pasta"),
+                               message: L("Crie pastas para organizar seus PDFs, por cliente ou por processo."))
             } else {
                 TileGrid {
                     ForEach(library.topLevelFolders) { folder in
@@ -261,7 +261,7 @@ struct FoldersScreen: View {
                     }
                 }
             }
-            WideTile(title: "Nova pasta", systemImage: "folder.badge.plus", color: Theme.blue) {
+            WideTile(title: L("Nova pasta"), systemImage: "folder.badge.plus", color: Theme.blue) {
                 folderActions.create(in: "")
             }
             Text("As pastas também aparecem no app Arquivos, em No meu iPhone › Prumo PDF.")
@@ -325,7 +325,7 @@ struct DocumentChooser: View {
 
     private var origins: [ChooserOriginOption] {
         var out = DocList.allCases.map { ChooserOriginOption(label: $0.title, origin: .list($0)) }
-        if excludeFolder != "" { out.append(ChooserOriginOption(label: "Sem pasta", origin: .folder(""))) }
+        if excludeFolder != "" { out.append(ChooserOriginOption(label: L("Sem pasta"), origin: .folder(""))) }
         for f in library.folders where f.path != excludeFolder {
             let indent = String(repeating: "   ", count: f.path.filter { $0 == "/" }.count)
             out.append(ChooserOriginOption(label: indent + f.name, origin: .folder(f.path)))
@@ -336,11 +336,11 @@ struct DocumentChooser: View {
     var body: some View {
         Screen {
             if allowImport {
-                WideTile(title: "Do app Arquivos…", systemImage: "folder.badge.plus", color: Theme.blue,
-                         subtitle: "PDF, foto, Word, Excel… (o que não for PDF é convertido na hora)") {
+                WideTile(title: L("Do app Arquivos…"), systemImage: "folder.badge.plus", color: Theme.blue,
+                         subtitle: L("PDF, foto, Word, Excel… (o que não for PDF é convertido na hora)")) {
                     showImporter = true
                 }
-                SectionTitle(text: "Ou escolha no Prumo")
+                SectionTitle(text: L("Ou escolha no Prumo"))
             }
             HStack(spacing: 8) {
                 Text("Mostrar")
@@ -355,11 +355,11 @@ struct DocumentChooser: View {
                 Spacer(minLength: 0)
             }
             .padding(.horizontal, 4)
-            SearchField(text: $query, placeholder: "Buscar PDF")
+            SearchField(text: $query, placeholder: L("Buscar PDF"))
             if docs.isEmpty {
-                EmptyStateView(systemImage: "doc", title: "Nenhum PDF aqui",
-                               message: allowImport ? "Use “Do app Arquivos…” para escolher um arquivo de fora do Prumo."
-                                                    : "Não há outros PDFs aqui.")
+                EmptyStateView(systemImage: "doc", title: L("Nenhum PDF aqui"),
+                               message: allowImport ? L("Use “Do app Arquivos…” para escolher um arquivo de fora do Prumo.")
+                                                    : L("Não há outros PDFs aqui."))
             } else {
                 let shown = docs
                 TileGrid {
@@ -392,7 +392,7 @@ struct DocumentChooser: View {
             }
             if multiple {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(selected.isEmpty ? "Adicionar" : "Adicionar (\(selected.count))") {
+                    Button(selected.isEmpty ? L("Adicionar") : LF("Adicionar ({})", selected.count)) {
                         onDone(selected.compactMap { library.item(id: $0) })
                     }
                     .disabled(selected.isEmpty)
@@ -406,7 +406,7 @@ struct DocumentChooser: View {
             let others = all.filter { Converter.kind(of: $0) != .pdf }
             let imported = library.importFiles(pdfs, into: importFolder)
             if others.isEmpty {
-                if imported.isEmpty { flow.toast("Não foi possível importar o arquivo.") } else { onDone(imported) }
+                if imported.isEmpty { flow.toast(L("Não foi possível importar o arquivo.")) } else { onDone(imported) }
                 return
             }
             // O que não é PDF vira PDF antes de seguir (cada arquivo vira um PDF).
@@ -430,20 +430,20 @@ struct AddToFolderModifier: ViewModifier {
     @EnvironmentObject private var flow: AppFlow
     @State private var fromLibrary: [PDFItem]?
 
-    private var name: String { folder.isEmpty ? "Sem pasta" : (folder as NSString).lastPathComponent }
+    private var name: String { folder.isEmpty ? L("Sem pasta") : (folder as NSString).lastPathComponent }
 
     func body(content: Content) -> some View {
         content
             .sheet(isPresented: $isPresented) {
                 NavigationStack {
-                    DocumentChooser(title: "Adicionar a “\(name)”", multiple: true, allowImport: true,
+                    DocumentChooser(title: LF("Adicionar a “{}”", name), multiple: true, allowImport: true,
                                     importFolder: folder, excludeFolder: folder,
                                     onDone: { items in
                                         isPresented = false
                                         let others = items.filter { $0.folder != folder }
                                         if others.count < items.count {
                                             let n = items.count - others.count
-                                            flow.toast("\(n) PDF\(n == 1 ? "" : "s") importado\(n == 1 ? "" : "s") para \(name).")
+                                            flow.toast(LN(n, "1 PDF importado para {}.", "{} PDFs importados para {}.", name))
                                         }
                                         if !others.isEmpty {
                                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { fromLibrary = others }
@@ -459,13 +459,13 @@ struct AddToFolderModifier: ViewModifier {
                 Button("Mover") {
                     do {
                         try library.move(items, toFolder: folder)
-                        flow.toast("\(items.count == 1 ? "PDF movido" : "\(items.count) PDFs movidos") para \(name).")
+                        flow.toast(LN(items.count, "PDF movido para {}.", "{} PDFs movidos para {}.", name))
                     } catch { flow.show(error: error) }
                 }
                 Button("Copiar") {
                     do {
                         try library.copy(items, toFolder: folder)
-                        flow.toast("\(items.count == 1 ? "PDF copiado" : "\(items.count) PDFs copiados") para \(name).")
+                        flow.toast(LN(items.count, "PDF copiado para {}.", "{} PDFs copiados para {}.", name))
                     } catch { flow.show(error: error) }
                 }
                 Button("Cancelar", role: .cancel) {}
@@ -476,6 +476,6 @@ struct AddToFolderModifier: ViewModifier {
 
     private var moveTitle: String {
         let n = fromLibrary?.count ?? 0
-        return n == 1 ? "Mover ou copiar o PDF?" : "Mover ou copiar os \(n) PDFs?"
+        return n == 1 ? L("Mover ou copiar o PDF?") : LF("Mover ou copiar os {} PDFs?", n)
     }
 }

@@ -97,7 +97,7 @@ struct PDFLexer {
 
     mutating func parse() throws -> PDFObject {
         skipWhite()
-        guard i < b.count else { throw PDFSyntaxError(message: "fim inesperado") }
+        guard i < b.count else { throw PDFSyntaxError(message: L("fim inesperado")) }
         let c = b[i]
         if peek("<<") {
             i += 2
@@ -105,8 +105,8 @@ struct PDFLexer {
             while true {
                 skipWhite()
                 if peek(">>") { i += 2; break }
-                guard i < b.count, b[i] == UInt8(ascii: "/") else { throw PDFSyntaxError(message: "chave inválida") }
-                guard case .name(let key) = try parse() else { throw PDFSyntaxError(message: "chave inválida") }
+                guard i < b.count, b[i] == UInt8(ascii: "/") else { throw PDFSyntaxError(message: L("chave inválida")) }
+                guard case .name(let key) = try parse() else { throw PDFSyntaxError(message: L("chave inválida")) }
                 let value = try parse()
                 d[key] = value
             }
@@ -118,7 +118,7 @@ struct PDFLexer {
             var arr: [PDFObject] = []
             while true {
                 skipWhite()
-                guard i < b.count else { throw PDFSyntaxError(message: "lista sem fim") }
+                guard i < b.count else { throw PDFSyntaxError(message: L("lista sem fim")) }
                 if b[i] == UInt8(ascii: "]") { i += 1; break }
                 arr.append(try parse())
             }
@@ -154,7 +154,7 @@ struct PDFLexer {
         case "true": return .bool(true)
         case "false": return .bool(false)
         case "null": return .null
-        default: throw PDFSyntaxError(message: "palavra inesperada: \(word)")
+        default: throw PDFSyntaxError(message: LF("palavra inesperada: {}", word))
         }
     }
 
@@ -226,7 +226,7 @@ struct PDFLexer {
                 out.append(c)
             }
         }
-        throw PDFSyntaxError(message: "texto sem fim")
+        throw PDFSyntaxError(message: L("texto sem fim"))
     }
 }
 
@@ -289,7 +289,7 @@ final class PDFFile {
             }
             k -= 1
         }
-        throw PDFSyntaxError(message: "startxref não encontrado")
+        throw PDFSyntaxError(message: L("startxref não encontrado"))
     }
 
     private func readXrefs() throws {
@@ -315,7 +315,7 @@ final class PDFFile {
             first = false
             off = prev ?? -1
         }
-        guard trailer["Root"] != nil else { throw PDFSyntaxError(message: "PDF sem catálogo") }
+        guard trailer["Root"] != nil else { throw PDFSyntaxError(message: L("PDF sem catálogo")) }
     }
 
     private func classicXref(at start: Int) throws -> PDFDict {
@@ -325,15 +325,15 @@ final class PDFFile {
             lx.skipWhite()
             if lx.peek("trailer") {
                 _ = lx.keyword()
-                guard case .dict(let t) = try lx.parse() else { throw PDFSyntaxError(message: "trailer inválido") }
+                guard case .dict(let t) = try lx.parse() else { throw PDFSyntaxError(message: L("trailer inválido")) }
                 return t
             }
             guard let first = Int(lx.keyword()), let count = Int(lx.keyword()) else {
-                throw PDFSyntaxError(message: "xref inválida")
+                throw PDFSyntaxError(message: L("xref inválida"))
             }
             for n in 0..<count {
                 guard let off = Int(lx.keyword()), let gen = Int(lx.keyword()) else {
-                    throw PDFSyntaxError(message: "xref inválida")
+                    throw PDFSyntaxError(message: L("xref inválida"))
                 }
                 let kind = lx.keyword()
                 let num = first + n
@@ -347,10 +347,10 @@ final class PDFFile {
     @discardableResult
     private func streamXref(at off: Int) throws -> PDFDict {
         let (_, _, obj) = try indirect(at: off)
-        guard case .stream(let d, let raw) = obj else { throw PDFSyntaxError(message: "xref em fluxo inválida") }
+        guard case .stream(let d, let raw) = obj else { throw PDFSyntaxError(message: L("xref em fluxo inválida")) }
         let data = try decode(d, raw)
         guard let w = d["W"]?.arrayValue?.compactMap({ $0.intValue }), w.count == 3 else {
-            throw PDFSyntaxError(message: "xref sem /W")
+            throw PDFSyntaxError(message: L("xref sem /W"))
         }
         let size = d["Size"]?.intValue ?? 0
         var index: [Int] = d["Index"]?.arrayValue?.compactMap { $0.intValue } ?? [0, size]
@@ -388,7 +388,7 @@ final class PDFFile {
     func indirect(at off: Int) throws -> (Int, Int, PDFObject) {
         var lx = PDFLexer(bytes, at: off)
         guard let n = Int(lx.keyword()), let g = Int(lx.keyword()), lx.keyword() == "obj" else {
-            throw PDFSyntaxError(message: "objeto inválido em \(off)")
+            throw PDFSyntaxError(message: LF("objeto inválido em {}", off))
         }
         let value = try lx.parse()
         lx.skipWhite()
@@ -430,7 +430,7 @@ final class PDFFile {
         var result: PDFObject = .null
         if let o = offsets[num] {
             let (n, _, v) = try indirect(at: o.offset)
-            guard n == num else { throw PDFSyntaxError(message: "xref aponta para o objeto errado (\(num))") }
+            guard n == num else { throw PDFSyntaxError(message: LF("xref aponta para o objeto errado ({})", num)) }
             result = v
         } else if let c = compressed[num] {
             result = try fromObjectStream(c.stream, num)
@@ -443,7 +443,7 @@ final class PDFFile {
 
     private func fromObjectStream(_ stm: Int, _ num: Int) throws -> PDFObject {
         if let objs = objStreams[stm] { return objs[num] ?? .null }
-        guard case .stream(let d, let raw) = try object(stm) else { throw PDFSyntaxError(message: "fluxo de objetos inválido") }
+        guard case .stream(let d, let raw) = try object(stm) else { throw PDFSyntaxError(message: L("fluxo de objetos inválido")) }
         let data = try decode(d, raw)
         let n = d["N"]?.intValue ?? 0
         let first = d["First"]?.intValue ?? 0
@@ -478,7 +478,7 @@ final class PDFFile {
         }
         var data = raw
         for f in filters {
-            guard f == "FlateDecode" || f == "Fl" else { throw PDFSyntaxError(message: "filtro não suportado: \(f)") }
+            guard f == "FlateDecode" || f == "Fl" else { throw PDFSyntaxError(message: LF("filtro não suportado: {}", f)) }
             data = try PDFFile.inflate(data)
         }
         if let parms = resolve(d["DecodeParms"])?.dictValue ?? resolve(d["DecodeParms"])?.arrayValue?.first?.dictValue,
@@ -493,7 +493,7 @@ final class PDFFile {
         // o PDF usa zlib (2 bytes de cabeçalho); o "zlib" da Apple é o DEFLATE puro
         let body = Data(data[2...])
         guard let out = try? (body as NSData).decompressed(using: .zlib) else {
-            throw PDFSyntaxError(message: "fluxo compactado inválido")
+            throw PDFSyntaxError(message: L("fluxo compactado inválido"))
         }
         return [UInt8](out as Data)
     }

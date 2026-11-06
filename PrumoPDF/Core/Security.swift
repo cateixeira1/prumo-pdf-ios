@@ -9,35 +9,35 @@ import SwiftUI
 extension Library {
     /// Cópia do PDF com senha, na criptografia padrão de PDF: abre em qualquer leitor com a senha.
     func protect(_ item: PDFItem, password: String) throws -> PDFItem {
-        guard !password.isEmpty else { throw UserFacingError("Digite uma senha.") }
-        guard let doc = PDFDocument(url: item.url) else { throw UserFacingError("Não foi possível abrir o PDF.") }
-        if doc.isLocked { throw UserFacingError("Este PDF já tem senha.") }
-        let dest = uniqueURL(folder: item.folder, baseName: "\(item.name) - protegido")
+        guard !password.isEmpty else { throw UserFacingError(L("Digite uma senha.")) }
+        guard let doc = PDFDocument(url: item.url) else { throw UserFacingError(L("Não foi possível abrir o PDF.")) }
+        if doc.isLocked { throw UserFacingError(L("Este PDF já tem senha.")) }
+        let dest = uniqueURL(folder: item.folder, baseName: LF("{} - protegido", item.name))
         let ok = doc.write(to: dest, withOptions: [.userPasswordOption: password, .ownerPasswordOption: password])
-        guard ok else { throw UserFacingError("Não foi possível gravar o PDF protegido.") }
+        guard ok else { throw UserFacingError(L("Não foi possível gravar o PDF protegido.")) }
         reload()
         guard let new = self.item(path: relativePath(of: dest)) else {
-            throw UserFacingError("O arquivo foi salvo, mas não apareceu na biblioteca.")
+            throw UserFacingError(L("O arquivo foi salvo, mas não apareceu na biblioteca."))
         }
         return new
     }
 
     /// Cópia sem senha (com a senha atual), para fazer OCR, organizar páginas etc.
     func unprotect(_ item: PDFItem, password: String) throws -> PDFItem {
-        guard let doc = PDFDocument(url: item.url) else { throw UserFacingError("Não foi possível abrir o PDF.") }
-        guard doc.unlock(withPassword: password) else { throw UserFacingError("Senha incorreta.") }
+        guard let doc = PDFDocument(url: item.url) else { throw UserFacingError(L("Não foi possível abrir o PDF.")) }
+        guard doc.unlock(withPassword: password) else { throw UserFacingError(L("Senha incorreta.")) }
         // Copia as páginas para um documento novo: ele é gravado sem criptografia.
         let plain = PDFDocument()
         for i in 0..<doc.pageCount {
             if let page = doc.page(at: i)?.copy() as? PDFPage { plain.insert(page, at: plain.pageCount) }
         }
-        let base = item.name.hasSuffix(" - protegido") ? String(item.name.dropLast(" - protegido".count))
-                                                         : "\(item.name) - sem senha"
+        let stripped = AppLanguages.stripSuffix(item.name, template: "{} - protegido")   // i18n: em qualquer idioma
+        let base = stripped != item.name ? stripped : LF("{} - sem senha", item.name)
         let dest = uniqueURL(folder: item.folder, baseName: base)
-        guard plain.write(to: dest) else { throw UserFacingError("Não foi possível gravar a cópia sem senha.") }
+        guard plain.write(to: dest) else { throw UserFacingError(L("Não foi possível gravar a cópia sem senha.")) }
         reload()
         guard let new = self.item(path: relativePath(of: dest)) else {
-            throw UserFacingError("O arquivo foi salvo, mas não apareceu na biblioteca.")
+            throw UserFacingError(L("O arquivo foi salvo, mas não apareceu na biblioteca."))
         }
         return new
     }
@@ -72,7 +72,7 @@ final class AppLock: ObservableObject {
         case .faceID: return "Face ID"
         case .touchID: return "Touch ID"
         case .opticID: return "Optic ID"
-        default: return "código do iPhone"
+        default: return L("código do iPhone")
         }
     }
 
@@ -95,9 +95,9 @@ final class AppLock: ObservableObject {
         prompting = true
         defer { prompting = false }
         let ctx = LAContext()
-        ctx.localizedCancelTitle = "Cancelar"
+        ctx.localizedCancelTitle = L("Cancelar")
         do {
-            let ok = try await ctx.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "Desbloquear o Prumo PDF")
+            let ok = try await ctx.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: L("Desbloquear o Prumo PDF"))
             if ok {
                 locked = false
                 lastError = nil
@@ -115,13 +115,13 @@ final class AppLock: ObservableObject {
         case .userCancel, .systemCancel, .appCancel, .notInteractive, .userFallback:
             return nil
         case .biometryNotAvailable:
-            return automatic ? nil : "O \(methodName) não está disponível agora. Tente de novo em instantes."
+            return automatic ? nil : LF("O {} não está disponível agora. Tente de novo em instantes.", methodName)
         case .biometryLockout:
-            return "O \(methodName) foi bloqueado por muitas tentativas. Toque em Desbloquear e use o código do iPhone."
+            return LF("O {} foi bloqueado por muitas tentativas. Toque em Desbloquear e use o código do iPhone.", methodName)
         case .authenticationFailed:
-            return "Não foi possível confirmar. Tente de novo."
+            return L("Não foi possível confirmar. Tente de novo.")
         case .passcodeNotSet:
-            return "Configure um código no iPhone (Ajustes › Face ID e Código) para usar o bloqueio."
+            return L("Configure um código no iPhone (Ajustes › Face ID e Código) para usar o bloqueio.")
         default:
             return automatic ? nil : e.localizedDescription
         }
@@ -133,11 +133,11 @@ final class AppLock: ObservableObject {
         let ctx = LAContext()
         var err: NSError?
         guard ctx.canEvaluatePolicy(.deviceOwnerAuthentication, error: &err) else {
-            lastError = "Este iPhone não tem Face ID, Touch ID nem código configurado."
+            lastError = L("Este iPhone não tem Face ID, Touch ID nem código configurado.")
             return false
         }
         do {
-            let reason = on ? "Ligar o bloqueio do Prumo PDF" : "Desligar o bloqueio do Prumo PDF"
+            let reason = on ? L("Ligar o bloqueio do Prumo PDF") : L("Desligar o bloqueio do Prumo PDF")
             guard try await ctx.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) else { return false }
         } catch {
             return false
@@ -176,7 +176,7 @@ struct LockView: View {
             if let e = lock.lastError {
                 Text(e).font(.footnote).foregroundStyle(Theme.red).multilineTextAlignment(.center).padding(.horizontal)
             }
-            PrimaryButton(title: "Desbloquear com \(AppLock.methodName)", color: Theme.blue) {
+            PrimaryButton(title: LF("Desbloquear com {}", AppLock.methodName), color: Theme.blue) {
                 Task { await lock.unlock() }
             }
             .padding(.horizontal, 40)

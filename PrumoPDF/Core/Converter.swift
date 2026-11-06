@@ -171,9 +171,9 @@ enum Converter {
         if combineImages && imageURLs.count > 1 {
             let imgs = imageURLs.flatMap { images(from: $0) }
             if imgs.isEmpty {
-                failed.append(("Imagens", "Não foi possível abrir as imagens."))
+                failed.append((L("Imagens"), L("Não foi possível abrir as imagens.")))
             } else {
-                outputs.append(Output(data: pdfData(images: imgs), name: combinedName ?? "Imagens", fromImages: true))
+                outputs.append(Output(data: pdfData(images: imgs), name: combinedName ?? L("Imagens"), fromImages: true))
             }
         }
         for url in urls {
@@ -183,7 +183,7 @@ enum Converter {
                 case .image?:
                     if combineImages && imageURLs.count > 1 { continue }
                     let imgs = images(from: url)
-                    guard !imgs.isEmpty else { throw UserFacingError("Não foi possível abrir a imagem.") }
+                    guard !imgs.isEmpty else { throw UserFacingError(L("Não foi possível abrir a imagem.")) }
                     outputs.append(Output(data: pdfData(images: imgs), name: name, fromImages: true))
                 case .text?:
                     let ext = url.pathExtension.lowercased()
@@ -205,7 +205,7 @@ enum Converter {
         // Confere se cada resultado é um PDF com páginas.
         outputs = outputs.filter { out in
             if let doc = PDFDocument(data: out.data), doc.pageCount > 0 { return true }
-            failed.append((out.name, "A conversão não gerou páginas."))
+            failed.append((out.name, L("A conversão não gerou páginas.")))
             return false
         }
         return (outputs, failed)
@@ -247,12 +247,12 @@ final class WebPDFRenderer: NSObject, WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        continuation?.resume(throwing: UserFacingError("Não foi possível abrir o documento: \(error.localizedDescription)"))
+        continuation?.resume(throwing: UserFacingError(LF("Não foi possível abrir o documento: {}", error.localizedDescription)))
         continuation = nil
     }
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-        continuation?.resume(throwing: UserFacingError("Não foi possível abrir o documento: \(error.localizedDescription)"))
+        continuation?.resume(throwing: UserFacingError(LF("Não foi possível abrir o documento: {}", error.localizedDescription)))
         continuation = nil
     }
 }

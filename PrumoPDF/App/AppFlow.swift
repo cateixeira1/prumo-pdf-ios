@@ -124,7 +124,7 @@ final class AppFlow: ObservableObject {
 
     func startScan(_ target: ScanTarget) {
         guard ScanService.scannerAvailable else {
-            toast("O scanner de documentos não está disponível neste aparelho.")
+            toast(L("O scanner de documentos não está disponível neste aparelho."))
             return
         }
         scanTarget = target
@@ -133,7 +133,7 @@ final class AppFlow: ObservableObject {
     func finishScan(_ scan: VNDocumentCameraScan, target: ScanTarget, library: Library = .shared) {
         scanTarget = nil
         guard scan.pageCount > 0 else { return }
-        busyMessage = "Salvando \(scan.pageCount) página\(scan.pageCount == 1 ? "" : "s")…"
+        busyMessage = LN(scan.pageCount, "Salvando 1 página…", "Salvando {} páginas…")
         let count = scan.pageCount
         Task {
             let data = await Task.detached(priority: .userInitiated) { ScanService.makePDF(from: scan) }.value
@@ -170,18 +170,18 @@ final class AppFlow: ObservableObject {
     func insertScannedPages(_ pending: PendingScanInsert, at position: InsertPosition, library: Library = .shared) {
         pendingScanInsert = nil
         guard let item = library.item(id: pending.itemID) else { return }
-        busyMessage = "Incluindo páginas…"
+        busyMessage = L("Incluindo páginas…")
         let data = pending.data
         Task {
             do {
                 try await library.modify(item) { doc in
                     guard let source = PDFDocument(data: data), source.pageCount > 0 else {
-                        throw UserFacingError("Não foi possível ler as páginas escaneadas.")
+                        throw UserFacingError(L("Não foi possível ler as páginas escaneadas."))
                     }
                     PDFOps.insert(pages: Array(1...source.pageCount), from: source, into: doc, at: position)
                 }
                 busyMessage = nil
-                toast("\(pending.pageCount) página\(pending.pageCount == 1 ? "" : "s") incluída\(pending.pageCount == 1 ? "" : "s").")
+                toast(LN(pending.pageCount, "1 página incluída.", "{} páginas incluídas."))
             } catch {
                 busyMessage = nil
                 show(error: error)
@@ -196,9 +196,9 @@ final class AppFlow: ObservableObject {
         if let first = imported.first {
             popToRoot()
             open(.document(first.id))
-            toast("PDF importado: \(first.name)")
+            toast(LF("PDF importado: {}", first.name))
         } else {
-            toast("Não foi possível importar o arquivo.")
+            toast(L("Não foi possível importar o arquivo."))
         }
     }
 
@@ -222,7 +222,7 @@ final class AppFlow: ObservableObject {
     func startConversion(_ urls: [URL], folder: String = "", alreadyLocal: Bool = false) {
         let local = alreadyLocal ? urls : copyForConversion(urls)
         guard !local.isEmpty else {
-            toast("Não foi possível ler os arquivos escolhidos.")
+            toast(L("Não foi possível ler os arquivos escolhidos."))
             return
         }
         let images = local.filter { Converter.kind(of: $0) == .image }.count
@@ -243,12 +243,12 @@ final class AppFlow: ObservableObject {
     @discardableResult
     func runConversion(_ urls: [URL], folder: String, combine: Bool, askOCR: Bool = true,
                        library: Library = .shared) async -> [PDFItem] {
-        busyMessage = "Convertendo em PDF…"
+        busyMessage = L("Convertendo em PDF…")
         let f = DateFormatter()
         f.locale = Locale(identifier: "pt_BR")
         f.dateFormat = "dd-MM-yyyy HH'h'mm"
         let result = await Converter.convert(urls: urls, combineImages: combine,
-                                             combinedName: "Imagens \(f.string(from: Date()))")
+                                             combinedName: LF("Imagens {}", f.string(from: Date())))
         busyMessage = nil
         var failed = result.failed
         var items: [PDFItem] = []
@@ -266,19 +266,21 @@ final class AppFlow: ObservableObject {
             try? FileManager.default.removeItem(at: dir)
         }
         if items.isEmpty {
-            if let first = failed.first { toast("Não foi possível converter “\(first.0)”: \(first.1)") }
+            if let first = failed.first { toast(LF("Não foi possível converter “{}”: {}", first.0, first.1)) }
             return []
         }
         if askOCR && items.count == 1 && imageItems.count == 1 {
             askOCRItemID = imageItems[0].id   // a pergunta abre o PDF depois da resposta
         } else {
             for item in imageItems { library.setPendingOCR(item, true) }
-            var msg = items.count == 1 ? "PDF criado: \(items[0].name)" : "\(items.count) PDFs criados"
-            if !imageItems.isEmpty && askOCR { msg += ". Os de fotos estão em Sem OCR." }
-            if !failed.isEmpty { msg += " \(failed.count) não \(failed.count == 1 ? "foi convertido" : "foram convertidos")." }
+            var msg = items.count == 1 ? LF("PDF criado: {}", items[0].name) : LF("{} PDFs criados", items.count)
+            if !imageItems.isEmpty && askOCR { msg = sentences(msg, L("Os de fotos estão em Sem OCR.")) }
+            if !failed.isEmpty {
+                msg = sentences(msg, LN(failed.count, "1 não foi convertido.", "{} não foram convertidos."))
+            }
             let first = items[0]
             if items.count == 1 {
-                toast(msg, actionTitle: "Abrir") { [weak self] in self?.open(.document(first.id)) }
+                toast(msg, actionTitle: L("Abrir")) { [weak self] in self?.open(.document(first.id)) }
             } else {
                 toast(msg)
             }
