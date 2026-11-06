@@ -89,7 +89,6 @@ xcrun simctl ui "$SIM" appearance dark
 shot 15-inicio-escuro home 7
 shot 16-documento-escuro detail
 xcrun simctl ui "$SIM" appearance light
-exit 0
 
 # O mesmo app em outros idiomas (conferência das traduções): SHOT_LANGS="en de ja"
 for lang in ${SHOT_LANGS:-}; do
@@ -100,3 +99,4 @@ for lang in ${SHOT_LANGS:-}; do
   shot "$lang-09-aguardando-ocr" pending 6 "$lang"
   shot "$lang-12-ajustes" settings 6 "$lang"
 done
+exit 0

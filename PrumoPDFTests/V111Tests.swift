@@ -72,7 +72,7 @@ final class V111Tests: XCTestCase {
 
     func testTranslationsAreBundled() throws {
         let bundle = Bundle(for: Library.self)
-        for lproj in AppLanguages.all.map(\.lproj) where lproj != "pt-BR" {
+        for lproj in AppLanguages.all.map(\.lproj) where lproj != "pt" {   // pt.lproj: a chave já é o texto
             let path = try XCTUnwrap(bundle.path(forResource: lproj, ofType: "lproj"), "falta \(lproj).lproj")
             let b = try XCTUnwrap(Bundle(path: path))
             XCTAssertNotEqual(b.localizedString(forKey: "Sem OCR", value: nil, table: nil), "Sem OCR", lproj)
