@@ -379,7 +379,7 @@ struct PDFKitView: UIViewRepresentable {
 /// Ações do botão "Ferramentas" do leitor (todas as funções do app).
 enum ReaderAction: Identifiable {
     case textMode, pageMode, goToPage, crop, number, sign, ocr, organize, insert, remove, extract, split, merge, dewarp,
-         protect, unprotect, duplicate, favorite, rename, move, details, undo, delete, openSummary
+         protect, unprotect, compress, duplicate, favorite, rename, move, details, undo, delete, openSummary
     var id: String { "\(self)" }
 }
 
@@ -1223,6 +1223,15 @@ struct PDFReaderScreen: View {
                     sheetAction = action
                 }
             }
+        case .compress:
+            if target.meta.isSigned {
+                flow.toast(L("Este PDF está assinado digitalmente: comprimir regrava o arquivo e a assinatura deixaria de valer. Comprima o original (sem assinatura) e assine depois."))
+            } else {
+                Task {
+                    await flushSaves()
+                    sheetAction = .compress
+                }
+            }
         case .split, .dewarp, .protect:
             if action != .split, target.meta.isSigned {
                 flow.toast(L("Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura."))
@@ -1291,6 +1300,8 @@ struct PDFReaderScreen: View {
             DewarpSheet(item: item).appEnvironment()
         case .sign:
             SignSheet(item: item).appEnvironment()
+        case .compress:
+            CompressSheet(item: item).appEnvironment()
         default:
             ProtectSheet(item: item).appEnvironment()
         }
@@ -1340,6 +1351,8 @@ struct ReaderToolsSheet: View {
                     } else {
                         row(L("Proteger com senha"), "lock", .protect, disabled: signed)
                     }
+                    row(L("Comprimir PDF"), "arrow.down.forward.and.arrow.up.backward", .compress,
+                        disabled: locked || signed)
                     row(L("Duplicar"), "plus.square.on.square", .duplicate)
                 }
                 Section("Arquivo") {

@@ -33,6 +33,7 @@ struct DocumentDetailScreen: View {
     @State private var showCrop = false
     @State private var showNumber = false
     @State private var showSign = false
+    @State private var showCompress = false
 
     private var item: PDFItem? { library.item(id: itemID) }
 
@@ -142,6 +143,10 @@ struct DocumentDetailScreen: View {
                         edit(item) { showProtect = true }
                     }
                 }
+                Tile(title: L("Comprimir PDF"), systemImage: "arrow.down.forward.and.arrow.up.backward", color: Theme.teal,
+                     shape: .rounded, subtitle: LF("Média ou alta · {}", item.size.fileSizeText)) {
+                    compress(item)
+                }
                 Tile(title: L("Duplicar"), systemImage: "plus.square.on.square", color: Theme.gray, shape: .rounded) {
                     do {
                         if let copy = try library.duplicate(item) {
@@ -196,6 +201,10 @@ struct DocumentDetailScreen: View {
         }
         .sheet(isPresented: $showProtect) {
             ProtectSheet(item: item)
+                .appEnvironment()
+        }
+        .sheet(isPresented: $showCompress) {
+            CompressSheet(item: item)
                 .appEnvironment()
         }
         .alert("Remover a senha", isPresented: $askUnprotect) {
@@ -260,6 +269,7 @@ struct DocumentDetailScreen: View {
             case "number"?: if item.meta.locked == true { lockedToast() } else { showNumber = true }
             case "protect"?: showProtect = true
             case "sign"?: showSign = true
+            case "compress"?: compress(item)
             case "remove"?:
                 pickerRequest = PagePickerRequest(kind: .remove, sourceURL: item.url,
                                                   sourceVersion: item.version, sourceTitle: item.name)
@@ -383,6 +393,17 @@ struct DocumentDetailScreen: View {
             } icon: {
                 Image(systemName: "signature").foregroundStyle(Theme.blue)
             }
+        }
+    }
+
+    /// Comprimir: PDF com senha ou assinado não é comprimido (a assinatura deixaria de valer).
+    private func compress(_ item: PDFItem) {
+        if item.meta.locked == true {
+            flow.toast(L("Este PDF tem senha. Para comprimir, crie antes uma cópia sem senha."))
+        } else if item.meta.isSigned {
+            flow.toast(L("Este PDF está assinado digitalmente: comprimir regrava o arquivo e a assinatura deixaria de valer. Comprima o original (sem assinatura) e assine depois."))
+        } else {
+            showCompress = true
         }
     }
 

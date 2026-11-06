@@ -143,6 +143,7 @@
 "Assinar no nível 1" = "Mit Stufe 1 signieren";
 "Assinar qual PDF?" = "Welches PDF signieren?";
 "Assinatura digital" = "Digitale Signatur";
+"Atenção: fotos e páginas escaneadas perdem nitidez (imagens reduzidas para 96 dpi). Letras pequenas podem ficar borradas ao ampliar ou imprimir. Use para enviar por e-mail ou anexar onde há limite de tamanho. Texto, destaques e o texto do OCR não mudam." = "Achtung: Fotos und gescannte Seiten verlieren an Schärfe (Bilder auf 96 dpi verkleinert). Kleine Schrift kann beim Vergrößern oder Drucken unscharf wirken. Verwenden Sie dies zum Versand per E-Mail oder zum Hochladen, wo die Größe begrenzt ist. Text, Markierungen und OCR-Text bleiben unverändert.";
 "Atual" = "Aktuell";
 "Atualizando o resumo…" = "Zusammenfassung wird aktualisiert …";
 "Aumentar" = "Größer";
@@ -206,6 +207,13 @@
 "Compartilhar" = "Teilen";
 "Compartilhar o texto" = "Text teilen";
 "Compartilhar…" = "Teilen …";
+"Compressão alta" = "Hohe Komprimierung";
+"Compressão média" = "Mittlere Komprimierung";
+"Comprimindo…" = "Wird komprimiert…";
+"Comprimir" = "Komprimieren";
+"Comprimir PDF" = "PDF komprimieren";
+"Comprimir PDF…" = "PDF komprimieren…";
+"Comprimir qual PDF?" = "Welches PDF komprimieren?";
 "Conectado neste computador" = "Auf diesem Computer verbunden";
 "Conferindo o certificado…" = "Zertifikat wird geprüft …";
 "Conferindo o resultado" = "Ergebnis wird geprüft";
@@ -237,6 +245,7 @@
 "Cortar ou girar páginas de qual PDF?" = "Seiten welches PDFs zuschneiden oder drehen?";
 "Cortar ou girar qual PDF?" = "Welches PDF zuschneiden oder drehen?";
 "Corte ou numeração" = "Zuschnitt oder Nummerierung";
+"Cria uma cópia menor: compressão média ou alta" = "Erstellt eine kleinere Kopie: mittlere oder hohe Komprimierung";
 "Cria uma cópia sem senha" = "Erstellt eine Kopie ohne Passwort";
 "Cria uma cópia sem senha, para destacar, fazer OCR, organizar ou dividir. O PDF com senha continua guardado." = "Erstellt eine Kopie ohne Passwort, um zu markieren, OCR auszuführen, zu organisieren oder zu teilen. Das PDF mit Passwort bleibt erhalten.";
 "Cria uma cópia sem senha, para fazer OCR, organizar ou dividir. O PDF com senha continua guardado." = "Erstellt eine Kopie ohne Passwort, um OCR auszuführen, zu organisieren oder zu teilen. Das PDF mit Passwort bleibt erhalten.";
@@ -377,6 +386,7 @@
 "Esses PDFs já têm texto selecionável. O OCR não é necessário." = "Diese PDFs haben bereits auswählbaren Text. Eine OCR ist nicht nötig.";
 "Esta página não tem texto para selecionar (é imagem). Faça o OCR para poder selecionar, destacar e resumir." = "Diese Seite hat keinen auswählbaren Text (sie ist ein Bild). Führen Sie die OCR aus, um auswählen, markieren und zusammenfassen zu können.";
 "Esta página é imagem, sem texto para selecionar. A cópia com OCR tem o texto." = "Diese Seite ist ein Bild ohne auswählbaren Text. Die Kopie mit OCR enthält den Text.";
+"Este PDF está assinado digitalmente: comprimir regrava o arquivo e a assinatura deixaria de valer. Comprima o original (sem assinatura) e assine depois." = "Dieses PDF ist digital signiert: Beim Komprimieren wird die Datei neu geschrieben und die Signatur wäre nicht mehr gültig. Komprimieren Sie das Original (ohne Signatur) und signieren Sie danach.";
 "Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura." = "Dieses PDF ist digital signiert: Jede Änderung würde die Signatur ungültig machen.";
 "Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura. Dá para ler, buscar, copiar e adicionar trechos ao resumo, mas não destacar, cortar ou mudar páginas." = "Dieses PDF ist digital signiert: Jede Änderung würde die Signatur ungültig machen. Sie können lesen, suchen, kopieren und Auszüge zur Zusammenfassung hinzufügen, aber nicht markieren, zuschneiden oder Seiten ändern.";
 "Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura. Use o original (sem assinatura) para mudar páginas, cortar, numerar ou destacar." = "Dieses PDF ist digital signiert: Jede Änderung würde die Signatur ungültig machen. Verwenden Sie das Original (ohne Signatur), um Seiten zu ändern, zuzuschneiden, zu nummerieren oder zu markieren.";
@@ -391,6 +401,7 @@
 "Este PDF não tem texto pesquisável (é imagem). Faça o OCR para poder buscar." = "Dieses PDF hat keinen durchsuchbaren Text (es ist ein Bild). Führen Sie die OCR aus, um suchen zu können.";
 "Este PDF não tem texto reconhecido. Faça o OCR para usar o modo leitor." = "Dieses PDF hat keinen erkannten Text. Führen Sie die OCR aus, um den Lesemodus zu verwenden.";
 "Este PDF tem senha" = "Dieses PDF hat ein Passwort";
+"Este PDF tem senha. Para comprimir, crie antes uma cópia sem senha." = "Dieses PDF hat ein Passwort. Erstellen Sie zum Komprimieren zuerst eine Kopie ohne Passwort.";
 "Este PDF tem senha. Para cortar ou girar, crie antes uma cópia sem senha." = "Dieses PDF hat ein Passwort. Um es zuzuschneiden oder zu drehen, erstellen Sie zuerst eine Kopie ohne Passwort.";
 "Este PDF tem senha. Para cortar, girar ou numerar, crie antes uma cópia sem senha (“Remover senha”)." = "Dieses PDF hat ein Passwort. Um zuzuschneiden, zu drehen oder zu nummerieren, erstellen Sie zuerst eine Kopie ohne Passwort („Passwort entfernen“).";
 "Este PDF tem senha. Para destacar ou alterar, crie antes uma cópia sem senha (“Remover senha”)." = "Dieses PDF hat ein Passwort. Um es zu markieren oder zu ändern, erstellen Sie zuerst eine Kopie ohne Passwort („Passwort entfernen“).";
@@ -471,6 +482,7 @@
 "Igual ao Windows" = "Wie Windows";
 "Imagem + texto digital" = "Bild + digitaler Text";
 "Imagens" = "Bilder";
+"Imagens com mais de 150 dpi são reduzidas para 150 dpi. Fica bom para ler na tela e para imprimir. Texto, destaques e o texto do OCR não mudam." = "Bilder über 150 dpi werden auf 150 dpi verkleinert. Gut zum Lesen am Bildschirm und zum Drucken. Text, Markierungen und OCR-Text bleiben unverändert.";
 "Imagens {}" = "Bilder {}";
 "Importando…" = "Wird importiert …";
 "Importante: se você esquecer a senha, não há como abrir o PDF, nem pelo Prumo. Guarde a senha num lugar seguro. Evite acentos e “ç” na senha: alguns leitores de PDF não os entendem." = "Wichtig: Wenn Sie das Passwort vergessen, lässt sich das PDF nicht mehr öffnen, auch nicht mit Prumo. Bewahren Sie das Passwort an einem sicheren Ort auf. Vermeiden Sie Akzente und Umlaute im Passwort: Manche PDF-Reader verstehen sie nicht.";
@@ -556,6 +568,7 @@
 "Mudar a senha do Prumo" = "Prumo-Passwort ändern";
 "Mudar para {}" = "Zu {} wechseln";
 "Mudar senha…" = "Passwort ändern …";
+"Média ou alta · {}" = "Mittel oder hoch · {}";
 "Na fila do OCR: {}" = "In der OCR-Warteschlange: {}";
 "Na página {} já havia algo na posição escolhida (por exemplo, um número impresso); o número foi deslocado para não ficar por cima." = "Auf Seite {} war an der gewählten Position bereits etwas (zum Beispiel eine gedruckte Zahl); die Nummer wurde verschoben, damit sie nichts überdeckt.";
 "Na página {} não achei lugar livre perto; o número ficou na posição escolhida." = "Auf Seite {} gab es in der Nähe keinen freien Platz; die Nummer blieb an der gewählten Position.";
@@ -626,6 +639,7 @@
 "Não foi possível abrir o documento: {}" = "Das Dokument konnte nicht geöffnet werden: {}";
 "Não foi possível abrir o resumo atual." = "Die aktuelle Zusammenfassung konnte nicht geöffnet werden.";
 "Não foi possível achar o conteúdo da página." = "Der Seiteninhalt wurde nicht gefunden.";
+"Não foi possível comprimir: {}" = "Komprimieren nicht möglich: {}";
 "Não foi possível concluir" = "Vorgang konnte nicht abgeschlossen werden";
 "Não foi possível confirmar. Tente de novo." = "Konnte nicht bestätigt werden. Versuchen Sie es erneut.";
 "Não foi possível converter" = "Konvertierung nicht möglich";
@@ -657,6 +671,7 @@
 "Não foi possível mover: {}. O arquivo pode estar aberto em outro programa." = "Verschieben nicht möglich: {}. Die Datei ist möglicherweise in einem anderen Programm geöffnet.";
 "Não foi possível preparar o PDF numerado." = "Das nummerierte PDF konnte nicht vorbereitet werden.";
 "Não foi possível proteger: {}" = "Schützen nicht möglich: {}";
+"Não foi possível reduzir o tamanho deste PDF. Ele provavelmente já tem imagens em resolução baixa ou quase só texto. Nenhuma cópia foi criada." = "Die Größe dieses PDFs konnte nicht verringert werden. Es enthält wahrscheinlich bereits Bilder in niedriger Auflösung oder fast nur Text. Es wurde keine Kopie erstellt.";
 "Não foi possível remover a senha: {}" = "Passwort konnte nicht entfernt werden: {}";
 "Não foi possível restaurar: {}" = "Wiederherstellen nicht möglich: {}";
 "Não foi possível salvar o PDF." = "Das PDF konnte nicht gespeichert werden.";
@@ -699,6 +714,7 @@
 "O PDF está protegido por senha. Remova a senha antes do OCR." = "Das PDF ist passwortgeschützt. Entfernen Sie das Passwort vor der OCR.";
 "O PDF foi movido ou apagado." = "Das PDF wurde verschoben oder gelöscht.";
 "O PDF gerado não pôde ser conferido; nada foi alterado." = "Das erzeugte PDF konnte nicht geprüft werden; nichts wurde geändert.";
+"O PDF já está compacto" = "Das PDF ist bereits kompakt";
 "O PDF numerado não pôde ser conferido; nada foi alterado." = "Das nummerierte PDF konnte nicht geprüft werden; nichts wurde geändert.";
 "O PDF não pode ser alterado sem invalidar a assinatura. Para conferir a validade, abra no Adobe Reader ou em validar.iti.gov.br." = "Das PDF kann nicht geändert werden, ohne die Signatur ungültig zu machen. Zur Prüfung der Gültigkeit öffnen Sie es in Adobe Reader oder auf validar.iti.gov.br.";
 "O PDF original foi movido ou apagado durante o OCR." = "Das Original-PDF wurde während der OCR verschoben oder gelöscht.";
@@ -757,6 +773,7 @@
 "O nível de proteção foi definido pela primeira assinatura e não muda mais." = "Die Schutzstufe wurde durch die erste Signatur festgelegt und ändert sich nicht mehr.";
 "O nível vale para a primeira assinatura do PDF (assinatura de certificação, DocMDP) e depois não muda. Na hora de assinar, dá para trocar o nível daquele PDF. PDF com mais de um campo de assinatura usa o nível 2 automaticamente, e o Prumo confirma com você antes de assinar. Nenhum nível impede que outro programa grave uma alteração no arquivo: o que muda é que a assinatura deixa de valer (ou é marcada como alterada), e leitores como o Adobe Acrobat avisam. Por isso o Prumo assina uma cópia (“Nome - assinado”), mantém o original editável e desliga as ferramentas de edição na cópia." = "Die Stufe gilt für die erste Signatur des PDFs (Zertifizierungssignatur, DocMDP) und ändert sich danach nicht mehr. Beim Signieren können Sie die Stufe für dieses PDF ändern. Ein PDF mit mehr als einem Signaturfeld verwendet automatisch Stufe 2, und Prumo fragt vor dem Signieren nach. Keine Stufe verhindert, dass ein anderes Programm eine Änderung in der Datei speichert: Dann ist die Signatur nicht mehr gültig (oder wird als geändert markiert), und Reader wie Adobe Acrobat weisen darauf hin. Deshalb signiert Prumo eine Kopie („Name - signiert“), lässt das Original bearbeitbar und schaltet die Bearbeitungswerkzeuge in der Kopie ab.";
 "O número fica gravado como texto na página. Para tirar, use “Desfazer última alteração”. Se a posição escolhida já tiver texto ou um número impresso, o Prumo desloca o número para não ficar por cima." = "Die Nummer wird als Text auf der Seite gespeichert. Zum Entfernen verwenden Sie „Letzte Änderung rückgängig“. Wenn an der gewählten Position schon Text oder eine gedruckte Zahl steht, verschiebt Prumo die Nummer, damit sie nichts überdeckt.";
+"O original não muda: o Prumo cria uma cópia comprimida na mesma pasta." = "Das Original bleibt unverändert: Prumo erstellt eine komprimierte Kopie im selben Ordner.";
 "O original não muda: o resultado é um PDF novo, com “- corrigido” no nome. As páginas corrigidas viram imagem; depois, o app oferece o OCR." = "Das Original bleibt unverändert: Das Ergebnis ist ein neues PDF mit „- korrigiert“ im Namen. Die korrigierten Seiten werden zu Bildern; danach bietet die App die OCR an.";
 "O original não muda: o resultado é um PDF novo, com “- corrigido” no nome. Depois, o app pergunta se você quer fazer o OCR." = "Das Original ändert sich nicht: Das Ergebnis ist ein neues PDF mit „- korrigiert“ im Namen. Danach fragt die App, ob Sie die OCR ausführen möchten.";
 "O resumo atual tem senha; remova a senha antes." = "Die aktuelle Zusammenfassung hat ein Passwort; entfernen Sie das Passwort zuerst.";
@@ -813,6 +830,7 @@
 "PDF com senha não pode ser assinado. Remova a senha antes." = "Ein PDF mit Passwort kann nicht signiert werden. Entfernen Sie zuerst das Passwort.";
 "PDF combinado" = "Zusammengefügtes PDF";
 "PDF combinado: {}" = "Zusammengefügtes PDF: {}";
+"PDF comprimido: {} → {} ({}% menor)" = "PDF komprimiert: {} → {} ({} % kleiner)";
 "PDF copiado para {}." = "PDF kopiert nach {}.";
 "PDF criado: {}" = "PDF erstellt: {}";
 "PDF e arquivos para converter" = "PDFs und Dateien zum Konvertieren";
@@ -854,6 +872,7 @@
 "Preparando as fotos…" = "Fotos werden vorbereitet …";
 "Preparando o texto…" = "Text wird vorbereitet …";
 "Preparando…" = "Wird vorbereitet …";
+"Preserva melhor a qualidade. O arquivo fica menor, mas reduz menos." = "Erhält die Qualität besser. Die Datei wird kleiner, aber weniger stark.";
 "Primeira página" = "Erste Seite";
 "Primeiro número" = "Erste Nummer";
 "Primeiro número: {}" = "Erste Nummer: {}";
@@ -904,6 +923,8 @@
 "Recentes" = "Zuletzt";
 "Recomendado" = "Empfohlen";
 "Reconhecendo o texto" = "Text wird erkannt";
+"Reduz bastante o tamanho do arquivo, sacrificando a qualidade das imagens." = "Verkleinert die Datei deutlich, auf Kosten der Bildqualität.";
+"Reduzindo as imagens" = "Bilder werden verkleinert";
 "Refazendo…" = "Wird wiederholt …";
 "Refazer" = "Wiederholen";
 "Refazer (Ctrl+Y)" = "Wiederholen (Strg+Y)";
@@ -996,6 +1017,7 @@
 "Só esta página ({})" = "Nur diese Seite ({})";
 "Só neste computador" = "Nur auf diesem Computer";
 "Só neste iPhone" = "Nur auf diesem iPhone";
+"Tamanho atual: {}" = "Aktuelle Größe: {}";
 "Tamanho da letra" = "Schriftgröße";
 "Tamanho da letra: {} pt" = "Schriftgröße: {} pt";
 "Tamanho das páginas" = "Seitengröße";
@@ -1110,6 +1132,7 @@
 "{} (cópia)" = "{} (Kopie)";
 "{} - Parte {}" = "{} - Teil {}";
 "{} - assinado" = "{} - signiert";
+"{} - comprimido" = "{} - komprimiert";
 "{} - corrigido" = "{} - korrigiert";
 "{} - protegido" = "{} - geschützt";
 "{} - págs. {}" = "{} - S. {}";

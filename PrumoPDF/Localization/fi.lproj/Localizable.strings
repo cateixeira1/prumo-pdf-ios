@@ -143,6 +143,7 @@
 "Assinar no nível 1" = "Allekirjoita tasolla 1";
 "Assinar qual PDF?" = "Mikä PDF allekirjoitetaan?";
 "Assinatura digital" = "Sähköinen allekirjoitus";
+"Atenção: fotos e páginas escaneadas perdem nitidez (imagens reduzidas para 96 dpi). Letras pequenas podem ficar borradas ao ampliar ou imprimir. Use para enviar por e-mail ou anexar onde há limite de tamanho. Texto, destaques e o texto do OCR não mudam." = "Huomio: valokuvat ja skannatut sivut menettävät terävyyttään (kuvat pienennetään 96 dpi:hin). Pieni teksti voi näyttää sumealta suurennettaessa tai tulostettaessa. Käytä sähköpostilla lähettämiseen tai liitteeksi, kun koko on rajoitettu. Teksti, korostukset ja OCR-teksti eivät muutu.";
 "Atual" = "Nykyinen";
 "Atualizando o resumo…" = "Päivitetään tiivistelmää…";
 "Aumentar" = "Suurenna";
@@ -206,6 +207,13 @@
 "Compartilhar" = "Jaa";
 "Compartilhar o texto" = "Jaa teksti";
 "Compartilhar…" = "Jaa…";
+"Compressão alta" = "Voimakas pakkaus";
+"Compressão média" = "Keskitason pakkaus";
+"Comprimindo…" = "Pakataan…";
+"Comprimir" = "Pakkaa";
+"Comprimir PDF" = "Pakkaa PDF";
+"Comprimir PDF…" = "Pakkaa PDF…";
+"Comprimir qual PDF?" = "Mikä PDF pakataan?";
 "Conectado neste computador" = "Yhdistetty tällä tietokoneella";
 "Conferindo o certificado…" = "Tarkistetaan varmennetta…";
 "Conferindo o resultado" = "Tarkistetaan tulosta";
@@ -237,6 +245,7 @@
 "Cortar ou girar páginas de qual PDF?" = "Minkä PDF:n sivuja rajataan tai käännetään?";
 "Cortar ou girar qual PDF?" = "Mikä PDF rajataan tai käännetään?";
 "Corte ou numeração" = "Rajaus tai numerointi";
+"Cria uma cópia menor: compressão média ou alta" = "Luo pienemmän kopion: keskitason tai voimakas pakkaus";
 "Cria uma cópia sem senha" = "Luo kopion ilman salasanaa";
 "Cria uma cópia sem senha, para destacar, fazer OCR, organizar ou dividir. O PDF com senha continua guardado." = "Luo kopion ilman salasanaa korostamista, OCR:ää, järjestämistä tai jakamista varten. Salasanalla suojattu PDF säilyy.";
 "Cria uma cópia sem senha, para fazer OCR, organizar ou dividir. O PDF com senha continua guardado." = "Luo kopion ilman salasanaa OCR:ää, järjestämistä tai jakamista varten. Salasanalla suojattu PDF säilyy.";
@@ -377,6 +386,7 @@
 "Esses PDFs já têm texto selecionável. O OCR não é necessário." = "Näissä PDF:issä on jo valittavaa tekstiä. OCR:ää ei tarvita.";
 "Esta página não tem texto para selecionar (é imagem). Faça o OCR para poder selecionar, destacar e resumir." = "Tällä sivulla ei ole valittavaa tekstiä (se on kuva). Tee OCR, jotta voit valita, korostaa ja koota tiivistelmän.";
 "Esta página é imagem, sem texto para selecionar. A cópia com OCR tem o texto." = "Tämä sivu on kuva, eikä siinä ole valittavaa tekstiä. OCR-kopiossa on teksti.";
+"Este PDF está assinado digitalmente: comprimir regrava o arquivo e a assinatura deixaria de valer. Comprima o original (sem assinatura) e assine depois." = "Tämä PDF on allekirjoitettu digitaalisesti: pakkaus kirjoittaa tiedoston uudelleen, eikä allekirjoitus olisi enää voimassa. Pakkaa alkuperäinen (allekirjoittamaton) ja allekirjoita sen jälkeen.";
 "Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura." = "Tämä PDF on allekirjoitettu sähköisesti: mikä tahansa muutos mitätöisi allekirjoituksen.";
 "Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura. Dá para ler, buscar, copiar e adicionar trechos ao resumo, mas não destacar, cortar ou mudar páginas." = "Tämä PDF on allekirjoitettu sähköisesti: mikä tahansa muutos mitätöisi allekirjoituksen. Voit lukea, hakea, kopioida ja lisätä otteita tiivistelmään, mutta et korostaa, rajata tai muuttaa sivuja.";
 "Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura. Use o original (sem assinatura) para mudar páginas, cortar, numerar ou destacar." = "Tämä PDF on allekirjoitettu sähköisesti: mikä tahansa muutos mitätöisi allekirjoituksen. Käytä alkuperäistä (allekirjoittamatonta) sivujen muuttamiseen, rajaamiseen, numerointiin tai korostamiseen.";
@@ -391,6 +401,7 @@
 "Este PDF não tem texto pesquisável (é imagem). Faça o OCR para poder buscar." = "Tässä PDF:ssä ei ole haettavaa tekstiä (se on kuva). Tee OCR, jotta voit hakea.";
 "Este PDF não tem texto reconhecido. Faça o OCR para usar o modo leitor." = "Tässä PDF:ssä ei ole tunnistettua tekstiä. Tee OCR käyttääksesi lukutilaa.";
 "Este PDF tem senha" = "Tällä PDF:llä on salasana";
+"Este PDF tem senha. Para comprimir, crie antes uma cópia sem senha." = "Tässä PDF:ssä on salasana. Luo ensin kopio ilman salasanaa, jotta voit pakata sen.";
 "Este PDF tem senha. Para cortar ou girar, crie antes uma cópia sem senha." = "Tässä PDF:ssä on salasana. Jotta voit rajata tai kääntää, luo ensin kopio ilman salasanaa.";
 "Este PDF tem senha. Para cortar, girar ou numerar, crie antes uma cópia sem senha (“Remover senha”)." = "Tällä PDF:llä on salasana. Jos haluat rajata, kääntää tai numeroida, luo ensin kopio ilman salasanaa (”Poista salasana”).";
 "Este PDF tem senha. Para destacar ou alterar, crie antes uma cópia sem senha (“Remover senha”)." = "Tässä PDF:ssä on salasana. Jotta voit korostaa tai muuttaa, luo ensin kopio ilman salasanaa (”Poista salasana”).";
@@ -471,6 +482,7 @@
 "Igual ao Windows" = "Kuten Windowsissa";
 "Imagem + texto digital" = "Kuva + digitaalinen teksti";
 "Imagens" = "Kuvat";
+"Imagens com mais de 150 dpi são reduzidas para 150 dpi. Fica bom para ler na tela e para imprimir. Texto, destaques e o texto do OCR não mudam." = "Yli 150 dpi:n kuvat pienennetään 150 dpi:hin. Sopii näytöltä lukemiseen ja tulostamiseen. Teksti, korostukset ja OCR-teksti eivät muutu.";
 "Imagens {}" = "Kuvat {}";
 "Importando…" = "Tuodaan…";
 "Importante: se você esquecer a senha, não há como abrir o PDF, nem pelo Prumo. Guarde a senha num lugar seguro. Evite acentos e “ç” na senha: alguns leitores de PDF não os entendem." = "Tärkeää: jos unohdat salasanan, PDF:ää ei voi avata millään tavalla, ei edes Prumolla. Säilytä salasana turvallisessa paikassa. Vältä salasanassa aksentteja ja erikoismerkkejä: jotkin PDF-lukijat eivät ymmärrä niitä.";
@@ -556,6 +568,7 @@
 "Mudar a senha do Prumo" = "Vaihda Prumon salasana";
 "Mudar para {}" = "Vaihda: {}";
 "Mudar senha…" = "Vaihda salasana…";
+"Média ou alta · {}" = "Keskitaso tai voimakas · {}";
 "Na fila do OCR: {}" = "OCR-jonossa: {}";
 "Na página {} já havia algo na posição escolhida (por exemplo, um número impresso); o número foi deslocado para não ficar por cima." = "Sivulla {} valitussa kohdassa oli jo jotain (esimerkiksi painettu numero); numeroa siirrettiin, jotta se ei ole päällekkäin.";
 "Na página {} não achei lugar livre perto; o número ficou na posição escolhida." = "Sivulla {} ei löytynyt vapaata tilaa läheltä; numero jäi valittuun kohtaan.";
@@ -626,6 +639,7 @@
 "Não foi possível abrir o documento: {}" = "Asiakirjaa ei voitu avata: {}";
 "Não foi possível abrir o resumo atual." = "Nykyistä tiivistelmää ei voitu avata.";
 "Não foi possível achar o conteúdo da página." = "Sivun sisältöä ei löytynyt.";
+"Não foi possível comprimir: {}" = "Pakkaus epäonnistui: {}";
 "Não foi possível concluir" = "Toimintoa ei voitu suorittaa";
 "Não foi possível confirmar. Tente de novo." = "Vahvistus epäonnistui. Yritä uudelleen.";
 "Não foi possível converter" = "Muuntaminen epäonnistui";
@@ -657,6 +671,7 @@
 "Não foi possível mover: {}. O arquivo pode estar aberto em outro programa." = "Siirtäminen epäonnistui: {}. Tiedosto voi olla auki toisessa ohjelmassa.";
 "Não foi possível preparar o PDF numerado." = "Numeroitua PDF:ää ei voitu valmistella.";
 "Não foi possível proteger: {}" = "Suojaus epäonnistui: {}";
+"Não foi possível reduzir o tamanho deste PDF. Ele provavelmente já tem imagens em resolução baixa ou quase só texto. Nenhuma cópia foi criada." = "Tämän PDF:n kokoa ei voitu pienentää. Siinä on luultavasti jo matalan resoluution kuvia tai lähes pelkkää tekstiä. Kopiota ei luotu.";
 "Não foi possível remover a senha: {}" = "Salasanan poistaminen epäonnistui: {}";
 "Não foi possível restaurar: {}" = "Palautus epäonnistui: {}";
 "Não foi possível salvar o PDF." = "PDF:ää ei voitu tallentaa.";
@@ -699,6 +714,7 @@
 "O PDF está protegido por senha. Remova a senha antes do OCR." = "PDF on suojattu salasanalla. Poista salasana ennen OCR:ää.";
 "O PDF foi movido ou apagado." = "PDF siirrettiin tai poistettiin.";
 "O PDF gerado não pôde ser conferido; nada foi alterado." = "Luotua PDF:ää ei voitu tarkistaa; mitään ei muutettu.";
+"O PDF já está compacto" = "PDF on jo valmiiksi pieni";
 "O PDF numerado não pôde ser conferido; nada foi alterado." = "Numeroitua PDF:ää ei voitu tarkistaa; mitään ei muutettu.";
 "O PDF não pode ser alterado sem invalidar a assinatura. Para conferir a validade, abra no Adobe Reader ou em validar.iti.gov.br." = "PDF:ää ei voi muuttaa mitätöimättä allekirjoitusta. Tarkista voimassaolo avaamalla se Adobe Readerissa tai osoitteessa validar.iti.gov.br.";
 "O PDF original foi movido ou apagado durante o OCR." = "Alkuperäinen PDF siirrettiin tai poistettiin OCR:n aikana.";
@@ -757,6 +773,7 @@
 "O nível de proteção foi definido pela primeira assinatura e não muda mais." = "Suojaustason määritti ensimmäinen allekirjoitus, eikä se enää muutu.";
 "O nível vale para a primeira assinatura do PDF (assinatura de certificação, DocMDP) e depois não muda. Na hora de assinar, dá para trocar o nível daquele PDF. PDF com mais de um campo de assinatura usa o nível 2 automaticamente, e o Prumo confirma com você antes de assinar. Nenhum nível impede que outro programa grave uma alteração no arquivo: o que muda é que a assinatura deixa de valer (ou é marcada como alterada), e leitores como o Adobe Acrobat avisam. Por isso o Prumo assina uma cópia (“Nome - assinado”), mantém o original editável e desliga as ferramentas de edição na cópia." = "Taso koskee PDF:n ensimmäistä allekirjoitusta (varmennusallekirjoitus, DocMDP), eikä se muutu sen jälkeen. Allekirjoitettaessa voit vaihtaa kyseisen PDF:n tason. PDF, jossa on useampi kuin yksi allekirjoituskenttä, käyttää automaattisesti tasoa 2, ja Prumo varmistaa asian kanssasi ennen allekirjoittamista. Mikään taso ei estä toista ohjelmaa tallentamasta muutosta tiedostoon: tällöin allekirjoitus lakkaa olemasta voimassa (tai se merkitään muutetuksi), ja esimerkiksi Adobe Acrobat varoittaa siitä. Siksi Prumo allekirjoittaa kopion (”Nimi - allekirjoitettu”), pitää alkuperäisen muokattavana ja poistaa kopiosta muokkaustyökalut käytöstä.";
 "O número fica gravado como texto na página. Para tirar, use “Desfazer última alteração”. Se a posição escolhida já tiver texto ou um número impresso, o Prumo desloca o número para não ficar por cima." = "Numero tallennetaan sivulle tekstinä. Poista se toiminnolla ”Kumoa viimeisin muutos”. Jos valitussa kohdassa on jo tekstiä tai painettu numero, Prumo siirtää numeroa, jotta se ei ole päällekkäin.";
+"O original não muda: o Prumo cria uma cópia comprimida na mesma pasta." = "Alkuperäinen ei muutu: Prumo luo pakatun kopion samaan kansioon.";
 "O original não muda: o resultado é um PDF novo, com “- corrigido” no nome. As páginas corrigidas viram imagem; depois, o app oferece o OCR." = "Alkuperäinen ei muutu: tuloksena on uusi PDF, jonka nimessä on ”- korjattu”. Korjatuista sivuista tulee kuvia; sen jälkeen sovellus tarjoaa OCR:ää.";
 "O original não muda: o resultado é um PDF novo, com “- corrigido” no nome. Depois, o app pergunta se você quer fazer o OCR." = "Alkuperäinen ei muutu: tulos on uusi PDF, jonka nimessä on ”- korjattu”. Sen jälkeen appi kysyy, haluatko tehdä OCR:n.";
 "O resumo atual tem senha; remova a senha antes." = "Nykyisellä tiivistelmällä on salasana; poista salasana ensin.";
@@ -813,6 +830,7 @@
 "PDF com senha não pode ser assinado. Remova a senha antes." = "Salasanalla suojattua PDF:ää ei voi allekirjoittaa. Poista salasana ensin.";
 "PDF combinado" = "Yhdistetty PDF";
 "PDF combinado: {}" = "Yhdistetty PDF: {}";
+"PDF comprimido: {} → {} ({}% menor)" = "PDF pakattu: {} → {} ({} % pienempi)";
 "PDF copiado para {}." = "PDF kopioitu: {}.";
 "PDF criado: {}" = "PDF luotu: {}";
 "PDF e arquivos para converter" = "PDF:t ja muunnettavat tiedostot";
@@ -854,6 +872,7 @@
 "Preparando as fotos…" = "Valmistellaan kuvia…";
 "Preparando o texto…" = "Valmistellaan tekstiä…";
 "Preparando…" = "Valmistellaan…";
+"Preserva melhor a qualidade. O arquivo fica menor, mas reduz menos." = "Säilyttää laadun paremmin. Tiedosto pienenee, mutta vähemmän.";
 "Primeira página" = "Ensimmäinen sivu";
 "Primeiro número" = "Ensimmäinen numero";
 "Primeiro número: {}" = "Ensimmäinen numero: {}";
@@ -904,6 +923,8 @@
 "Recentes" = "Viimeisimmät";
 "Recomendado" = "Suositeltu";
 "Reconhecendo o texto" = "Tunnistetaan tekstiä";
+"Reduz bastante o tamanho do arquivo, sacrificando a qualidade das imagens." = "Pienentää tiedostokokoa paljon kuvien laadun kustannuksella.";
+"Reduzindo as imagens" = "Pienennetään kuvia";
 "Refazendo…" = "Tehdään uudelleen…";
 "Refazer" = "Tee uudelleen";
 "Refazer (Ctrl+Y)" = "Tee uudelleen (Ctrl+Y)";
@@ -996,6 +1017,7 @@
 "Só esta página ({})" = "Vain tämä sivu ({})";
 "Só neste computador" = "Vain tällä tietokoneella";
 "Só neste iPhone" = "Vain tässä iPhonessa";
+"Tamanho atual: {}" = "Nykyinen koko: {}";
 "Tamanho da letra" = "Tekstin koko";
 "Tamanho da letra: {} pt" = "Fonttikoko: {} pt";
 "Tamanho das páginas" = "Sivujen koko";
@@ -1110,6 +1132,7 @@
 "{} (cópia)" = "{} (kopio)";
 "{} - Parte {}" = "{} - Osa {}";
 "{} - assinado" = "{} - allekirjoitettu";
+"{} - comprimido" = "{} - pakattu";
 "{} - corrigido" = "{} - korjattu";
 "{} - protegido" = "{} - suojattu";
 "{} - págs. {}" = "{} - s. {}";

@@ -76,3 +76,11 @@ febre persistente
 febre persistente, dor abdominal intensa
 # Nome do certificado nas Chaves do iPhone (não aparece no Prumo)
 Prumo PDF – {}
+Contents
+Decode
+Mask
+Matte
+{} {} obj\n{}\nendobj\n
+{} {} obj\n{}\nstream\n
+Thumb
+Matrix

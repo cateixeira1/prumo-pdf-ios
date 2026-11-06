@@ -143,6 +143,7 @@
 "Assinar no nível 1" = "Signer på nivå 1";
 "Assinar qual PDF?" = "Hvilken PDF vil du signere?";
 "Assinatura digital" = "Digital signatur";
+"Atenção: fotos e páginas escaneadas perdem nitidez (imagens reduzidas para 96 dpi). Letras pequenas podem ficar borradas ao ampliar ou imprimir. Use para enviar por e-mail ou anexar onde há limite de tamanho. Texto, destaques e o texto do OCR não mudam." = "Merk: bilder og skannede sider blir mindre skarpe (bilder redusert til 96 dpi). Liten skrift kan bli uskarp ved forstørrelse eller utskrift. Bruk det til å sende med e-post eller legge ved der det er størrelsesgrense. Tekst, uthevinger og OCR-tekst endres ikke.";
 "Atual" = "Gjeldende";
 "Atualizando o resumo…" = "Oppdaterer sammendraget …";
 "Aumentar" = "Større";
@@ -206,6 +207,13 @@
 "Compartilhar" = "Del";
 "Compartilhar o texto" = "Del teksten";
 "Compartilhar…" = "Del …";
+"Compressão alta" = "Høy komprimering";
+"Compressão média" = "Middels komprimering";
+"Comprimindo…" = "Komprimerer…";
+"Comprimir" = "Komprimer";
+"Comprimir PDF" = "Komprimer PDF";
+"Comprimir PDF…" = "Komprimer PDF…";
+"Comprimir qual PDF?" = "Hvilken PDF vil du komprimere?";
 "Conectado neste computador" = "Tilkoblet på denne datamaskinen";
 "Conferindo o certificado…" = "Kontrollerer sertifikatet …";
 "Conferindo o resultado" = "Kontrollerer resultatet";
@@ -237,6 +245,7 @@
 "Cortar ou girar páginas de qual PDF?" = "Beskjær eller roter sider i hvilken PDF?";
 "Cortar ou girar qual PDF?" = "Beskjære eller rotere hvilken PDF?";
 "Corte ou numeração" = "Beskjæring eller nummerering";
+"Cria uma cópia menor: compressão média ou alta" = "Lager en mindre kopi: middels eller høy komprimering";
 "Cria uma cópia sem senha" = "Lager en kopi uten passord";
 "Cria uma cópia sem senha, para destacar, fazer OCR, organizar ou dividir. O PDF com senha continua guardado." = "Lager en kopi uten passord, for å utheve, kjøre OCR, organisere eller dele. PDF-en med passord beholdes.";
 "Cria uma cópia sem senha, para fazer OCR, organizar ou dividir. O PDF com senha continua guardado." = "Lager en kopi uten passord, for å kjøre OCR, organisere eller dele. PDF-en med passord beholdes.";
@@ -377,6 +386,7 @@
 "Esses PDFs já têm texto selecionável. O OCR não é necessário." = "Disse PDF-ene har allerede tekst som kan merkes. OCR er ikke nødvendig.";
 "Esta página não tem texto para selecionar (é imagem). Faça o OCR para poder selecionar, destacar e resumir." = "Denne siden har ingen tekst å merke (den er et bilde). Kjør OCR for å kunne merke, utheve og lage sammendrag.";
 "Esta página é imagem, sem texto para selecionar. A cópia com OCR tem o texto." = "Denne siden er et bilde uten tekst å merke. Kopien med OCR har teksten.";
+"Este PDF está assinado digitalmente: comprimir regrava o arquivo e a assinatura deixaria de valer. Comprima o original (sem assinatura) e assine depois." = "Denne PDF-en er digitalt signert: komprimering skriver filen på nytt, og signaturen ville ikke lenger være gyldig. Komprimer originalen (uten signatur) og signer etterpå.";
 "Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura." = "Denne PDF-en er digitalt signert: enhver endring ville gjøre signaturen ugyldig.";
 "Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura. Dá para ler, buscar, copiar e adicionar trechos ao resumo, mas não destacar, cortar ou mudar páginas." = "Denne PDF-en er digitalt signert: Enhver endring ville gjort signaturen ugyldig. Du kan lese, søke, kopiere og legge utdrag til sammendraget, men ikke utheve, beskjære eller endre sider.";
 "Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura. Use o original (sem assinatura) para mudar páginas, cortar, numerar ou destacar." = "Denne PDF-en er digitalt signert: Enhver endring ville gjort signaturen ugyldig. Bruk originalen (uten signatur) for å endre sider, beskjære, nummerere eller utheve.";
@@ -391,6 +401,7 @@
 "Este PDF não tem texto pesquisável (é imagem). Faça o OCR para poder buscar." = "Denne PDF-en har ingen søkbar tekst (den er et bilde). Kjør OCR for å kunne søke.";
 "Este PDF não tem texto reconhecido. Faça o OCR para usar o modo leitor." = "Denne PDF-en har ingen gjenkjent tekst. Kjør OCR for å bruke lesemodus.";
 "Este PDF tem senha" = "Denne PDF-en har passord";
+"Este PDF tem senha. Para comprimir, crie antes uma cópia sem senha." = "Denne PDF-en har passord. For å komprimere den må du først lage en kopi uten passord.";
 "Este PDF tem senha. Para cortar ou girar, crie antes uma cópia sem senha." = "Denne PDF-en har passord. For å beskjære eller rotere må du først lage en kopi uten passord.";
 "Este PDF tem senha. Para cortar, girar ou numerar, crie antes uma cópia sem senha (“Remover senha”)." = "Denne PDF-en har passord. For å beskjære, rotere eller nummerere, lag først en kopi uten passord («Fjern passord»).";
 "Este PDF tem senha. Para destacar ou alterar, crie antes uma cópia sem senha (“Remover senha”)." = "Denne PDF-en har passord. For å utheve eller endre må du først lage en kopi uten passord («Fjern passord»).";
@@ -471,6 +482,7 @@
 "Igual ao Windows" = "Som Windows";
 "Imagem + texto digital" = "Bilde + digital tekst";
 "Imagens" = "Bilder";
+"Imagens com mais de 150 dpi são reduzidas para 150 dpi. Fica bom para ler na tela e para imprimir. Texto, destaques e o texto do OCR não mudam." = "Bilder over 150 dpi reduseres til 150 dpi. Bra for lesing på skjermen og for utskrift. Tekst, uthevinger og OCR-tekst endres ikke.";
 "Imagens {}" = "Bilder {}";
 "Importando…" = "Importerer …";
 "Importante: se você esquecer a senha, não há como abrir o PDF, nem pelo Prumo. Guarde a senha num lugar seguro. Evite acentos e “ç” na senha: alguns leitores de PDF não os entendem." = "Viktig: Hvis du glemmer passordet, finnes det ingen måte å åpne PDF-en på, heller ikke i Prumo. Oppbevar passordet på et trygt sted. Unngå aksenter og spesialtegn i passordet: Noen PDF-lesere forstår dem ikke.";
@@ -556,6 +568,7 @@
 "Mudar a senha do Prumo" = "Endre passordet til Prumo";
 "Mudar para {}" = "Bytt til {}";
 "Mudar senha…" = "Endre passord …";
+"Média ou alta · {}" = "Middels eller høy · {}";
 "Na fila do OCR: {}" = "I OCR-køen: {}";
 "Na página {} já havia algo na posição escolhida (por exemplo, um número impresso); o número foi deslocado para não ficar por cima." = "På side {} var det allerede noe på den valgte plasseringen (for eksempel et trykt tall); nummeret ble flyttet så det ikke overlapper.";
 "Na página {} não achei lugar livre perto; o número ficou na posição escolhida." = "På side {} fant jeg ingen ledig plass i nærheten; nummeret ble stående på den valgte plasseringen.";
@@ -626,6 +639,7 @@
 "Não foi possível abrir o documento: {}" = "Kunne ikke åpne dokumentet: {}";
 "Não foi possível abrir o resumo atual." = "Kunne ikke åpne det nåværende sammendraget.";
 "Não foi possível achar o conteúdo da página." = "Fant ikke innholdet på siden.";
+"Não foi possível comprimir: {}" = "Kunne ikke komprimere: {}";
 "Não foi possível concluir" = "Kunne ikke fullføre";
 "Não foi possível confirmar. Tente de novo." = "Kunne ikke bekrefte. Prøv igjen.";
 "Não foi possível converter" = "Kunne ikke konvertere";
@@ -657,6 +671,7 @@
 "Não foi possível mover: {}. O arquivo pode estar aberto em outro programa." = "Kunne ikke flytte: {}. Filen kan være åpen i et annet program.";
 "Não foi possível preparar o PDF numerado." = "Kunne ikke klargjøre den nummererte PDF-en.";
 "Não foi possível proteger: {}" = "Kunne ikke beskytte: {}";
+"Não foi possível reduzir o tamanho deste PDF. Ele provavelmente já tem imagens em resolução baixa ou quase só texto. Nenhuma cópia foi criada." = "Størrelsen på denne PDF-en kunne ikke reduseres. Den har sannsynligvis allerede bilder med lav oppløsning eller nesten bare tekst. Ingen kopi ble laget.";
 "Não foi possível remover a senha: {}" = "Kunne ikke fjerne passordet: {}";
 "Não foi possível restaurar: {}" = "Kunne ikke gjenopprette: {}";
 "Não foi possível salvar o PDF." = "Kunne ikke lagre PDF-en.";
@@ -699,6 +714,7 @@
 "O PDF está protegido por senha. Remova a senha antes do OCR." = "PDF-en er passordbeskyttet. Fjern passordet før OCR.";
 "O PDF foi movido ou apagado." = "PDF-en ble flyttet eller slettet.";
 "O PDF gerado não pôde ser conferido; nada foi alterado." = "Den genererte PDF-en kunne ikke kontrolleres; ingenting ble endret.";
+"O PDF já está compacto" = "PDF-en er allerede kompakt";
 "O PDF numerado não pôde ser conferido; nada foi alterado." = "Den nummererte PDF-en kunne ikke kontrolleres; ingenting ble endret.";
 "O PDF não pode ser alterado sem invalidar a assinatura. Para conferir a validade, abra no Adobe Reader ou em validar.iti.gov.br." = "PDF-en kan ikke endres uten at signaturen blir ugyldig. For å kontrollere gyldigheten åpner du den i Adobe Reader eller på validar.iti.gov.br.";
 "O PDF original foi movido ou apagado durante o OCR." = "Den opprinnelige PDF-en ble flyttet eller slettet under OCR.";
@@ -757,6 +773,7 @@
 "O nível de proteção foi definido pela primeira assinatura e não muda mais." = "Beskyttelsesnivået ble bestemt av den første signaturen og endres ikke lenger.";
 "O nível vale para a primeira assinatura do PDF (assinatura de certificação, DocMDP) e depois não muda. Na hora de assinar, dá para trocar o nível daquele PDF. PDF com mais de um campo de assinatura usa o nível 2 automaticamente, e o Prumo confirma com você antes de assinar. Nenhum nível impede que outro programa grave uma alteração no arquivo: o que muda é que a assinatura deixa de valer (ou é marcada como alterada), e leitores como o Adobe Acrobat avisam. Por isso o Prumo assina uma cópia (“Nome - assinado”), mantém o original editável e desliga as ferramentas de edição na cópia." = "Nivået gjelder den første signaturen i PDF-en (sertifiseringssignatur, DocMDP) og endres ikke etterpå. Ved signering kan du endre nivået for den PDF-en. En PDF med mer enn ett signaturfelt bruker nivå 2 automatisk, og Prumo bekrefter med deg før signering. Ingen nivåer hindrer et annet program i å lagre en endring i filen: Det som skjer, er at signaturen slutter å gjelde (eller merkes som endret), og lesere som Adobe Acrobat varsler om det. Derfor signerer Prumo en kopi («Navn - signert»), holder originalen redigerbar og slår av redigeringsverktøyene i kopien.";
 "O número fica gravado como texto na página. Para tirar, use “Desfazer última alteração”. Se a posição escolhida já tiver texto ou um número impresso, o Prumo desloca o número para não ficar por cima." = "Nummeret lagres som tekst på siden. For å fjerne det bruker du «Angre siste endring». Hvis den valgte plasseringen allerede har tekst eller et trykt tall, flytter Prumo nummeret så det ikke overlapper.";
+"O original não muda: o Prumo cria uma cópia comprimida na mesma pasta." = "Originalen endres ikke: Prumo lager en komprimert kopi i samme mappe.";
 "O original não muda: o resultado é um PDF novo, com “- corrigido” no nome. As páginas corrigidas viram imagem; depois, o app oferece o OCR." = "Originalen endres ikke: Resultatet er en ny PDF med «- rettet» i navnet. De rettede sidene blir bilder; deretter tilbyr appen OCR.";
 "O original não muda: o resultado é um PDF novo, com “- corrigido” no nome. Depois, o app pergunta se você quer fazer o OCR." = "Originalen endres ikke: resultatet er en ny PDF, med «- rettet» i navnet. Etterpå spør appen om du vil kjøre OCR.";
 "O resumo atual tem senha; remova a senha antes." = "Det nåværende sammendraget har passord; fjern passordet først.";
@@ -813,6 +830,7 @@
 "PDF com senha não pode ser assinado. Remova a senha antes." = "En PDF med passord kan ikke signeres. Fjern passordet først.";
 "PDF combinado" = "Sammenslått PDF";
 "PDF combinado: {}" = "Sammenslått PDF: {}";
+"PDF comprimido: {} → {} ({}% menor)" = "PDF komprimert: {} → {} ({} % mindre)";
 "PDF copiado para {}." = "PDF kopiert til {}.";
 "PDF criado: {}" = "PDF opprettet: {}";
 "PDF e arquivos para converter" = "PDF-er og filer som skal konverteres";
@@ -854,6 +872,7 @@
 "Preparando as fotos…" = "Klargjør bildene …";
 "Preparando o texto…" = "Klargjør teksten …";
 "Preparando…" = "Klargjør …";
+"Preserva melhor a qualidade. O arquivo fica menor, mas reduz menos." = "Bevarer kvaliteten bedre. Filen blir mindre, men ikke like mye.";
 "Primeira página" = "Første side";
 "Primeiro número" = "Første nummer";
 "Primeiro número: {}" = "Første nummer: {}";
@@ -904,6 +923,8 @@
 "Recentes" = "Nylige";
 "Recomendado" = "Anbefalt";
 "Reconhecendo o texto" = "Gjenkjenner teksten";
+"Reduz bastante o tamanho do arquivo, sacrificando a qualidade das imagens." = "Reduserer filstørrelsen kraftig, på bekostning av bildekvaliteten.";
+"Reduzindo as imagens" = "Reduserer bildene";
 "Refazendo…" = "Gjør om …";
 "Refazer" = "Gjør om";
 "Refazer (Ctrl+Y)" = "Gjør om (Ctrl+Y)";
@@ -996,6 +1017,7 @@
 "Só esta página ({})" = "Bare denne siden ({})";
 "Só neste computador" = "Bare på denne datamaskinen";
 "Só neste iPhone" = "Bare på denne iPhonen";
+"Tamanho atual: {}" = "Nåværende størrelse: {}";
 "Tamanho da letra" = "Skriftstørrelse";
 "Tamanho da letra: {} pt" = "Skriftstørrelse: {} pt";
 "Tamanho das páginas" = "Sidestørrelse";
@@ -1110,6 +1132,7 @@
 "{} (cópia)" = "{} (kopi)";
 "{} - Parte {}" = "{} - Del {}";
 "{} - assinado" = "{} - signert";
+"{} - comprimido" = "{} - komprimert";
 "{} - corrigido" = "{} - rettet";
 "{} - protegido" = "{} - beskyttet";
 "{} - págs. {}" = "{} - s. {}";

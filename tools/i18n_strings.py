@@ -32,7 +32,7 @@ NON_UI = re.compile(r"(systemName:|systemImage:|forKey:|forResource:|withExtensi
                     r"PDFAnnotationKey|forAnnotationKey:|key:|setValue\(|value\(forKey|Notification\.Name\(|"
                     r"\.id\(|Sym\(|symbol:|icon:)\s*$")
 # Textos usados de forma indireta (chaves montadas em outro lugar), que também precisam de tradução.
-EXTRA = ["{} - resumo", "{} - assinado", "{} - protegido", "fim"]
+EXTRA = ["{} - resumo", "{} - assinado", "{} - protegido", "{} - comprimido", "fim"]
 
 
 def literals(text: str):

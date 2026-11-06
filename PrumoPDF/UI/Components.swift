@@ -207,6 +207,11 @@ struct DocTile: View {
         Button { flow.open(.organize(item.id)) } label: {
             Label("Organizar páginas", systemImage: "rectangle.grid.2x2")
         }
+        if item.meta.locked != true {
+            Button { flow.openTool("compress", on: item) } label: {
+                Label(L("Comprimir PDF…"), systemImage: "arrow.down.forward.and.arrow.up.backward")
+            }
+        }
         Button { toggleFavorite() } label: {
             Label(item.meta.favorite ? L("Remover dos favoritos") : L("Favoritar"),
                   systemImage: item.meta.favorite ? "star.slash" : "star")

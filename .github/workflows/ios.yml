@@ -46,11 +46,11 @@ jobs:
         id: test
         run: |
           set +e
-          mkdir -p "$OUT/signed"
+          mkdir -p "$OUT/signed" "$OUT/compressed"
           # Sem assinatura, o app do simulador não tem os "direitos simulados" que as Chaves (Keychain) exigem
           # (erro -34018). O Xcode grava esses direitos na seção __TEXT,__entitlements; aqui ela é gravada direto.
           # os testes da assinatura guardam os PDFs assinados aqui, para o pyHanko conferir depois
-          TEST_RUNNER_PRUMO_SIGNED_OUT="$OUT/signed" xcodebuild test \
+          TEST_RUNNER_PRUMO_SIGNED_OUT="$OUT/signed" TEST_RUNNER_PRUMO_COMPRESSED_OUT="$OUT/compressed" xcodebuild test \
             -project PrumoPDF.xcodeproj -scheme PrumoPDF \
             -destination "id=$SIM_ID" \
             -derivedDataPath build \
@@ -82,6 +82,14 @@ jobs:
           /tmp/pyhanko/bin/python scripts/verify_signatures.py "$OUT/signed" 2>&1 | tee "$OUT/logs/signatures.txt"
           exit ${PIPESTATUS[0]}
 
+      - name: Conferir os PDFs comprimidos (qpdf, pelo pikepdf)
+        id: compressed
+        if: always() && steps.prep.outcome == 'success'
+        run: |
+          /tmp/pyhanko/bin/pip install -q pikepdf 2>/dev/null || { python3 -m venv /tmp/pyhanko && /tmp/pyhanko/bin/pip install -q pikepdf; }
+          /tmp/pyhanko/bin/python scripts/verify_compressed.py "$OUT/compressed" 2>&1 | tee "$OUT/logs/compressed.txt"
+          exit ${PIPESTATUS[0]}
+
       - name: Capturas de tela
         id: shots
         if: always() && steps.prep.outcome == 'success'
@@ -103,6 +111,7 @@ jobs:
           echo "screenshots=${{ steps.shots.outcome }}" >> "$OUT/STATUS.txt"
           echo "ipa=${{ steps.ipa.outcome }}" >> "$OUT/STATUS.txt"
           echo "signatures=${{ steps.verify.outcome }}" >> "$OUT/STATUS.txt"
+          echo "compressed=${{ steps.compressed.outcome }}" >> "$OUT/STATUS.txt"
           echo "i18n=${{ steps.i18n.outcome }}" >> "$OUT/STATUS.txt"
           date -u >> "$OUT/STATUS.txt"
           cd "$OUT"
@@ -114,7 +123,7 @@ jobs:
           git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" ci-output
 
       - name: Publicar o app na página de versões
-        if: steps.ipa.outcome == 'success' && steps.test.outcome == 'success' && steps.verify.outcome == 'success'
+        if: steps.ipa.outcome == 'success' && steps.test.outcome == 'success' && steps.verify.outcome == 'success' && steps.compressed.outcome == 'success'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
