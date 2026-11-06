@@ -82,11 +82,12 @@ jobs:
           /tmp/pyhanko/bin/python scripts/verify_signatures.py "$OUT/signed" 2>&1 | tee "$OUT/logs/signatures.txt"
           exit ${PIPESTATUS[0]}
 
-      - name: Conferir os PDFs comprimidos (qpdf, pelo pikepdf)
+      - name: Conferir os PDFs comprimidos (pypdf, modo estrito)
         id: compressed
         if: always() && steps.prep.outcome == 'success'
         run: |
-          /tmp/pyhanko/bin/pip install -q pikepdf 2>/dev/null || { python3 -m venv /tmp/pyhanko && /tmp/pyhanko/bin/pip install -q pikepdf; }
+          [ -x /tmp/pyhanko/bin/pip ] || python3 -m venv /tmp/pyhanko
+          /tmp/pyhanko/bin/pip install -q "pypdf>=5" pillow
           /tmp/pyhanko/bin/python scripts/verify_compressed.py "$OUT/compressed" 2>&1 | tee "$OUT/logs/compressed.txt"
           exit ${PIPESTATUS[0]}
 
