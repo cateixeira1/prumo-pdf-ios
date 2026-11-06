@@ -1,0 +1,127 @@
+App: build/Build/Products/Debug-iphonesimulator/PrumoPDF.app
+Monitoring boot status for iPhone 17 (0C838647-022A-46B9-BC8F-310CD1CE6BDE).
+[2026-11-06 21:33:51 +0000] Status=1, isTerminal=NO, Elapsed=00:03.
+	Waiting on BackBoard
+
+[2026-11-06 21:34:37 +0000] Status=2, isTerminal=NO, Elapsed=00:13.
+	Waiting on Data Migration
+		Reason:(null)
+		Migration Elapsed:00:01 seconds
+
+[2026-11-06 21:34:37 +0000] Status=4, isTerminal=NO, Elapsed=00:13.
+	Waiting on System App
+
+[2026-11-06 21:34:37 +0000] Status=4, isTerminal=NO, Elapsed=00:14.
+	Waiting on System App
+
+[2026-11-06 21:34:37 +0000] Status=4, isTerminal=NO, Elapsed=00:16.
+	Waiting on System App
+
+[2026-11-06 21:34:37 +0000] Status=4, isTerminal=NO, Elapsed=00:18.
+	Waiting on System App
+
+[2026-11-06 21:34:37 +0000] Status=4, isTerminal=NO, Elapsed=00:19.
+	Waiting on System App
+
+[2026-11-06 21:34:37 +0000] Status=4, isTerminal=NO, Elapsed=00:21.
+	Waiting on System App
+
+[2026-11-06 21:34:39 +0000] Status=4, isTerminal=NO, Elapsed=00:23.
+	Waiting on System App
+
+[2026-11-06 21:34:39 +0000] Status=4, isTerminal=NO, Elapsed=00:24.
+	Waiting on System App
+
+[2026-11-06 21:34:39 +0000] Status=4, isTerminal=NO, Elapsed=00:25.
+	Waiting on System App
+
+[2026-11-06 21:34:39 +0000] Status=4, isTerminal=NO, Elapsed=00:25.
+	Waiting on System App
+
+[2026-11-06 21:34:39 +0000] Status=4, isTerminal=NO, Elapsed=00:27.
+	Waiting on System App
+
+[2026-11-06 21:34:39 +0000] Status=4, isTerminal=NO, Elapsed=00:27.
+	Waiting on System App
+
+[2026-11-06 21:34:39 +0000] Status=4, isTerminal=NO, Elapsed=00:29.
+	Waiting on System App
+
+[2026-11-06 21:34:39 +0000] Status=4, isTerminal=NO, Elapsed=00:30.
+	Waiting on System App
+
+[2026-11-06 21:34:39 +0000] Status=4, isTerminal=NO, Elapsed=00:32.
+	Waiting on System App
+
+[2026-11-06 21:34:39 +0000] Status=4, isTerminal=NO, Elapsed=00:33.
+	Waiting on System App
+
+[2026-11-06 21:34:39 +0000] Status=4, isTerminal=NO, Elapsed=00:34.
+	Waiting on System App
+
+[2026-11-06 21:34:39 +0000] Status=4, isTerminal=NO, Elapsed=00:35.
+	Waiting on System App
+
+[2026-11-06 21:34:39 +0000] Status=4, isTerminal=NO, Elapsed=00:36.
+	Waiting on System App
+
+[2026-11-06 21:34:39 +0000] Status=4, isTerminal=NO, Elapsed=00:37.
+	Waiting on System App
+
+[2026-11-06 21:34:39 +0000] Status=4, isTerminal=NO, Elapsed=00:38.
+	Waiting on System App
+
+[2026-11-06 21:34:39 +0000] Status=4, isTerminal=NO, Elapsed=00:40.
+	Waiting on System App
+
+[2026-11-06 21:34:39 +0000] Status=4294967295, isTerminal=YES, Elapsed=00:43.
+	Finished
+
+ok: 01-inicio (novas tentativas: 1)
+ok: 02-todos (novas tentativas: 0)
+ok: 03-pastas (novas tentativas: 0)
+ok: 04-pasta (novas tentativas: 0)
+ok: 05-documento (novas tentativas: 0)
+ok: 06-organizar (novas tentativas: 0)
+ok: 07-dividir (novas tentativas: 0)
+ok: 08-leitor (novas tentativas: 0)
+ok: 09-aguardando-ocr (novas tentativas: 0)
+ok: 10-pergunta-ocr (novas tentativas: 0)
+ok: 11-combinar (novas tentativas: 0)
+ok: 12-ajustes (novas tentativas: 0)
+ok: 17-busca-no-texto (novas tentativas: 0)
+ok: 18-incluir-de-outro-pdf (novas tentativas: 0)
+ok: 19-escolha-de-leitura (novas tentativas: 0)
+ok: 20-modo-leitor (novas tentativas: 0)
+ok: 21-ferramenta-escolher-pdf (novas tentativas: 0)
+ok: 22-adicionar-a-pasta (novas tentativas: 0)
+ok: 23-converter-em-pdf (novas tentativas: 0)
+ok: 24-corrigir-paginas-curvas (novas tentativas: 0)
+ok: 25-leitor-miniaturas (novas tentativas: 0)
+ok: 26-cortar-e-girar (novas tentativas: 0)
+ok: 27-numerar-paginas (novas tentativas: 0)
+ok: 28-bloqueado (novas tentativas: 0)
+ok: 29-leitor-selecao (novas tentativas: 0)
+ok: 30-assinar (novas tentativas: 0)
+ok: 13
+ok: 14
+ok: 15-inicio-escuro (novas tentativas: 0)
+ok: 16-documento-escuro (novas tentativas: 0)
+ok: en-01-inicio (novas tentativas: 0)
+ok: en-05-documento (novas tentativas: 0)
+ok: en-06-organizar (novas tentativas: 0)
+ok: en-08-leitor (novas tentativas: 0)
+ok: en-09-aguardando-ocr (novas tentativas: 0)
+ok: en-12-ajustes (novas tentativas: 0)
+ok: de-01-inicio (novas tentativas: 0)
+ok: de-05-documento (novas tentativas: 0)
+ok: de-06-organizar (novas tentativas: 0)
+ok: de-08-leitor (novas tentativas: 0)
+ok: de-09-aguardando-ocr (novas tentativas: 0)
+ok: de-12-ajustes (novas tentativas: 0)
+ok: ja-01-inicio (novas tentativas: 0)
+ok: ja-05-documento (novas tentativas: 0)
+ok: ja-06-organizar (novas tentativas: 0)
+ok: ja-08-leitor (novas tentativas: 0)
+ok: ja-09-aguardando-ocr (novas tentativas: 0)
+ok: ja-12-ajustes (novas tentativas: 0)
