@@ -16,7 +16,8 @@ jobs:
   build:
     # macos-26 (Apple Silicon) ficou sem máquina livre em 28/10/2026; a versão Intel tem o mesmo Xcode.
     runs-on: macos-26-intel
-    timeout-minutes: 75
+    # A máquina Intel às vezes leva 40 min só nas capturas (8/nov/2026: passou de 1h15 e o trabalho foi cancelado).
+    timeout-minutes: 120
     env:
       OUT: ${{ github.workspace }}/ci-output
     steps:
