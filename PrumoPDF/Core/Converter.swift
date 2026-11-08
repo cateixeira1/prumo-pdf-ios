@@ -220,7 +220,10 @@ final class WebPDFRenderer: NSObject, WKNavigationDelegate {
 
     /// O arquivo convertido é só lido: sem JavaScript, sem internet e sem guardar nada (cookies, cache).
     /// Um documento malicioso não consegue rodar código nem mandar dados para fora durante a conversão.
-    static let blockNetworkRules = #"[{"trigger":{"url-filter":"^(https?|wss?|ftp)://"},"action":{"type":"block"}}]"#
+    /// (As regras de conteúdo do WebKit não aceitam "|" na expressão: uma regra para cada endereço.)
+    static let blockNetworkRules = #"[{"trigger":{"url-filter":"^https?://"},"action":{"type":"block"}},"#
+        + #"{"trigger":{"url-filter":"^wss?://"},"action":{"type":"block"}},"#
+        + #"{"trigger":{"url-filter":"^ftp://"},"action":{"type":"block"}}]"#
 
     static func configuration() async -> WKWebViewConfiguration {
         let config = WKWebViewConfiguration()
