@@ -1,0 +1,109 @@
+Test Case '-[PrumoPDFTests.CompressTests testHighlightsAreKept]' passed (1.088 seconds).
+Test Case '-[PrumoPDFTests.CompressTests testLibraryCreatesCopyAndKeepsOriginal]' passed (20.106 seconds).
+Test Case '-[PrumoPDFTests.CompressTests testPasswordPDFIsRefused]' passed (0.044 seconds).
+Tamanho: original 4251529, média 2531698, alta 978454
+Test Case '-[PrumoPDFTests.CompressTests testScanMediumAndHigh]' passed (23.139 seconds).
+Test Case '-[PrumoPDFTests.CompressTests testTextIsKept]' passed (0.055 seconds).
+	 Executed 5 tests, with 0 failures (0 unexpected) in 44.432 (44.439) seconds
+Test Case '-[PrumoPDFTests.ConverterTests testHTMLAndRTF]' passed (3.712 seconds).
+Test Case '-[PrumoPDFTests.ConverterTests testImagesCombinedA4WithOrientation]' passed (0.331 seconds).
+Test Case '-[PrumoPDFTests.ConverterTests testImagesOnePDFEach]' passed (0.174 seconds).
+Test Case '-[PrumoPDFTests.ConverterTests testKinds]' passed (0.005 seconds).
+Test Case '-[PrumoPDFTests.ConverterTests testLongTextPaginatesA4]' passed (0.391 seconds).
+Test Case '-[PrumoPDFTests.ConverterTests testMultipageTIFF]' passed (0.289 seconds).
+Test Case '-[PrumoPDFTests.ConverterTests testSavedConversionGoesToLibraryAndPendingOCR]' passed (0.159 seconds).
+Test Case '-[PrumoPDFTests.ConverterTests testWebRendererIsLockedDown]' passed (0.221 seconds).
+Test Case '-[PrumoPDFTests.ConverterTests testWordDocument]' passed (10.376 seconds).
+	 Executed 9 tests, with 0 failures (0 unexpected) in 15.658 (15.677) seconds
+Test Case '-[PrumoPDFTests.DewarpTests testCurvedPageReadsBetterAfterCorrection]' passed (88.183 seconds).
+Test Case '-[PrumoPDFTests.DewarpTests testDewarpPDFKeepsOtherPages]' passed (126.723 seconds).
+Test Case '-[PrumoPDFTests.DewarpTests testModelIsBundledAndPredictsGrid]' passed (2.579 seconds).
+	 Executed 3 tests, with 0 failures (0 unexpected) in 217.485 (217.489) seconds
+Test Case '-[PrumoPDFTests.I18nTests testCatalogsAreCompleteAndKeepPlaceholders]' passed (0.637 seconds).
+Test Case '-[PrumoPDFTests.I18nTests testCopyNamesAreRecognizedInAnyLanguage]' passed (0.015 seconds).
+Test Case '-[PrumoPDFTests.I18nTests testDocumentLanguageForTextWrittenInPDFs]' passed (0.127 seconds).
+Test Case '-[PrumoPDFTests.I18nTests testEveryLanguageIsInTheApp]' passed (0.007 seconds).
+Test Case '-[PrumoPDFTests.I18nTests testSummaryMadeInAnotherLanguageIsFound]' passed (0.031 seconds).
+Test Case '-[PrumoPDFTests.I18nTests testTemplatesAndPlurals]' passed (0.002 seconds).
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.818 (0.831) seconds
+Test Case '-[PrumoPDFTests.LibraryTests testBackupFolderAndRestoreWithoutDuplicates]' passed (0.084 seconds).
+Test Case '-[PrumoPDFTests.LibraryTests testBackupPreference]' passed (0.157 seconds).
+Test Case '-[PrumoPDFTests.LibraryTests testCopyIntoFolderKeepsOriginal]' passed (0.030 seconds).
+Test Case '-[PrumoPDFTests.LibraryTests testFavoriteStarFeedsFavoritesList]' passed (0.022 seconds).
+Test Case '-[PrumoPDFTests.LibraryTests testImportFoldersRenameMoveDelete]' passed (0.108 seconds).
+Test Case '-[PrumoPDFTests.LibraryTests testMetadataSurvivesRestart]' passed (0.037 seconds).
+Test Case '-[PrumoPDFTests.LibraryTests testModifyAndUndo]' passed (0.345 seconds).
+Test Case '-[PrumoPDFTests.LibraryTests testSaveNewDocumentAndSplitNames]' passed (0.072 seconds).
+Busca: analisado=true isAnalyzing=false status=Optional(PrumoPDF.TextStatus.digital) texto direto=marcador-a-1 este e um texto digital com bastante conteudo para a pagina 1. marc
+Test Case '-[PrumoPDFTests.LibraryTests testSearchFindsAccentInsensitiveText]' passed (0.231 seconds).
+	 Executed 9 tests, with 0 failures (0 unexpected) in 1.086 (1.095) seconds
+Test Case '-[PrumoPDFTests.OCRTests testCancellation]' passed (0.220 seconds).
+Test Case '-[PrumoPDFTests.OCRTests testDigitalOnlyDocumentReportsNothingToDo]' passed (0.011 seconds).
+Test Case '-[PrumoPDFTests.OCRTests testDigitalPagesAreUntouched]' passed (11.985 seconds).
+Texto reconhecido (página 1): excelentissimo senhor doutor juiz de direito a autora propoe a presente acao de indenizacao por danos materiais e morais em face do hospital reu. o prontuario demonstra a demora no diagnostico. valor da causa: r$ 150.000,00 em 12 de marco de 2025.
+Tamanho: original 100768 bytes, com OCR 112976 bytes
+Confiança média: 1.0; revisar: []
+Test Case '-[PrumoPDFTests.OCRTests testScannedPagesGetSearchableText]' passed (28.457 seconds).
+Test Case '-[PrumoPDFTests.OCRTests testScannedPageWithDigitalStampKeepsStampOnce]' passed (9.028 seconds).
+	 Executed 5 tests, with 0 failures (0 unexpected) in 49.701 (49.706) seconds
+Test Case '-[PrumoPDFTests.PDFOpsTests testAnalyzerClassifiesPages]' passed (0.074 seconds).
+Test Case '-[PrumoPDFTests.PDFOpsTests testArrangementReorderRotateDelete]' passed (0.018 seconds).
+Test Case '-[PrumoPDFTests.PDFOpsTests testInsertAllAtStartAndEnd]' passed (0.013 seconds).
+Test Case '-[PrumoPDFTests.PDFOpsTests testInsertSelectedPagesAfterPosition]' passed (0.023 seconds).
+Test Case '-[PrumoPDFTests.PDFOpsTests testRemoveKeepsAtLeastOnePage]' passed (0.008 seconds).
+Test Case '-[PrumoPDFTests.PDFOpsTests testSplitAndExtractAndMerge]' passed (0.018 seconds).
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.154 (0.173) seconds
+Test Case '-[PrumoPDFTests.PageSelectionTests testFormat]' passed (0.004 seconds).
+Test Case '-[PrumoPDFTests.PageSelectionTests testParsesNumbersRangesAndEnd]' passed (0.003 seconds).
+Test Case '-[PrumoPDFTests.PageSelectionTests testRejectsInvalidInput]' passed (0.002 seconds).
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.008 (0.012) seconds
+Modo leitor, página 1: ["EXCELENTÍSSIMO SENHOR DOUTOR JUIZ DE DIREITO", "A autora propõe a presente ação de indenização por danos materiais e morais em face do hospital réu. O prontuário demonstra a demora no diagnóstico. Valor da causa: R$ 150.000,00 em 12 de março de 2025."]
+Test Case '-[PrumoPDFTests.ReaderTextTests testReaderTextFromOCRResult]' passed (27.310 seconds).
+Test Case '-[PrumoPDFTests.ReaderTextTests testReflowJoinsLinesAndSplitsParagraphs]' passed (0.003 seconds).
+Test Case '-[PrumoPDFTests.ReaderTextTests testReflowWithoutPositions]' passed (0.002 seconds).
+Test Case '-[PrumoPDFTests.ReaderTextTests testScannedPDFWithoutOCRHasNoText]' passed (0.043 seconds).
+	 Executed 4 tests, with 0 failures (0 unexpected) in 27.357 (27.362) seconds
+Test Case '-[PrumoPDFTests.ScanServiceTests testDefaultName]' passed (0.003 seconds).
+Tamanho do PDF escaneado de teste: 189372 bytes
+Test Case '-[PrumoPDFTests.ScanServiceTests testMakesOnePagePerImageWithPhotoProportions]' passed (0.074 seconds).
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.077 (0.080) seconds
+Test Case '-[PrumoPDFTests.SecurityTests testCertificateKeyAccessControl]' passed (0.271 seconds).
+Test Case '-[PrumoPDFTests.SecurityTests testLockedPDFIsRecognized]' passed (0.029 seconds).
+Test Case '-[PrumoPDFTests.SecurityTests testProtectAndUnprotect]' passed (0.130 seconds).
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.429 (0.435) seconds
+Test Case '-[PrumoPDFTests.SplitPlanTests testEqualParts]' passed (0.006 seconds).
+Test Case '-[PrumoPDFTests.SplitPlanTests testInvalidParts]' passed (0.011 seconds).
+Test Case '-[PrumoPDFTests.SplitPlanTests testRemainderGoesToFirstParts]' passed (0.005 seconds).
+Test Case '-[PrumoPDFTests.SplitPlanTests testSummary]' passed (0.004 seconds).
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.025 (0.036) seconds
+Test Case '-[PrumoPDFTests.SyncTests testFavoritesAndOCRLinkReachTheOtherDevice]' passed (0.265 seconds).
+Test Case '-[PrumoPDFTests.SyncTests testFileStillOnTheWayKeepsItsEntry]' passed (0.101 seconds).
+Test Case '-[PrumoPDFTests.SyncTests testMovingTheLibraryToACloudFolder]' passed (0.163 seconds).
+Test Case '-[PrumoPDFTests.SyncTests testReadsTheListWrittenByWindows]' passed (0.035 seconds).
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.564 (0.569) seconds
+Test Case '-[PrumoPDFTests.V111Tests testNumberingMovesOffPrintedNumbers]' passed (0.064 seconds).
+Test Case '-[PrumoPDFTests.V111Tests testNumberingOnCleanPagesDoesNotMove]' passed (0.046 seconds).
+Test Case '-[PrumoPDFTests.V111Tests testOCRLanguageSelection]' passed (0.037 seconds).
+Test Case '-[PrumoPDFTests.V111Tests testStampLayoutFitsLongUppercaseName]' passed (0.008 seconds).
+Test Case '-[PrumoPDFTests.V111Tests testTranslationsAreBundled]' passed (0.011 seconds).
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.165 (0.175) seconds
+Test Case '-[PrumoPDFTests.V18Tests testCropAndRotatePages]' passed (0.048 seconds).
+Test Case '-[PrumoPDFTests.V18Tests testHighlightIsSavedAsStandardAnnotation]' passed (0.026 seconds).
+Test Case '-[PrumoPDFTests.V18Tests testMarginsRoundTripForEveryRotation]' passed (0.011 seconds).
+Test Case '-[PrumoPDFTests.V18Tests testNumberPagesKeepsTextAndHighlights]' passed (0.133 seconds).
+Test Case '-[PrumoPDFTests.V18Tests testPasswordStrength]' passed (0.018 seconds).
+Test Case '-[PrumoPDFTests.V18Tests testSummaryIsCreatedAndExtended]' passed (0.144 seconds).
+Test Case '-[PrumoPDFTests.V18Tests testSummaryTextAndLabels]' passed (0.024 seconds).
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.403 (0.426) seconds
+Test Case '-[PrumoPDFTests.V19Tests testHighlightFromTextAndPartialUnmark]' passed (0.031 seconds).
+Test Case '-[PrumoPDFTests.V19Tests testHistoryRecordClearsRedo]' passed (0.004 seconds).
+Test Case '-[PrumoPDFTests.V19Tests testImportCertificateAndWrongPassword]' passed (0.069 seconds).
+Test Case '-[PrumoPDFTests.V19Tests testLibrarySignsACopyAndThenInPlace]' passed (0.235 seconds).
+Test Case '-[PrumoPDFTests.V19Tests testProtectionLevelsAndAutomaticLevel]' passed (1.000 seconds).
+Test Case '-[PrumoPDFTests.V19Tests testReaderReturnsToTheSamePageAfterBeingHidden]' passed (1.363 seconds).
+Test Case '-[PrumoPDFTests.V19Tests testSignInvisibleRotatedAndXrefStream]' passed (0.219 seconds).
+Test Case '-[PrumoPDFTests.V19Tests testSignTwiceKeepsTheFirstSignature]' passed (0.761 seconds).
+Test Case '-[PrumoPDFTests.V19Tests testTextModeKnowsWhereEachLetterCameFrom]' passed (0.011 seconds).
+	 Executed 9 tests, with 0 failures (0 unexpected) in 3.695 (3.708) seconds
+	 Executed 84 tests, with 0 failures (0 unexpected) in 362.058 (362.300) seconds
+	 Executed 84 tests, with 0 failures (0 unexpected) in 362.058 (362.303) seconds

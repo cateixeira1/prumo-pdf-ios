@@ -1,0 +1,7 @@
+destaque-media.pdf: OK (1 páginas, 10993 bytes, imagens [])
+scan-alta.pdf: OK (2 páginas, 978454 bytes, imagens [793, 793])
+scan-media.pdf: OK (2 páginas, 2531698 bytes, imagens [1240, 1240])
+scan-original.pdf: OK (2 páginas, 4251529 bytes, imagens [1654, 1654])
+texto-alta.pdf: OK (3 páginas, 8827 bytes, imagens [])
+scan-media.pdf: 40% menor que o original
+scan-alta.pdf: 77% menor que o original
