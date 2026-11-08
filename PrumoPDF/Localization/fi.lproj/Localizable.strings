@@ -39,6 +39,7 @@
 "A assinatura falhou: {}." = "Allekirjoitus epäonnistui: {}.";
 "A assinatura ficou maior que o espaço reservado." = "Allekirjoitus on suurempi kuin varattu tila.";
 "A biblioteca agora está no {}." = "Kirjasto on nyt sijainnissa {}.";
+"A biblioteca está no {}: a nuvem guarda por um tempo os arquivos apagados. Para não sobrar cópia sem senha, apague o original também da lixeira da nuvem (no iCloud Drive, em Arquivos › Apagados Recentemente)." = "Kirjasto on palvelussa {}: pilvi säilyttää poistettuja tiedostoja jonkin aikaa. Jotta salasanatonta kopiota ei jäisi, poista alkuperäinen myös pilven roskakorista (iCloud Drivessa: Tiedostot › Äskettäin poistetut).";
 "A biblioteca já está nessa pasta." = "Kirjasto on jo tässä kansiossa.";
 "A busca procura no nome dos arquivos e no texto dos PDFs. PDFs escaneados só aparecem pelo texto depois do OCR." = "Haku etsii tiedostonimistä ja PDF-tiedostojen tekstistä. Skannatut PDF:t löytyvät tekstin perusteella vasta OCR:n jälkeen.";
 "A chave do certificado não está nas Chaves deste iPhone. Adicione o certificado de novo." = "Varmenteen avain ei ole tämän iPhonen avainnipussa. Lisää varmenne uudelleen.";
@@ -60,6 +61,7 @@
 "A saída não pode ser o próprio arquivo de origem." = "Tulos ei voi olla itse lähdetiedosto.";
 "A senha bloqueia a tela do Prumo. Os PDFs continuam como arquivos comuns na pasta da biblioteca: para proteger um arquivo em si (por exemplo, antes de enviar), use “Proteger com senha” na tela do PDF, que usa a criptografia padrão de PDF (AES-256) e abre em qualquer leitor com a senha." = "Salasana lukitsee Prumon näkymän. PDF:t pysyvät tavallisina tiedostoina kirjaston kansiossa: suojataksesi itse tiedoston (esimerkiksi ennen lähettämistä) käytä PDF:n näkymässä toimintoa ”Suojaa salasanalla”, joka käyttää PDF:n vakiosalausta (AES-256) ja aukeaa missä tahansa lukijassa salasanalla.";
 "A senha só serve para abrir o arquivo agora: o certificado vai para as Chaves do iPhone, só neste aparelho, e a senha não fica gravada." = "Salasanaa käytetään vain tiedoston avaamiseen nyt: varmenne menee iPhonen avainnippuun, vain tähän laitteeseen, eikä salasanaa tallenneta.";
+"A senha só serve para abrir o arquivo agora: o certificado vai para as Chaves do iPhone, só neste aparelho, e a senha não fica gravada. A chave fica protegida pelo próprio iOS: cada assinatura exige o Face ID ou o código do iPhone." = "Salasanaa käytetään vain tiedoston avaamiseen nyt: varmenne tallennetaan iPhonen avainnippuun vain tälle laitteelle, eikä salasanaa tallenneta. Avainta suojaa iOS itse: jokainen allekirjoitus vaatii Face ID:n tai iPhonen pääsykoodin.";
 "A1 salvo no Prumo" = "A1 tallennettu Prumoon";
 "A1: o arquivo do certificado fica guardado só nesta conta do Windows (fora da biblioteca e da nuvem). A senha não é gravada: o Prumo pede a senha a cada assinatura." = "A1: varmennetiedosto säilytetään vain tällä Windows-tilillä (kirjaston ja pilven ulkopuolella). Salasanaa ei tallenneta: Prumo kysyy sitä jokaisen allekirjoituksen yhteydessä.";
 "Abrir" = "Avaa";
@@ -183,6 +185,7 @@
 "Certificado removido do Prumo." = "Varmenne poistettu Prumosta.";
 "Certificados do Windows são removidos pelo Windows (certmgr.msc) ou pelo programa do token." = "Windowsin varmenteet poistetaan Windowsissa (certmgr.msc) tai tunnuksen ohjelmalla.";
 "Certificados encontrados no Windows" = "Windowsista löytyneet varmenteet";
+"Chave protegida pelo iOS: o Face ID ou o código é exigido a cada assinatura." = "iOS suojaa avaimen: Face ID tai pääsykoodi vaaditaan jokaisessa allekirjoituksessa.";
 "Claro" = "Vaalea";
 "Clique na estrela de um PDF para ele aparecer aqui." = "Napsauta PDF:n tähteä, niin se näkyy täällä.";
 "Clique na lupa (ou dê dois cliques) para ver a página grande" = "Napsauta suurennuslasia (tai kaksoisnapsauta) nähdäksesi sivun isona";
@@ -753,6 +756,7 @@
 "O arquivo vai para a Lixeira do Windows. Dá para recuperar por lá, se precisar." = "Tiedosto siirtyy Windowsin roskakoriin. Voit palauttaa sen sieltä tarvittaessa.";
 "O certificado de {} sai deste iPhone. O arquivo .pfx que você tem continua onde estava, e os PDFs já assinados continuam válidos." = "Haltijan {} varmenne poistetaan tästä iPhonesta. .pfx-tiedostosi jää paikalleen, ja jo allekirjoitetut PDF:t pysyvät voimassa.";
 "O certificado de {} sai do Prumo. O arquivo original (.pfx) que você tem continua onde estava, e os PDFs já assinados continuam válidos." = "Varmenne {} poistetaan Prumosta. Hallussasi oleva alkuperäinen tiedosto (.pfx) pysyy paikallaan, ja jo allekirjoitetut PDF:t pysyvät voimassa.";
+"O certificado fica nas Chaves do iPhone, só neste aparelho (não vai para o iCloud nem para backups). A senha do arquivo não é gravada; cada assinatura pede o Face ID ou o código, exigido pelo próprio iOS para usar a chave. Se o código do iPhone for removido, o iOS apaga a chave: adicione o certificado de novo. Certificado A3 (token ou cartão) não funciona no iPhone: use o Prumo para Windows, que liga o token pelo Windows." = "Varmenne on iPhonen avainnipussa vain tällä laitteella (se ei mene iCloudiin eikä varmuuskopioihin). Tiedoston salasanaa ei tallenneta; jokainen allekirjoitus pyytää Face ID:tä tai pääsykoodia, jota iOS itse vaatii avaimen käyttöön. Jos iPhonen pääsykoodi poistetaan, iOS poistaa avaimen: lisää varmenne uudelleen. A3-varmenteet (tunnus tai kortti) eivät toimi iPhonessa: käytä Prumoa Windowsille, joka yhdistää tunnuksen Windowsin kautta.";
 "O certificado fica nas Chaves do iPhone, só neste aparelho (não vai para o iCloud nem para backups). A senha do arquivo não é gravada; cada assinatura pede o Face ID ou o código. Certificado A3 (token ou cartão) não funciona no iPhone: use o Prumo para Windows, que liga o token pelo Windows." = "Varmenne pysyy iPhonen avainnipussa, vain tässä laitteessa (se ei siirry iCloudiin eikä varmuuskopioihin). Tiedoston salasanaa ei tallenneta; jokainen allekirjoitus pyytää Face ID:tä tai pääsykoodia. A3-varmenteet (tunnus tai kortti) eivät toimi iPhonessa: käytä Prumo for Windowsia, joka yhdistää tunnuksen Windowsin kautta.";
 "O certificado não pôde ser lido." = "Varmennetta ei voitu lukea.";
 "O corte não apaga nada do PDF: “Página inteira” mostra tudo de novo." = "Rajaus ei poista PDF:stä mitään: ”Koko sivu” näyttää taas kaiken.";
@@ -773,6 +777,7 @@
 "O nível de proteção foi definido pela primeira assinatura e não muda mais." = "Suojaustason määritti ensimmäinen allekirjoitus, eikä se enää muutu.";
 "O nível vale para a primeira assinatura do PDF (assinatura de certificação, DocMDP) e depois não muda. Na hora de assinar, dá para trocar o nível daquele PDF. PDF com mais de um campo de assinatura usa o nível 2 automaticamente, e o Prumo confirma com você antes de assinar. Nenhum nível impede que outro programa grave uma alteração no arquivo: o que muda é que a assinatura deixa de valer (ou é marcada como alterada), e leitores como o Adobe Acrobat avisam. Por isso o Prumo assina uma cópia (“Nome - assinado”), mantém o original editável e desliga as ferramentas de edição na cópia." = "Taso koskee PDF:n ensimmäistä allekirjoitusta (varmennusallekirjoitus, DocMDP), eikä se muutu sen jälkeen. Allekirjoitettaessa voit vaihtaa kyseisen PDF:n tason. PDF, jossa on useampi kuin yksi allekirjoituskenttä, käyttää automaattisesti tasoa 2, ja Prumo varmistaa asian kanssasi ennen allekirjoittamista. Mikään taso ei estä toista ohjelmaa tallentamasta muutosta tiedostoon: tällöin allekirjoitus lakkaa olemasta voimassa (tai se merkitään muutetuksi), ja esimerkiksi Adobe Acrobat varoittaa siitä. Siksi Prumo allekirjoittaa kopion (”Nimi - allekirjoitettu”), pitää alkuperäisen muokattavana ja poistaa kopiosta muokkaustyökalut käytöstä.";
 "O número fica gravado como texto na página. Para tirar, use “Desfazer última alteração”. Se a posição escolhida já tiver texto ou um número impresso, o Prumo desloca o número para não ficar por cima." = "Numero tallennetaan sivulle tekstinä. Poista se toiminnolla ”Kumoa viimeisin muutos”. Jos valitussa kohdassa on jo tekstiä tai painettu numero, Prumo siirtää numeroa, jotta se ei ole päällekkäin.";
+"O original continua sem senha na biblioteca. Quem tiver acesso a este iPhone consegue abri-lo." = "Alkuperäinen jää kirjastoon ilman salasanaa. Kuka tahansa, jolla on pääsy tähän iPhoneen, voi avata sen.";
 "O original não muda: o Prumo cria uma cópia comprimida na mesma pasta." = "Alkuperäinen ei muutu: Prumo luo pakatun kopion samaan kansioon.";
 "O original não muda: o resultado é um PDF novo, com “- corrigido” no nome. As páginas corrigidas viram imagem; depois, o app oferece o OCR." = "Alkuperäinen ei muutu: tuloksena on uusi PDF, jonka nimessä on ”- korjattu”. Korjatuista sivuista tulee kuvia; sen jälkeen sovellus tarjoaa OCR:ää.";
 "O original não muda: o resultado é um PDF novo, com “- corrigido” no nome. Depois, o app pergunta se você quer fazer o OCR." = "Alkuperäinen ei muutu: tulos on uusi PDF, jonka nimessä on ”- korjattu”. Sen jälkeen appi kysyy, haluatko tehdä OCR:n.";
@@ -972,6 +977,7 @@
 "Salvar a nova ordem?" = "Tallennetaanko uusi järjestys?";
 "Salvar senha" = "Tallenna salasana";
 "Salvar uma cópia em…" = "Tallenna kopio kohteeseen…";
+"Se você esquecer a senha, não haverá outra cópia para abrir." = "Jos unohdat salasanan, muuta avattavaa kopiota ei ole.";
 "Segurança" = "Turvallisuus";
 "Selecionar" = "Valitse";
 "Selecionar texto (sem destacar)" = "Valitse tekstiä (korostamatta)";
@@ -980,6 +986,7 @@
 "Selecione o trecho com o mouse e depois toque em “Adicionar ao resumo”." = "Valitse ote hiirellä ja napsauta sitten ”Lisää tiivistelmään”.";
 "Selecione um trecho com texto para adicionar ao resumo." = "Valitse tekstiä sisältävä ote lisätäksesi sen tiivistelmään.";
 "Sem OCR" = "Ei OCR:ää";
+"Sem a proteção do iOS: o iPhone não tinha código quando o certificado foi adicionado. Defina um código no iPhone, remova o certificado e adicione de novo." = "Ilman iOS:n suojaa: iPhonessa ei ollut pääsykoodia, kun varmenne lisättiin. Aseta iPhoneen pääsykoodi, poista varmenne ja lisää se uudelleen.";
 "Sem backup e sem sincronização: se o computador estragar ou for perdido, os PDFs vão junto. Escolha uma nuvem para guardar e sincronizar os PDFs." = "Ei varmuuskopiota eikä synkronointia: jos tietokone hajoaa tai katoaa, PDF:t menevät sen mukana. Valitse pilvi PDF-tiedostojen tallentamista ja synkronointia varten.";
 "Sem giro a aplicar." = "Ei käytettävää kiertoa.";
 "Sem o Word instalado, a conversão foi simplificada: o layout pode mudar." = "Koska Wordia ei ole asennettu, muuntamista yksinkertaistettiin: asettelu voi muuttua.";

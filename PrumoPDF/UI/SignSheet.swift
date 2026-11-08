@@ -209,7 +209,7 @@ struct CertificateImportModifier: ViewModifier {
                 Button("Cancelar", role: .cancel) { importer.data = nil }
                 Button("Adicionar") { add() }
             } message: {
-                Text("A senha só serve para abrir o arquivo agora: o certificado vai para as Chaves do iPhone, só neste aparelho, e a senha não fica gravada.")
+                Text("A senha só serve para abrir o arquivo agora: o certificado vai para as Chaves do iPhone, só neste aparelho, e a senha não fica gravada. A chave fica protegida pelo próprio iOS: cada assinatura exige o Face ID ou o código do iPhone.")
             }
     }
 
@@ -249,6 +249,11 @@ struct CertificatesCard: View {
                                 Text(LF("Emitido por {} · válido até {}", c.issuer, c.certificate.notAfter.dayText) + (c.expired ? " · " + L("VENCIDO") : ""))
                                     .font(.system(size: 12.5))
                                     .foregroundStyle(c.expired ? Theme.red : Theme.secondaryText)
+                                Text(c.systemProtected
+                                     ? L("Chave protegida pelo iOS: o Face ID ou o código é exigido a cada assinatura.")
+                                     : L("Sem a proteção do iOS: o iPhone não tinha código quando o certificado foi adicionado. Defina um código no iPhone, remova o certificado e adicione de novo."))
+                                    .font(.system(size: 12.5))
+                                    .foregroundStyle(c.systemProtected ? Theme.secondaryText : Theme.orange)
                             }
                             Spacer()
                             Button(role: .destructive) { removing = c } label: { Image(systemName: "trash") }
@@ -259,7 +264,7 @@ struct CertificatesCard: View {
                 Button("Adicionar certificado A1 (.pfx ou .p12)…") { importer.start() }
                     .buttonStyle(.bordered)
                     .font(.system(size: 15, weight: .semibold))
-                Text("O certificado fica nas Chaves do iPhone, só neste aparelho (não vai para o iCloud nem para backups). A senha do arquivo não é gravada; cada assinatura pede o Face ID ou o código. Certificado A3 (token ou cartão) não funciona no iPhone: use o Prumo para Windows, que liga o token pelo Windows.")
+                Text("O certificado fica nas Chaves do iPhone, só neste aparelho (não vai para o iCloud nem para backups). A senha do arquivo não é gravada; cada assinatura pede o Face ID ou o código, exigido pelo próprio iOS para usar a chave. Se o código do iPhone for removido, o iOS apaga a chave: adicione o certificado de novo. Certificado A3 (token ou cartão) não funciona no iPhone: use o Prumo para Windows, que liga o token pelo Windows.")
                     .font(.system(size: 13))
                     .foregroundStyle(Theme.secondaryText)
             }

@@ -11,6 +11,9 @@ struct SigningCertificate: Identifiable, Hashable {
     let id: String              // SHA-1 do certificado
     let certificate: X509Certificate
     let chain: [[UInt8]]
+    /// A chave só é usada depois do Face ID ou do código do iPhone, exigidos pelo próprio iOS (controle de
+    /// acesso das Chaves). Sem código no iPhone não dá: aí quem pede a confirmação é o Prumo.
+    var systemProtected: Bool = false
 
     var name: String { certificate.holderName }
     var issuer: String { certificate.issuerCN }
@@ -60,13 +63,31 @@ enum CertificateStore {
         let chain = ((first[kSecImportItemCertChain as String] as? [SecCertificate]) ?? [])
             .map { [UInt8](SecCertificateCopyData($0) as Data) }
             .filter { $0 != der }
-        // a identidade (certificado + chave) vai para as Chaves
-        let add: [String: Any] = [
-            kSecValueRef as String: identity,
-            kSecAttrLabel as String: "Prumo PDF – \(x509.holderName)",
-            kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
-        ]
-        let st = SecItemAdd(add as CFDictionary, nil)
+        // A chave vai para as Chaves com controle de acesso do iOS (Face ID ou código a cada uso, só neste
+        // aparelho, só com código definido). Se não der (iPhone sem código), vai a identidade como antes.
+        let label = "Prumo PDF – \(x509.holderName)"
+        var systemProtected = false
+        var st = errSecUnimplemented
+        if protectedAddAllowed {
+            st = addProtected(identity: identity, certificate: cert, label: label)
+            if st == errSecSuccess {
+                let probe = SigningCertificate(id: x509.sha1, certificate: x509, chain: chain)
+                if Self.identity(for: probe) != nil {
+                    systemProtected = true
+                } else {
+                    deleteKeyAndCertificate(identity: identity, certificate: cert)   // não formou o par: volta ao jeito antigo
+                    st = errSecItemNotFound
+                }
+            }
+        }
+        if !systemProtected {
+            let add: [String: Any] = [
+                kSecValueRef as String: identity,
+                kSecAttrLabel as String: label,
+                kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
+            ]
+            st = SecItemAdd(add as CFDictionary, nil)
+        }
         #if DEBUG && targetEnvironment(simulator)
         if useMemory(st) {
             let c = SigningCertificate(id: x509.sha1, certificate: x509, chain: chain)
@@ -79,7 +100,8 @@ enum CertificateStore {
         }
         // a cadeia e os dados para mostrar a lista, num item separado
         let info: [String: Any] = ["der": Data(der).base64EncodedString(),
-                                   "chain": chain.map { Data($0).base64EncodedString() }]
+                                   "chain": chain.map { Data($0).base64EncodedString() },
+                                   "systemProtected": systemProtected]
         let blob = try JSONSerialization.data(withJSONObject: info)
         let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
                                     kSecAttrService as String: service,
@@ -92,7 +114,54 @@ enum CertificateStore {
         guard st2 == errSecSuccess else {
             throw UserFacingError(LF("Não foi possível guardar o certificado (código {}).", st2))
         }
-        return SigningCertificate(id: x509.sha1, certificate: x509, chain: chain)
+        return SigningCertificate(id: x509.sha1, certificate: x509, chain: chain, systemProtected: systemProtected)
+    }
+
+    /// No simulador (CI) não há código do aparelho nem quem toque no Face ID: a proteção do sistema
+    /// travaria os testes à espera de alguém. No iPhone, sempre se tenta.
+    static var protectedAddAllowed: Bool {
+        #if targetEnvironment(simulator)
+        return false
+        #else
+        return true
+        #endif
+    }
+
+    /// Controle de acesso da chave: só neste aparelho, só com código definido, Face ID ou código a cada uso.
+    static func keyAccessControl() -> SecAccessControl? {
+        SecAccessControlCreateWithFlags(nil, kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, .userPresence, nil)
+    }
+
+    /// Guarda a chave (com controle de acesso) e o certificado em itens separados; as Chaves juntam os dois
+    /// numa identidade pela chave pública.
+    private static func addProtected(identity: SecIdentity, certificate: SecCertificate, label: String) -> OSStatus {
+        var keyRef: SecKey?
+        guard SecIdentityCopyPrivateKey(identity, &keyRef) == errSecSuccess, let key = keyRef,
+              let access = keyAccessControl() else { return errSecParam }
+        let keyItem: [String: Any] = [kSecClass as String: kSecClassKey,
+                                      kSecValueRef as String: key,
+                                      kSecAttrLabel as String: label,
+                                      kSecAttrAccessControl as String: access]
+        let st = SecItemAdd(keyItem as CFDictionary, nil)
+        guard st == errSecSuccess else { return st }
+        let certItem: [String: Any] = [kSecClass as String: kSecClassCertificate,
+                                       kSecValueRef as String: certificate,
+                                       kSecAttrLabel as String: label,
+                                       kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly]
+        let st2 = SecItemAdd(certItem as CFDictionary, nil)
+        if st2 != errSecSuccess && st2 != errSecDuplicateItem {
+            SecItemDelete([kSecClass as String: kSecClassKey, kSecValueRef as String: key] as CFDictionary)
+            return st2
+        }
+        return errSecSuccess
+    }
+
+    private static func deleteKeyAndCertificate(identity: SecIdentity, certificate: SecCertificate) {
+        var keyRef: SecKey?
+        if SecIdentityCopyPrivateKey(identity, &keyRef) == errSecSuccess, let key = keyRef {
+            SecItemDelete([kSecClass as String: kSecClassKey, kSecValueRef as String: key] as CFDictionary)
+        }
+        SecItemDelete([kSecClass as String: kSecClassCertificate, kSecValueRef as String: certificate] as CFDictionary)
     }
 
     static func parse(_ der: [UInt8]) throws -> X509Certificate {
@@ -119,19 +188,22 @@ enum CertificateStore {
                   let derB64 = info["der"] as? String, let der = Data(base64Encoded: derB64),
                   let x = try? X509Certificate(der: [UInt8](der)) else { return nil }
             let chain = (info["chain"] as? [String] ?? []).compactMap { Data(base64Encoded: $0) }.map { [UInt8]($0) }
-            return SigningCertificate(id: x.sha1, certificate: x, chain: chain)
+            return SigningCertificate(id: x.sha1, certificate: x, chain: chain,
+                                      systemProtected: info["systemProtected"] as? Bool ?? false)
         }
         .sorted { $0.name < $1.name }
     }
 
-    /// A identidade (certificado + chave) nas Chaves.
-    static func identity(for cert: SigningCertificate) -> SecIdentity? {
+    /// A identidade (certificado + chave) nas Chaves. Com `context` já confirmado (Face ID ou código), a chave
+    /// protegida é usada sem pedir de novo.
+    static func identity(for cert: SigningCertificate, context: LAContext? = nil) -> SecIdentity? {
         #if DEBUG && targetEnvironment(simulator)
         if let m = memory[cert.id] { return m.identity }
         #endif
-        let query: [String: Any] = [kSecClass as String: kSecClassIdentity,
+        var query: [String: Any] = [kSecClass as String: kSecClassIdentity,
                                     kSecReturnRef as String: true,
                                     kSecMatchLimit as String: kSecMatchLimitAll]
+        if let context { query[kSecUseAuthenticationContext as String] = context }
         var out: CFTypeRef?
         guard SecItemCopyMatching(query as CFDictionary, &out) == errSecSuccess, let list = out as? [Any] else { return nil }
         for any in list {
@@ -150,7 +222,10 @@ enum CertificateStore {
         memory[cert.id] = nil
         #endif
         if let identity = identity(for: cert) {
+            var keyRef: SecKey?
+            let key = SecIdentityCopyPrivateKey(identity, &keyRef) == errSecSuccess ? keyRef : nil
             SecItemDelete([kSecClass as String: kSecClassIdentity, kSecValueRef as String: identity] as CFDictionary)
+            if let key { SecItemDelete([kSecClass as String: kSecClassKey, kSecValueRef as String: key] as CFDictionary) }
             var c: SecCertificate?
             if SecIdentityCopyCertificate(identity, &c) == errSecSuccess, let c {
                 SecItemDelete([kSecClass as String: kSecClassCertificate, kSecValueRef as String: c] as CFDictionary)
@@ -161,8 +236,8 @@ enum CertificateStore {
     }
 
     /// Assina `data` com a chave do certificado (RSA PKCS#1 v1.5 ou ECDSA, SHA-256).
-    static func signer(for cert: SigningCertificate) throws -> ([UInt8]) throws -> [UInt8] {
-        guard let identity = identity(for: cert) else {
+    static func signer(for cert: SigningCertificate, context: LAContext? = nil) throws -> ([UInt8]) throws -> [UInt8] {
+        guard let identity = identity(for: cert, context: context) else {
             throw UserFacingError(L("A chave do certificado não está nas Chaves deste iPhone. Adicione o certificado de novo."))
         }
         var keyRef: SecKey?
@@ -584,7 +659,7 @@ extension Library {
         guard item.meta.locked != true else {
             throw UserFacingError(L("PDF com senha não pode ser assinado. Remova a senha antes."))
         }
-        let signer = try CertificateStore.signer(for: cert)
+        let signer = try CertificateStore.signer(for: cert, context: SignConfirmation.lastContext)
         let url = item.url
         let original = try Data(contentsOf: url)
         let already = PDFSigner.signatureCount(original) > 0
@@ -610,14 +685,21 @@ extension Library {
     }
 }
 
-/// Face ID ou código do iPhone antes de usar a chave do certificado.
+/// Face ID ou código do iPhone antes de usar a chave do certificado. Com a chave protegida pelo iOS, o mesmo
+/// contexto vai para as Chaves: a confirmação vale para a assinatura, sem pedir duas vezes.
 enum SignConfirmation {
+    @MainActor static var lastContext: LAContext?
+
     @MainActor
     static func confirm() async -> Bool {
         let ctx = LAContext()
+        ctx.localizedReason = L("Confirme para assinar o PDF com o seu certificado")
+        lastContext = nil
         var err: NSError?
         guard ctx.canEvaluatePolicy(.deviceOwnerAuthentication, error: &err) else { return true }
-        return (try? await ctx.evaluatePolicy(.deviceOwnerAuthentication,
-                                              localizedReason: L("Confirme para assinar o PDF com o seu certificado"))) ?? false
+        let ok = (try? await ctx.evaluatePolicy(.deviceOwnerAuthentication,
+                                                localizedReason: L("Confirme para assinar o PDF com o seu certificado"))) ?? false
+        if ok { lastContext = ctx }
+        return ok
     }
 }

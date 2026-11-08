@@ -39,6 +39,7 @@
 "A assinatura falhou: {}." = "Signeringen mislyktes: {}.";
 "A assinatura ficou maior que o espaço reservado." = "Signaturen er større enn den reserverte plassen.";
 "A biblioteca agora está no {}." = "Biblioteket ligger nå i {}.";
+"A biblioteca está no {}: a nuvem guarda por um tempo os arquivos apagados. Para não sobrar cópia sem senha, apague o original também da lixeira da nuvem (no iCloud Drive, em Arquivos › Apagados Recentemente)." = "Biblioteket ligger i {}: skyen tar vare på slettede filer en stund. For at det ikke skal bli igjen en kopi uten passord, må du også slette originalen fra papirkurven i skyen (for iCloud Drive: Filer › Nylig slettet).";
 "A biblioteca já está nessa pasta." = "Biblioteket ligger allerede i den mappen.";
 "A busca procura no nome dos arquivos e no texto dos PDFs. PDFs escaneados só aparecem pelo texto depois do OCR." = "Søket ser i filnavnene og i teksten i PDF-ene. Skannede PDF-er dukker bare opp etter tekst når OCR er kjørt.";
 "A chave do certificado não está nas Chaves deste iPhone. Adicione o certificado de novo." = "Sertifikatnøkkelen finnes ikke i nøkkelringen på denne iPhonen. Legg til sertifikatet på nytt.";
@@ -60,6 +61,7 @@
 "A saída não pode ser o próprio arquivo de origem." = "Utdataene kan ikke være selve kildefilen.";
 "A senha bloqueia a tela do Prumo. Os PDFs continuam como arquivos comuns na pasta da biblioteca: para proteger um arquivo em si (por exemplo, antes de enviar), use “Proteger com senha” na tela do PDF, que usa a criptografia padrão de PDF (AES-256) e abre em qualquer leitor com a senha." = "Passordet låser skjermen i Prumo. PDF-ene forblir vanlige filer i bibliotekmappen: For å beskytte selve filen (for eksempel før du sender den) bruker du «Beskytt med passord» på PDF-skjermen. Det bruker standard PDF-kryptering (AES-256) og kan åpnes i alle lesere med passordet.";
 "A senha só serve para abrir o arquivo agora: o certificado vai para as Chaves do iPhone, só neste aparelho, e a senha não fica gravada." = "Passordet brukes bare til å åpne filen nå: sertifikatet legges i nøkkelringen på iPhonen, bare på denne enheten, og passordet lagres ikke.";
+"A senha só serve para abrir o arquivo agora: o certificado vai para as Chaves do iPhone, só neste aparelho, e a senha não fica gravada. A chave fica protegida pelo próprio iOS: cada assinatura exige o Face ID ou o código do iPhone." = "Passordet brukes bare til å åpne filen nå: sertifikatet havner i nøkkelringen på iPhone, bare på denne enheten, og passordet lagres ikke. Nøkkelen beskyttes av iOS selv: hver signering krever Face ID eller iPhone-koden.";
 "A1 salvo no Prumo" = "A1 lagret i Prumo";
 "A1: o arquivo do certificado fica guardado só nesta conta do Windows (fora da biblioteca e da nuvem). A senha não é gravada: o Prumo pede a senha a cada assinatura." = "A1: Sertifikatfilen lagres bare i denne Windows-kontoen (utenfor biblioteket og skyen). Passordet lagres ikke: Prumo spør om det ved hver signering.";
 "Abrir" = "Åpne";
@@ -183,6 +185,7 @@
 "Certificado removido do Prumo." = "Sertifikatet er fjernet fra Prumo.";
 "Certificados do Windows são removidos pelo Windows (certmgr.msc) ou pelo programa do token." = "Windows-sertifikater fjernes via Windows (certmgr.msc) eller tokenprogrammet.";
 "Certificados encontrados no Windows" = "Sertifikater funnet i Windows";
+"Chave protegida pelo iOS: o Face ID ou o código é exigido a cada assinatura." = "Nøkkel beskyttet av iOS: Face ID eller koden kreves ved hver signering.";
 "Claro" = "Lys";
 "Clique na estrela de um PDF para ele aparecer aqui." = "Klikk på stjernen på en PDF for at den skal vises her.";
 "Clique na lupa (ou dê dois cliques) para ver a página grande" = "Klikk på forstørrelsesglasset (eller dobbeltklikk) for å se siden i stort format";
@@ -753,6 +756,7 @@
 "O arquivo vai para a Lixeira do Windows. Dá para recuperar por lá, se precisar." = "Filen havner i papirkurven i Windows. Du kan gjenopprette den derfra ved behov.";
 "O certificado de {} sai deste iPhone. O arquivo .pfx que você tem continua onde estava, e os PDFs já assinados continuam válidos." = "Sertifikatet til {} fjernes fra denne iPhonen. .pfx-filen din blir der den var, og PDF-er som allerede er signert, er fortsatt gyldige.";
 "O certificado de {} sai do Prumo. O arquivo original (.pfx) que você tem continua onde estava, e os PDFs já assinados continuam válidos." = "Sertifikatet til {} fjernes fra Prumo. Originalfilen (.pfx) du har, blir liggende der den var, og PDF-er som allerede er signert, forblir gyldige.";
+"O certificado fica nas Chaves do iPhone, só neste aparelho (não vai para o iCloud nem para backups). A senha do arquivo não é gravada; cada assinatura pede o Face ID ou o código, exigido pelo próprio iOS para usar a chave. Se o código do iPhone for removido, o iOS apaga a chave: adicione o certificado de novo. Certificado A3 (token ou cartão) não funciona no iPhone: use o Prumo para Windows, que liga o token pelo Windows." = "Sertifikatet ligger i nøkkelringen på iPhone, bare på denne enheten (det går ikke til iCloud eller til sikkerhetskopier). Passordet til filen lagres ikke; hver signering ber om Face ID eller koden, som iOS selv krever for å bruke nøkkelen. Hvis iPhone-koden fjernes, sletter iOS nøkkelen: legg til sertifikatet på nytt. A3-sertifikater (token eller kort) virker ikke på iPhone: bruk Prumo for Windows, som kobler til tokenet gjennom Windows.";
 "O certificado fica nas Chaves do iPhone, só neste aparelho (não vai para o iCloud nem para backups). A senha do arquivo não é gravada; cada assinatura pede o Face ID ou o código. Certificado A3 (token ou cartão) não funciona no iPhone: use o Prumo para Windows, que liga o token pelo Windows." = "Sertifikatet blir i nøkkelringen på iPhonen, bare på denne enheten (det går ikke til iCloud eller sikkerhetskopier). Passordet til filen lagres ikke; hver signatur ber om Face ID eller koden. A3-sertifikater (token eller kort) fungerer ikke på iPhone: bruk Prumo for Windows, som kobler til tokenet via Windows.";
 "O certificado não pôde ser lido." = "Sertifikatet kunne ikke leses.";
 "O corte não apaga nada do PDF: “Página inteira” mostra tudo de novo." = "Beskjæringen sletter ingenting fra PDF-en: «Hele siden» viser alt igjen.";
@@ -773,6 +777,7 @@
 "O nível de proteção foi definido pela primeira assinatura e não muda mais." = "Beskyttelsesnivået ble bestemt av den første signaturen og endres ikke lenger.";
 "O nível vale para a primeira assinatura do PDF (assinatura de certificação, DocMDP) e depois não muda. Na hora de assinar, dá para trocar o nível daquele PDF. PDF com mais de um campo de assinatura usa o nível 2 automaticamente, e o Prumo confirma com você antes de assinar. Nenhum nível impede que outro programa grave uma alteração no arquivo: o que muda é que a assinatura deixa de valer (ou é marcada como alterada), e leitores como o Adobe Acrobat avisam. Por isso o Prumo assina uma cópia (“Nome - assinado”), mantém o original editável e desliga as ferramentas de edição na cópia." = "Nivået gjelder den første signaturen i PDF-en (sertifiseringssignatur, DocMDP) og endres ikke etterpå. Ved signering kan du endre nivået for den PDF-en. En PDF med mer enn ett signaturfelt bruker nivå 2 automatisk, og Prumo bekrefter med deg før signering. Ingen nivåer hindrer et annet program i å lagre en endring i filen: Det som skjer, er at signaturen slutter å gjelde (eller merkes som endret), og lesere som Adobe Acrobat varsler om det. Derfor signerer Prumo en kopi («Navn - signert»), holder originalen redigerbar og slår av redigeringsverktøyene i kopien.";
 "O número fica gravado como texto na página. Para tirar, use “Desfazer última alteração”. Se a posição escolhida já tiver texto ou um número impresso, o Prumo desloca o número para não ficar por cima." = "Nummeret lagres som tekst på siden. For å fjerne det bruker du «Angre siste endring». Hvis den valgte plasseringen allerede har tekst eller et trykt tall, flytter Prumo nummeret så det ikke overlapper.";
+"O original continua sem senha na biblioteca. Quem tiver acesso a este iPhone consegue abri-lo." = "Originalen blir liggende i biblioteket uten passord. Alle som har tilgang til denne iPhonen, kan åpne den.";
 "O original não muda: o Prumo cria uma cópia comprimida na mesma pasta." = "Originalen endres ikke: Prumo lager en komprimert kopi i samme mappe.";
 "O original não muda: o resultado é um PDF novo, com “- corrigido” no nome. As páginas corrigidas viram imagem; depois, o app oferece o OCR." = "Originalen endres ikke: Resultatet er en ny PDF med «- rettet» i navnet. De rettede sidene blir bilder; deretter tilbyr appen OCR.";
 "O original não muda: o resultado é um PDF novo, com “- corrigido” no nome. Depois, o app pergunta se você quer fazer o OCR." = "Originalen endres ikke: resultatet er en ny PDF, med «- rettet» i navnet. Etterpå spør appen om du vil kjøre OCR.";
@@ -972,6 +977,7 @@
 "Salvar a nova ordem?" = "Lagre den nye rekkefølgen?";
 "Salvar senha" = "Lagre passord";
 "Salvar uma cópia em…" = "Lagre en kopi i …";
+"Se você esquecer a senha, não haverá outra cópia para abrir." = "Hvis du glemmer passordet, finnes det ingen annen kopi å åpne.";
 "Segurança" = "Sikkerhet";
 "Selecionar" = "Velg";
 "Selecionar texto (sem destacar)" = "Merk tekst (uten utheving)";
@@ -980,6 +986,7 @@
 "Selecione o trecho com o mouse e depois toque em “Adicionar ao resumo”." = "Merk utdraget med musen og klikk deretter på «Legg til i sammendraget».";
 "Selecione um trecho com texto para adicionar ao resumo." = "Merk et utdrag med tekst for å legge det til i sammendraget.";
 "Sem OCR" = "Uten OCR";
+"Sem a proteção do iOS: o iPhone não tinha código quando o certificado foi adicionado. Defina um código no iPhone, remova o certificado e adicione de novo." = "Uten iOS-beskyttelse: iPhonen hadde ingen kode da sertifikatet ble lagt til. Angi en kode på iPhonen, fjern sertifikatet og legg det til på nytt.";
 "Sem backup e sem sincronização: se o computador estragar ou for perdido, os PDFs vão junto. Escolha uma nuvem para guardar e sincronizar os PDFs." = "Ingen sikkerhetskopi og ingen synkronisering: Hvis datamaskinen blir ødelagt eller blir borte, forsvinner PDF-ene også. Velg en sky for å lagre og synkronisere PDF-ene.";
 "Sem giro a aplicar." = "Ingen rotasjon å bruke.";
 "Sem o Word instalado, a conversão foi simplificada: o layout pode mudar." = "Uten Word installert ble konverteringen forenklet: Oppsettet kan endre seg.";

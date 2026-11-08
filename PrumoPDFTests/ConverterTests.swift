@@ -1,5 +1,6 @@
 import PDFKit
 import UIKit
+import WebKit
 import XCTest
 @testable import PrumoPDF
 
@@ -104,6 +105,21 @@ final class ConverterTests: XCTestCase {
         let content = text(out.data)
         print("Converter: texto do .docx no PDF: \(content.prefix(120))")
         XCTAssertTrue(content.contains("indenização"), "o texto do Word aparece no PDF")
+    }
+
+    /// Versão 1.14: a visualização que converte documentos do Office não roda JavaScript, não acessa a internet
+    /// e não guarda dados; o .docx continua convertendo (testWordDocument).
+    func testWebRendererIsLockedDown() async throws {
+        let config = await WebPDFRenderer.configuration()
+        XCTAssertFalse(config.defaultWebpagePreferences.allowsContentJavaScript, "sem JavaScript")
+        XCTAssertFalse(config.websiteDataStore.isPersistent, "sem cookies nem cache gravados")
+        let rules = try await WKContentRuleListStore.default().compileContentRuleList(
+            forIdentifier: "teste-sem-rede", encodedContentRuleList: WebPDFRenderer.blockNetworkRules)
+        XCTAssertNotNil(rules, "a regra que bloqueia a internet compila")
+        XCTAssertFalse(WebPDFRenderer.allowed(URL(string: "https://exemplo.com/x")))
+        XCTAssertFalse(WebPDFRenderer.allowed(URL(string: "http://10.0.0.1/")))
+        XCTAssertTrue(WebPDFRenderer.allowed(URL(fileURLWithPath: "/tmp/a.docx")))
+        XCTAssertTrue(WebPDFRenderer.allowed(URL(string: "x-apple-ql-id://abc/preview.html")))
     }
 
     func testSavedConversionGoesToLibraryAndPendingOCR() async throws {

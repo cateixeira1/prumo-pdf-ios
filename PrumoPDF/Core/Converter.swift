@@ -218,9 +218,27 @@ final class WebPDFRenderer: NSObject, WKNavigationDelegate {
     private var webView: WKWebView?
     private var continuation: CheckedContinuation<Void, Error>?
 
+    /// O arquivo convertido é só lido: sem JavaScript, sem internet e sem guardar nada (cookies, cache).
+    /// Um documento malicioso não consegue rodar código nem mandar dados para fora durante a conversão.
+    static let blockNetworkRules = #"[{"trigger":{"url-filter":"^(https?|wss?|ftp)://"},"action":{"type":"block"}}]"#
+
+    static func configuration() async -> WKWebViewConfiguration {
+        let config = WKWebViewConfiguration()
+        config.websiteDataStore = .nonPersistent()
+        config.defaultWebpagePreferences.allowsContentJavaScript = false
+        config.preferences.javaScriptCanOpenWindowsAutomatically = false
+        if let rules = try? await WKContentRuleListStore.default().compileContentRuleList(
+            forIdentifier: "prumo-sem-rede", encodedContentRuleList: blockNetworkRules) {
+            config.userContentController.add(rules)
+        }
+        return config
+    }
+
     func render(url: URL) async throws -> Data {
         let printable = Converter.a4.insetBy(dx: Converter.margin, dy: Converter.margin)
-        let wv = WKWebView(frame: CGRect(x: -2000, y: 0, width: printable.width, height: printable.height))
+        let config = await Self.configuration()
+        let wv = WKWebView(frame: CGRect(x: -2000, y: 0, width: printable.width, height: printable.height),
+                           configuration: config)
         wv.navigationDelegate = self
         webView = wv
         // A visualização precisa estar numa janela para montar o documento.
@@ -234,11 +252,22 @@ final class WebPDFRenderer: NSObject, WKNavigationDelegate {
         }
         try await withCheckedThrowingContinuation { (c: CheckedContinuation<Void, Error>) in
             continuation = c
-            wv.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())
+            wv.loadFileURL(url, allowingReadAccessTo: url)        // só o próprio arquivo (ou o pacote .pages)
         }
         // Documentos do Office terminam de montar um pouco depois do "carregado".
         try await Task.sleep(nanoseconds: 1_200_000_000)
         return Converter.pdfData(formatter: wv.viewPrintFormatter())
+    }
+
+    /// Nada vai para a internet: links, redirecionamentos e quadros com endereço da web são recusados.
+    /// (Outros endereços internos, como o que o iOS usa para montar documentos do Office, continuam.)
+    static func allowed(_ url: URL?) -> Bool {
+        guard let scheme = url?.scheme?.lowercased() else { return true }
+        return !["http", "https", "ws", "wss", "ftp"].contains(scheme)
+    }
+
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
+        Self.allowed(navigationAction.request.url) ? .allow : .cancel
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {

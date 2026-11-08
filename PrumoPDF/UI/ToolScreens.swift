@@ -721,6 +721,18 @@ struct ProtectSheet: View {
 
     private var ready: Bool { pw1.count >= 4 && pw1 == pw2 }
 
+    /// O que acontece com o original sem senha (e o aviso da lixeira da nuvem).
+    private var originalNote: String {
+        guard deleteOriginal else {
+            return L("O original continua sem senha na biblioteca. Quem tiver acesso a este iPhone consegue abri-lo.")
+        }
+        var text = L("Se você esquecer a senha, não haverá outra cópia para abrir.")
+        if let cloud = library.cloudName {
+            text += " " + LF("A biblioteca está no {}: a nuvem guarda por um tempo os arquivos apagados. Para não sobrar cópia sem senha, apague o original também da lixeira da nuvem (no iCloud Drive, em Arquivos › Apagados Recentemente).", cloud == "nuvem" ? L("nuvem") : cloud)
+        }
+        return text
+    }
+
     var body: some View {
         NavigationStack {
             Screen {
@@ -750,6 +762,8 @@ struct ProtectSheet: View {
                         if let problem { Text(problem).font(.system(size: 13, weight: .medium)).foregroundStyle(Theme.red) }
                         Toggle("Apagar o original (sem senha)", isOn: $deleteOriginal)
                             .font(.system(size: 15))
+                        Text(originalNote)
+                            .font(.system(size: 13)).foregroundStyle(Theme.secondaryText)
                         Text("Importante: se você esquecer a senha, não há como abrir o PDF, nem pelo Prumo. Guarde a senha num lugar seguro. Evite acentos e “ç” na senha: alguns leitores de PDF não os entendem.")
                             .font(.system(size: 13, weight: .medium)).foregroundStyle(Theme.orange)
                     }

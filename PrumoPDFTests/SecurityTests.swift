@@ -42,6 +42,21 @@ final class SecurityTests: XCTestCase {
         XCTAssertTrue((reopened.string ?? "").contains("MARCADOR-A-1"), "o texto continua lá")
     }
 
+    /// Versão 1.14: a chave do certificado vai para as Chaves com controle de acesso do próprio iOS (Face ID ou
+    /// código a cada uso). No simulador não há código nem rosto: o Prumo usa o jeito antigo e diz isso.
+    func testCertificateKeyAccessControl() throws {
+        XCTAssertNotNil(CertificateStore.keyAccessControl(), "o controle de acesso (userPresence) é aceito pelo iOS")
+        #if targetEnvironment(simulator)
+        XCTAssertFalse(CertificateStore.protectedAddAllowed)
+        #endif
+        let c = try CertificateStore.importP12(TestCertificates.maria, password: TestCertificates.password)
+        defer { CertificateStore.remove(c) }
+        XCTAssertEqual(c.systemProtected, CertificateStore.protectedAddAllowed)
+        let listed = try XCTUnwrap(CertificateStore.all().first { $0.id == c.id })
+        XCTAssertEqual(listed.systemProtected, c.systemProtected, "a lista lembra se a chave tem a proteção do iOS")
+        XCTAssertNotNil(CertificateStore.identity(for: c))
+    }
+
     func testLockedPDFIsRecognized() throws {
         let base = TestPDF.tempDir()
         let src = base.appendingPathComponent("x.pdf")
