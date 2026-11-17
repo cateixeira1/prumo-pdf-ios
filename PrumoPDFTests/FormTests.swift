@@ -15,6 +15,8 @@ final class FormTests: XCTestCase {
 
     override func tearDown() {
         if let base { try? FileManager.default.removeItem(at: base) }
+        // a formatação escolhida fica nas preferências do app: não pode passar para as capturas de tela
+        UserDefaults.standard.removeObject(forKey: FormModel.styleKey)
     }
 
     private func keep(_ url: URL, _ name: String) {

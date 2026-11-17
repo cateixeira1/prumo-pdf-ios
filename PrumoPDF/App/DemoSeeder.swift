@@ -265,17 +265,15 @@ enum DemoSeeder {
     static func fillFormDemo(_ model: FormModel) {
         #if DEBUG
         guard startScreen == "form", let doc = model.document, let page = doc.page(at: 0) else { return }
-        var style = model.style
-        style.bold = true
-        style.color = .blue
+        var style = FormStyle(font: .helvetica, bold: true, size: 12, color: .blue)
         let text = "Caio Fernandes Teixeira\nOAB/SP 483.995"
         let size = FormBoxes.size(text: text, style: style)
-        let box = FormBox(page: 0, bounds: CGRect(x: 330, y: 560 - size.height, width: size.width, height: size.height),
+        let box = FormBox(page: 0, bounds: CGRect(x: 330, y: 330 - size.height, width: size.width, height: size.height),
                           kind: "text", text: text, style: style, name: FormBoxes.newName(kind: "text"))
         page.addAnnotation(FormBoxes.make(box))
         var markStyle = style
         markStyle.size = 14
-        let mark = FormBox(page: 0, bounds: CGRect(x: 306, y: 538, width: 14, height: 14), kind: "check", text: "",
+        let mark = FormBox(page: 0, bounds: CGRect(x: 306, y: 308, width: 14, height: 14), kind: "check", text: "",
                            style: markStyle, name: FormBoxes.newName(kind: "check"))
         page.addAnnotation(FormBoxes.make(mark))
         model.style = style
