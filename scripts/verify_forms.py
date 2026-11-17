@@ -56,7 +56,11 @@ def main(folder: str) -> int:
     fields = r.get_fields() or {}
     nome = fields.get("nome", {})
     aceito = fields.get("aceito", {})
-    print(f"campo nome: {nome.get('/V')!r}; aceito: {aceito.get('/V')!r}")
+    estado = fields.get("estado", {})
+    print(f"campo nome: {nome.get('/V')!r}; aceito: {aceito.get('/V')!r}; estado: {estado.get('/V')!r}")
+    if estado.get("/V") != "RJ":
+        print("ERRO: o valor da lista suspensa 'estado' não foi gravado")
+        bad += 1
     if nome.get("/V") != "Maria Ação":
         print("ERRO: o valor do campo 'nome' não foi gravado")
         bad += 1
@@ -72,10 +76,10 @@ def main(folder: str) -> int:
     boxes = []
     for i, a in annots(r):
         sub = a.get("/Subtype")
-        nm = str(a.get("/NM", ""))
+        nm = str(a.get("/NM", "") or a.get("/PrumoID", ""))
         if sub == "/Widget":
             ap = a.get("/AP")
-            print(f"  widget {a.get('/T')}: aparência {'sim' if ap else 'NÃO'}")
+            print(f"  widget {a.get('/T') or (a.get('/Parent') or dict()).get('/T')}: aparência {'sim' if ap else 'NÃO'}")
             if not ap:
                 bad += 1
         if nm.startswith(("prumo-tx-", "prumo-mk-")):
@@ -96,7 +100,7 @@ def main(folder: str) -> int:
     rf = PdfReader(final, strict=True)
     left = [(i, a.get("/Subtype")) for i, a in annots(rf)]
     print(f"finalizado: anotações {left}; AcroForm campos {len((rf.trailer['/Root'].get('/AcroForm') or {}).get('/Fields', []))}")
-    if any(s == "/Widget" for _, s in left) or any(str(a.get("/NM", "")).startswith("prumo-") for _, a in annots(rf)):
+    if any(s == "/Widget" for _, s in left) or any(str(a.get("/NM", "") or a.get("/PrumoID", "")).startswith("prumo-") for _, a in annots(rf)):
         print("ERRO: o PDF finalizado ainda tem campos ou caixas editáveis")
         bad += 1
     if [s for _, s in left] != ["/Highlight"]:

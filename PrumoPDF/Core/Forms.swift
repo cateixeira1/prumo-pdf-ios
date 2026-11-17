@@ -139,13 +139,19 @@ enum FormBoxes {
     static let selectionName = "prumo-sel"
     static let styleKey = PDFAnnotationKey(rawValue: "/PrumoStyle")
     static let dsKey = PDFAnnotationKey(rawValue: "/DS")
+    /// O PDFKit não grava o /NM ao salvar; a identificação vai também nesta chave (o Windows lê as duas).
+    static let idKey = PDFAnnotationKey(rawValue: "/PrumoID")
     static let pad: CGFloat = 2
     static let line: CGFloat = 1.2
     static let author = "Prumo PDF"
     static let marks: [String: String] = ["check": "✓", "cross": "✗", "dot": "●"]
 
     static func name(of a: PDFAnnotation) -> String {
-        (a.value(forAnnotationKey: .name) as? String) ?? (a.value(forAnnotationKey: .name) as? NSString).map { $0 as String } ?? ""
+        for key in [idKey, PDFAnnotationKey.name] {
+            if let s = a.value(forAnnotationKey: key) as? String, !s.isEmpty { return s }
+            if let s = a.value(forAnnotationKey: key) as? NSString, s.length > 0 { return s as String }
+        }
+        return ""
     }
 
     static func isBox(_ a: PDFAnnotation) -> Bool {
@@ -268,7 +274,9 @@ enum FormBoxes {
         a.border = border
         a.userName = author
         a.modificationDate = Date()
-        _ = a.setValue(b.name.isEmpty ? newName(kind: b.kind) : b.name, forAnnotationKey: .name)
+        let id = b.name.isEmpty ? newName(kind: b.kind) : b.name
+        _ = a.setValue(id, forAnnotationKey: .name)
+        _ = a.setValue(id, forAnnotationKey: idKey)
         let style = styleString(b)
         _ = a.setValue(style, forAnnotationKey: styleKey)
         _ = a.setValue(style.components(separatedBy: "; prumo-kind").first ?? style, forAnnotationKey: dsKey)

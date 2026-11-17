@@ -25,22 +25,10 @@ final class FormTests: XCTestCase {
         try? FileManager.default.copyItem(at: url, to: dest)
     }
 
-    /// PDF com um campo de texto e uma caixa de marcar (feitos pelo próprio PDFKit), gravado e reaberto.
+    /// Formulário de verdade (AcroForm), o mesmo dos testes do Windows.
     private func formPDF() -> URL {
-        let doc = TestPDF.digital(pages: 2)
-        let page = doc.page(at: 0)!
-        let text = PDFAnnotation(bounds: CGRect(x: 60, y: 500, width: 300, height: 22), forType: .widget, withProperties: nil)
-        text.widgetFieldType = .text
-        text.fieldName = "nome"
-        text.font = UIFont(name: "Helvetica", size: 12)
-        page.addAnnotation(text)
-        let check = PDFAnnotation(bounds: CGRect(x: 60, y: 460, width: 16, height: 16), forType: .widget, withProperties: nil)
-        check.widgetFieldType = .button
-        check.widgetControlType = .checkBoxControl
-        check.fieldName = "aceito"
-        page.addAnnotation(check)
         let url = base.appendingPathComponent("ficha.pdf")
-        XCTAssertTrue(doc.write(to: url))
+        try? FormFixture.data.write(to: url)
         return url
     }
 
@@ -62,12 +50,14 @@ final class FormTests: XCTestCase {
     func testFillFieldsAndBoxesThenFinalize() throws {
         let url = formPDF()
         let doc = try XCTUnwrap(PDFDocument(url: url))
-        XCTAssertEqual(FormFields.count(doc), 2)
+        XCTAssertGreaterThanOrEqual(FormFields.count(doc), 9)
         let widgets = doc.page(at: 0)!.annotations.filter { $0.type == "Widget" }
         let nome = try XCTUnwrap(widgets.first { $0.fieldName == "nome" })
         nome.widgetStringValue = "Maria Ação"
         let aceito = try XCTUnwrap(widgets.first { $0.fieldName == "aceito" })
         aceito.buttonWidgetState = .onState
+        let estado = try XCTUnwrap(widgets.first { $0.fieldName == "estado" })
+        estado.widgetStringValue = "RJ"
         // caixa de texto de duas linhas, ✓ e ✗
         var style = FormStyle(font: .helvetica, bold: true, size: 14, color: .blue)
         let text = "Caio Fernandes Teixeira\nOAB/SP 483.995"
@@ -97,6 +87,7 @@ final class FormTests: XCTestCase {
         let w2 = back.page(at: 0)!.annotations.filter { $0.type == "Widget" }
         XCTAssertEqual(w2.first { $0.fieldName == "nome" }?.widgetStringValue, "Maria Ação")
         XCTAssertEqual(w2.first { $0.fieldName == "aceito" }?.buttonWidgetState, .onState)
+        XCTAssertEqual(w2.first { $0.fieldName == "estado" }?.widgetStringValue, "RJ")
         let read = FormBoxes.read(back)
         XCTAssertEqual(read.map(\.kind), ["text", "check", "cross", "dot"])
         XCTAssertEqual(read.map(\.name), boxes.map(\.name))

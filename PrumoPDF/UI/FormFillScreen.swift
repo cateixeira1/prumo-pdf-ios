@@ -115,6 +115,7 @@ final class FormModel: ObservableObject {
         border.dashPattern = [4, 3]
         a.border = border
         _ = a.setValue(FormBoxes.selectionName, forAnnotationKey: .name)
+        _ = a.setValue(FormBoxes.selectionName, forAnnotationKey: FormBoxes.idKey)
         doc.page(at: b.page)?.addAnnotation(a)
     }
 
