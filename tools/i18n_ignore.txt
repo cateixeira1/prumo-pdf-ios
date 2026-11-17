@@ -88,6 +88,7 @@ Matrix
 Times
 Courier
 Widget
+Ink
 font: {}pt {}; font-family: {}; font-size: {}pt; 
 font-weight: {}; color: {}
 ; prumo-kind: {}
