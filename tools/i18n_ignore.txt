@@ -84,3 +84,10 @@ Matte
 {} {} obj\n{}\nstream\n
 Thumb
 Matrix
+# Preencher formulário: nomes de fontes, tipo de anotação do PDF e o estilo gravado no PDF (/DS, igual ao Windows)
+Times
+Courier
+Widget
+font: {}pt {}; font-family: {}; font-size: {}pt; 
+font-weight: {}; color: {}
+; prumo-kind: {}

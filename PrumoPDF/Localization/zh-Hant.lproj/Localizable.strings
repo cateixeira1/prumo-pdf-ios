@@ -106,6 +106,8 @@
 "Antes" = "校正前";
 "Ao converter fotos em PDF, corrigir páginas curvas" = "將照片轉換為 PDF 時校正彎曲的頁面";
 "Ao escanear e ao converter fotos: páginas de livros e revistas (curvatura perto da lombada) e papel ondulado ficam com o texto reto, e o OCR acerta mais. Em páginas já retas, deixe desligado: a margem pode ser cortada. Também dá para corrigir um PDF pronto, na tela dele. Usa o modelo UVDoc, no próprio iPhone." = "掃描和轉換照片時：書籍和雜誌的頁面（靠近書背處彎曲）以及起皺的紙張會讓文字變直，OCR 也更準確。對於原本就平整的頁面，請保持關閉：頁邊可能會被裁掉。也可以在現有 PDF 的畫面中進行校正。使用 UVDoc 模型，在 iPhone 本機執行。";
+"Apagar a caixa escolhida" = "刪除所選方塊";
+"Apagar a caixa escolhida (Delete)" = "刪除所選方塊（Delete）";
 "Apagar destaque" = "刪除螢光標記";
 "Apagar este destaque" = "刪除此螢光標記";
 "Apagar o destaque" = "刪除螢光標記";
@@ -169,6 +171,8 @@
 "Buscar no documento (sem precisar de acentos)" = "在文件中搜尋（無需輸入重音）";
 "Buscar no texto (Ctrl+F)" = "在文字中搜尋（Ctrl+F）";
 "Buscar nome ou texto" = "搜尋名稱或文字";
+"Campos do PDF ou texto em qualquer lugar da página" = "PDF 欄位，或在頁面任意位置加入文字";
+"Campos do PDF ou texto na página" = "PDF 欄位或頁面上的文字";
 "Cancelar" = "取消";
 "Cancelar OCR" = "取消 OCR";
 "Cancelar o OCR?" = "取消 OCR？";
@@ -217,6 +221,7 @@
 "Comprimir PDF" = "壓縮 PDF";
 "Comprimir PDF…" = "壓縮 PDF…";
 "Comprimir qual PDF?" = "要壓縮哪個 PDF？";
+"Concluir" = "完成";
 "Conectado neste computador" = "已在此電腦上連線";
 "Conferindo o certificado…" = "正在檢查憑證…";
 "Conferindo o resultado" = "正在檢查結果";
@@ -237,6 +242,7 @@
 "Copiar, exportar, Explorador" = "複製、匯出、檔案總管";
 "Cor" = "顏色";
 "Cor do destaque" = "螢光標記顏色";
+"Cor do texto" = "文字顏色";
 "Corrigindo 1 página…" = "正在校正 1 頁…";
 "Corrigindo as páginas…" = "正在校正頁面…";
 "Corrigindo {} páginas…" = "正在校正 {} 頁…";
@@ -248,6 +254,7 @@
 "Cortar ou girar páginas de qual PDF?" = "裁切或旋轉哪個 PDF 的頁面？";
 "Cortar ou girar qual PDF?" = "裁切或旋轉哪個 PDF？";
 "Corte ou numeração" = "裁切或編號";
+"Cria uma cópia em que o preenchimento não pode mais ser alterado" = "建立一份副本，其中填寫的內容無法再變更";
 "Cria uma cópia menor: compressão média ou alta" = "建立較小的副本：中度或高度壓縮";
 "Cria uma cópia sem senha" = "建立無密碼副本";
 "Cria uma cópia sem senha, para destacar, fazer OCR, organizar ou dividir. O PDF com senha continua guardado." = "建立一份無密碼的副本，以便加上螢光標記、OCR、整理或分割。有密碼的 PDF 會保留。";
@@ -389,6 +396,7 @@
 "Esses PDFs já têm texto selecionável. O OCR não é necessário." = "這些 PDF 已有可選擇的文字，無需 OCR。";
 "Esta página não tem texto para selecionar (é imagem). Faça o OCR para poder selecionar, destacar e resumir." = "此頁沒有可選擇的文字（是影像）。請進行 OCR，才能選擇、螢光標記和摘錄。";
 "Esta página é imagem, sem texto para selecionar. A cópia com OCR tem o texto." = "此頁是影像，沒有可選擇的文字。OCR 副本中有文字。";
+"Estas letras não podem ser gravadas no formulário: {}" = "以下字元無法儲存到表單中：{}";
 "Este PDF está assinado digitalmente: comprimir regrava o arquivo e a assinatura deixaria de valer. Comprima o original (sem assinatura) e assine depois." = "此 PDF 已有數位簽章：壓縮會重寫檔案，簽章將失效。請先壓縮原始檔案（未簽署），再進行簽署。";
 "Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura." = "此 PDF 已數位簽署：任何變更都會使簽章失效。";
 "Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura. Dá para ler, buscar, copiar e adicionar trechos ao resumo, mas não destacar, cortar ou mudar páginas." = "此 PDF 已數位簽章：任何變更都會使簽章失效。可以閱讀、搜尋、複製並將摘錄新增到摘要，但不能螢光標記、裁切或變更頁面。";
@@ -400,6 +408,8 @@
 "Este PDF já tem senha." = "此 PDF 已有密碼。";
 "Este PDF já tem {} assinaturas. A nova assinatura entra no próprio arquivo, sem mudar o conteúdo: as assinaturas anteriores continuam válidas. Depois, o PDF continua sem poder ser alterado." = "此 PDF 已有 {} 個簽章。新簽章將加入檔案本身，不會變更內容：之前的簽章仍然有效。之後，PDF 仍然無法變更。";
 "Este PDF já tem {}. A nova assinatura entra no próprio arquivo, sem mudar o conteúdo: as anteriores continuam válidas. O PDF continua sem poder ser alterado." = "此 PDF 已有 {}。新的簽章會加入檔案本身，不改變內容：先前的簽章仍然有效。PDF 仍然不能修改。";
+"Este PDF não tem campos: clique na página para escrever." = "此 PDF 沒有欄位：按一下頁面即可書寫。";
+"Este PDF não tem campos: toque na página para escrever." = "此 PDF 沒有欄位：點一下頁面即可書寫。";
 "Este PDF não tem texto para o modo leitor: as páginas são imagens. Faça o OCR e abra o modo leitor na cópia com OCR." = "此 PDF 沒有可用於閱讀模式的文字：頁面都是影像。請進行 OCR，然後在 OCR 副本中開啟閱讀模式。";
 "Este PDF não tem texto pesquisável (é imagem). Faça o OCR para poder buscar." = "此 PDF 沒有可搜尋的文字（是影像）。請進行 OCR 後再搜尋。";
 "Este PDF não tem texto reconhecido. Faça o OCR para usar o modo leitor." = "此 PDF 沒有已辨識的文字。請先進行 OCR 才能使用閱讀模式。";
@@ -411,8 +421,10 @@
 "Este PDF tem senha. Para destacar, crie antes uma cópia sem senha (Ferramentas › Remover senha)." = "此 PDF 有密碼。若要加上螢光標記，請先建立無密碼的副本（工具 › 移除密碼）。";
 "Este PDF tem senha. Para fazer OCR, organizar ou dividir, crie antes uma cópia sem senha." = "此 PDF 有密碼。要進行 OCR、整理或分割，請先建立無密碼副本。";
 "Este PDF tem senha. Para numerar, crie antes uma cópia sem senha." = "此 PDF 有密碼。要編號，請先建立無密碼副本。";
+"Este PDF tem senha. Para preencher, crie antes uma cópia sem senha." = "此 PDF 有密碼。若要填寫，請先建立一份無密碼的副本。";
 "Este PDF tem {} campos de assinatura. No nível 1, depois da sua assinatura ninguém mais poderá assinar os outros campos sem invalidar a sua. Para os outros poderem assinar, use o nível 2." = "此 PDF 有 {} 個簽章欄。在等級 1 下，你簽章後其他人無法在不使你的簽章失效的情況下籤署其他欄位。若要讓其他人也能簽章，請使用等級 2。";
 "Este PDF tem {} campos de assinatura: o Prumo escolheu o nível 2, para os outros signatários ainda poderem assinar. Você pode mudar para o nível 1 ou 3." = "此 PDF 有 {} 個簽章欄：Prumo 選擇了等級 2，以便其他簽署人仍可簽章。你可以改為等級 1 或 3。";
+"Este PDF usa um tipo de formulário (XFA) que só o Adobe Acrobat preenche. No Prumo, dá para escrever por cima da página com caixas de texto." = "此 PDF 使用的表單類型 (XFA) 只能由 Adobe Acrobat 填寫。在 Prumo 中，可以用文字方塊在頁面上書寫。";
 "Este arquivo já é o resultado de um OCR." = "此檔案已經是 OCR 的結果。";
 "Este certificado está vencido: a assinatura não será aceita como válida." = "此憑證已過期：簽章將不會被認定為有效。";
 "Este certificado não serve para assinatura digital." = "此憑證不能用於數位簽章。";
@@ -456,12 +468,18 @@
 "Fechar (Esc)" = "關閉（Esc）";
 "Fechar dica" = "關閉提示";
 "Fechar o Prumo PDF cancela o OCR. O arquivo original não muda." = "關閉 Prumo PDF 會取消 OCR。原檔案不會改變。";
+"Fechar teclado" = "隱藏鍵盤";
 "Ferramentas" = "工具";
+"Finalizar" = "定稿";
+"Finalizar o formulário?" = "要定稿此表單嗎？";
 "Fonte" = "字型";
 "Fonte, fundo e mais opções" = "字型、背景和更多選項";
 "Formato" = "格式";
 "Formato PAdES, reconhecido pelo Adobe Reader e por outros leitores de PDF. Com certificado ICP-Brasil, a assinatura tem a mesma validade jurídica da assinatura de próprio punho (MP 2.200-2/2001)." = "PAdES 格式，Adobe Reader 和其他 PDF 閱讀器均可識別。使用 ICP-Brasil 憑證時，該簽章在巴西具有與手寫簽章同等的法律效力（MP 2.200-2/2001）。";
 "Formato PAdES, reconhecido pelo Adobe Reader e por outros leitores de PDF. O Face ID (ou o código) confirma que é você. Com certificado ICP-Brasil, a assinatura tem a mesma validade jurídica da assinatura de próprio punho (MP 2.200-2/2001)." = "PAdES 格式，可被 Adobe Reader 及其他 PDF 閱讀器辨識。Face ID（或密碼）用來確認是你本人。使用 ICP-Brasil 憑證時，此簽章在巴西具有與親筆簽名相同的法律效力（MP 2.200-2/2001）。";
+"Formulário XFA" = "XFA 表單";
+"Formulário finalizado: cópia criada." = "表單已定稿：已建立副本。";
+"Formulário salvo no PDF." = "表單已儲存到 PDF。";
 "Fotos" = "照片";
 "Fotos da galeria" = "照片圖庫中的照片";
 "Fotos de livros, papel ondulado" = "書本照片、起皺的紙";
@@ -478,6 +496,7 @@
 "Giro a aplicar: {}°" = "要應用的旋轉：{}°";
 "Google Drive para computador" = "電腦版 Google 雲端硬碟";
 "Grade da página com tamanho inesperado." = "頁面格線尺寸異常。";
+"Gravar no PDF (Ctrl+S)" = "儲存到 PDF（Ctrl+S）";
 "Guarde a senha num lugar seguro. Se esquecer, dá para desfazer o bloqueio pelos ajustes do Windows (passo a passo no LEIA-ME); os PDFs não são afetados." = "請把密碼儲存在安全的地方。如果忘記，可以透過 Windows 設定取消鎖定（步驟見 README）；PDF 不受影響。";
 "Idioma do aplicativo" = "App 語言";
 "Idiomas dos documentos" = "文件語言";
@@ -538,6 +557,9 @@
 "Mais recentes" = "最新";
 "Mais tarde" = "稍後";
 "Mandar o original (sem senha) para a Lixeira" = "將原檔案（無密碼）移到資源回收筒";
+"Marcar com ●" = "用 ● 標記";
+"Marcar com ✓" = "用 ✓ 標記";
+"Marcar com ✗" = "用 ✗ 標記";
 "Margens" = "邊界";
 "Margens (mm)" = "邊界 (公釐)";
 "Margens automáticas" = "自動邊距";
@@ -581,6 +603,8 @@
 "Nada recente" = "沒有最近的專案";
 "Nas páginas {} já havia algo na posição escolhida (por exemplo, um número impresso); o número foi deslocado para não ficar por cima." = "第 {} 頁所選位置已有內容（例如印刷的頁碼）；已移動編號以免重疊。";
 "Nas páginas {} não achei lugar livre perto; o número ficou na posição escolhida." = "第 {} 頁附近沒有空位；編號保留在所選位置。";
+"Negrito" = "粗體";
+"Negrito (Ctrl+B)" = "粗體（Ctrl+B）";
 "Nenhum PDF" = "沒有 PDF";
 "Nenhum PDF (ou arquivo que dê para converter) para importar." = "沒有可匯入的 PDF（或可轉換的檔案）。";
 "Nenhum PDF aqui" = "這裡沒有 PDF";
@@ -640,6 +664,8 @@
 "Não foi possível abrir o PDF." = "無法開啟 PDF。";
 "Não foi possível abrir o PDF. O arquivo pode estar corrompido." = "無法開啟 PDF。檔案可能已損毀。";
 "Não foi possível abrir o documento: {}" = "無法開啟文件：{}";
+"Não foi possível abrir o formulário" = "無法開啟表單";
+"Não foi possível abrir o formulário: {}" = "無法開啟表單：{}";
 "Não foi possível abrir o resumo atual." = "無法開啟目前的摘要。";
 "Não foi possível achar o conteúdo da página." = "找不到頁面內容。";
 "Não foi possível comprimir: {}" = "無法壓縮：{}";
@@ -650,6 +676,7 @@
 "Não foi possível copiar: {}" = "無法複製：{}";
 "Não foi possível corrigir a imagem." = "無法校正影像。";
 "Não foi possível corrigir: {}" = "無法校正：{}";
+"Não foi possível finalizar: {}" = "無法定稿：{}";
 "Não foi possível gerar a prévia: {}" = "無法生成預覽：{}";
 "Não foi possível gravar a cópia sem senha." = "無法儲存無密碼的副本。";
 "Não foi possível gravar o PDF numerado." = "無法儲存已編號的 PDF。";
@@ -732,6 +759,7 @@
 "O PDF volta a ficar como estava antes da última mudança (páginas, destaques, cortes ou numeração)." = "PDF 將恢復到上次變更（頁面、螢光標記、裁切或編號）之前的狀態。";
 "O Prumo aparece em “Abrir com” nos PDFs e, no botão direito de fotos e arquivos do Word, Excel e PowerPoint, em “Converter em PDF com o Prumo”. Para abrir todo PDF no Prumo com dois cliques, escolha o Prumo PDF como aplicativo padrão para .pdf nas configurações do Windows." = "Prumo 會出現在 PDF 的「開啟方式」中，以及照片和 Word、Excel、PowerPoint 檔案右鍵選單的「用 Prumo 轉換為 PDF」中。若要雙擊即可在 Prumo 中開啟所有 PDF，請在 Windows 設定中將 Prumo PDF 設為 .pdf 的預設應用程式。";
 "O Prumo bloqueia ao sair do app e pede {} (ou o código do iPhone) ao voltar. Para proteger um PDF em si, por exemplo antes de enviar, use “Proteger com senha” na tela dele: a senha vai junto com o arquivo e vale em qualquer leitor de PDF." = "離開 App 時 Prumo 會鎖定，回來時需要{}（或 iPhone 密碼）。若要保護 PDF 本身，例如在傳送之前，請在其畫面上使用「以密碼保護」：密碼會隨檔案一起，在任何 PDF 閱讀器中都有效。";
+"O Prumo cria uma cópia em que os campos e o texto viram parte da página e não podem mais ser alterados. O original continua editável." = "Prumo 會建立一份副本，其中的欄位和文字成為頁面的一部分，無法再變更。原檔案仍可編輯。";
 "O Prumo não consegue gravar nessa pasta. Nem todo app de nuvem deixa outros apps usarem pastas dele; o iCloud Drive deixa." = "Prumo 無法寫入該資料夾。並非所有雲端 App 都允許其他 App 使用它們的資料夾；iCloud 雲碟允許。";
 "O Prumo pede a senha ao abrir e depois de um tempo sem uso (Ctrl+L bloqueia na hora)." = "Prumo 會在開啟時以及一段時間未使用後要求輸入密碼（Ctrl+L 可立即鎖定）。";
 "O Prumo perdeu a permissão para a pasta da nuvem (Ajustes do iPhone › Privacidade › Arquivos e Pastas). Escolha a pasta de novo em Ajustes › Escolher nuvem." = "Prumo 失去了雲端資料夾的權限（iPhone 設定 › 隱私權與安全性 › 檔案和資料夾）。請在 設定 › 選擇雲端 中重新選擇資料夾。";
@@ -781,6 +809,7 @@
 "O original não muda: o Prumo cria uma cópia comprimida na mesma pasta." = "原始檔案不會改變：Prumo 會在同一資料夾建立壓縮後的副本。";
 "O original não muda: o resultado é um PDF novo, com “- corrigido” no nome. As páginas corrigidas viram imagem; depois, o app oferece o OCR." = "原檔案不會改變：結果是一個新的 PDF，名稱中帶有「- 已校正」。校正後的頁面會變成影像；之後 App 會提供 OCR。";
 "O original não muda: o resultado é um PDF novo, com “- corrigido” no nome. Depois, o app pergunta se você quer fazer o OCR." = "原件不會改變：結果是一個名稱中帶有「- 已校正」的新 PDF。之後 App 會詢問是否進行 OCR。";
+"O que foi preenchido ainda não foi gravado no PDF." = "填寫的內容尚未儲存到 PDF。";
 "O resumo atual tem senha; remova a senha antes." = "目前的摘要有密碼；請先移除密碼。";
 "O resumo foi salvo, mas não apareceu na biblioteca." = "摘要已儲存，但沒有出現在文件庫中。";
 "O scanner de documentos não está disponível neste aparelho." = "此裝置無法使用文件掃描器。";
@@ -872,12 +901,16 @@
 "Posição" = "位置";
 "Posição e formato" = "位置和格式";
 "Precisão máxima (bem mais lento)" = "最高精度（慢很多）";
+"Preencher formulário" = "填寫表單";
+"Preencher formulário…" = "填寫表單…";
+"Preencher qual PDF?" = "要填寫哪個 PDF？";
 "Preparando" = "正在準備";
 "Preparando a prévia…" = "正在準備預覽…";
 "Preparando as fotos…" = "正在準備照片…";
 "Preparando o texto…" = "正在準備文字…";
 "Preparando…" = "正在準備…";
 "Preserva melhor a qualidade. O arquivo fica menor, mas reduz menos." = "較能保留品質。檔案會變小，但縮小幅度較少。";
+"Preto" = "黑色";
 "Primeira página" = "第一頁";
 "Primeiro número" = "起始編號";
 "Primeiro número: {}" = "起始編號：{}";
@@ -975,11 +1008,14 @@
 "Salvando…" = "正在儲存…";
 "Salvar" = "儲存";
 "Salvar a nova ordem?" = "儲存新的順序？";
+"Salvar o preenchimento?" = "要儲存填寫的內容嗎？";
 "Salvar senha" = "儲存密碼";
 "Salvar uma cópia em…" = "將副本儲存到…";
 "Se você esquecer a senha, não haverá outra cópia para abrir." = "如果您忘記密碼，將沒有其他可以打開的副本。";
 "Segurança" = "安全性";
 "Selecionar" = "選取";
+"Selecionar e mover" = "選取並移動";
+"Selecionar e mover (Esc)" = "選取並移動（Esc）";
 "Selecionar texto (sem destacar)" = "選擇文字（不螢光標記）";
 "Selecione o texto com o mouse." = "用滑鼠選擇文字。";
 "Selecione o trecho (toque e segure no texto) e depois toque em “Resumo”." = "選取段落（在文字上按住），然後點一下「摘要」。";
@@ -1036,6 +1072,8 @@
 "Texto digital" = "數位文字";
 "Texto e HTML" = "文字和 HTML";
 "Texto selecionado" = "所選文字";
+"Texto: clique na página para escrever" = "文字：按一下頁面即可書寫";
+"Texto: toque na página para escrever" = "文字：點一下頁面即可書寫";
 "Tipo de chave do certificado não suportado (use RSA ou ECDSA)." = "不支援的憑證金鑰型別（請使用 RSA 或 ECDSA）。";
 "Tira o destaque do texto selecionado" = "取消所選文字的螢光標記";
 "Tirar" = "去除";
@@ -1068,6 +1106,7 @@
 "Uma cópia completa (PDFs, pastas e favoritos) numa pasta comum, onde você escolher: iCloud Drive, Google Drive, OneDrive, pendrive… A cópia abre também no Prumo para Windows. {}" = "完整副本（PDF、資料夾和我的最愛）存放在你選擇的一般資料夾中：iCloud 雲碟、Google 雲端硬碟、OneDrive、隨身碟…此副本也能在 Windows 版 Prumo 中開啟。{}";
 "Uma cópia completa (PDFs, pastas e favoritos) numa pasta comum, por exemplo num pendrive ou HD externo." = "完整副本（PDF、資料夾和我的最愛）儲存在普通資料夾中，例如 隨身碟或外接硬碟。";
 "Usar OCR agora?" = "現在進行 OCR？";
+"Usar caixas de texto" = "使用文字方塊";
 "Usar o iCloud Drive…" = "使用 iCloud 雲碟…";
 "Usar o {}" = "使用 {}";
 "Usar outra pasta…" = "使用其他資料夾…";
@@ -1087,6 +1126,7 @@
 "Ver detalhes do PDF" = "檢視 PDF 詳細資訊";
 "Verde" = "綠色";
 "Verificando…" = "正在檢查…";
+"Vermelho" = "紅色";
 "Volta o PDF ao que era antes da última mudança, feita aqui ou em outra tela" = "將 PDF 恢復到上次變更（在此處或其他介面所做）之前的狀態";
 "Volta o arquivo para como estava antes da última mudança nas páginas" = "將檔案恢復到上次變更頁面之前的狀態";
 "Voltar" = "返回";
@@ -1141,6 +1181,7 @@
 "{} - assinado" = "{} - 已簽署";
 "{} - comprimido" = "{} - 已壓縮";
 "{} - corrigido" = "{} - 已校正";
+"{} - preenchido" = "{} - 已填寫";
 "{} - protegido" = "{} - 已保護";
 "{} - págs. {}" = "{} - 第 {} 頁";
 "{} - resumo" = "{} - 摘要";
@@ -1171,6 +1212,7 @@
 "{} não foram convertidos." = "{} 個未轉換。";
 "{} partes de {}" = "{} 部分（{}）";
 "{} partes: {} páginas" = "{} 部分：{} 頁";
+"{} pt" = "{} 點";
 "{} páginas" = "{} 頁";
 "{} páginas alteradas." = "已變更 {} 頁。";
 "{} páginas corrigidas em “{}”." = "已校正 {} 頁，位於「{}」。";

@@ -77,6 +77,7 @@ shot 27-numerar-paginas number 9
 shot 28-bloqueado lock 6
 shot 29-leitor-selecao readerselect 10
 shot 30-assinar sign 9
+shot 31-preencher-formulario form 9
 # OCR de verdade no simulador: barra de progresso e, depois, o aviso de concluído.
 xcrun simctl terminate "$SIM" "$BUNDLE" 2>/dev/null || true
 xcrun simctl launch "$SIM" "$BUNDLE" -demo -screen ocr >/dev/null
@@ -98,5 +99,6 @@ for lang in ${SHOT_LANGS:-}; do
   shot "$lang-08-leitor" reader 7 "$lang"
   shot "$lang-09-aguardando-ocr" pending 6 "$lang"
   shot "$lang-12-ajustes" settings 6 "$lang"
+  shot "$lang-31-preencher-formulario" form 9 "$lang"
 done
 exit 0

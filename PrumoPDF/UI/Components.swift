@@ -208,6 +208,9 @@ struct DocTile: View {
             Label("Organizar páginas", systemImage: "rectangle.grid.2x2")
         }
         if item.meta.locked != true {
+            Button { flow.openTool("fill", on: item) } label: {
+                Label(L("Preencher formulário…"), systemImage: "pencil.and.list.clipboard")
+            }
             Button { flow.openTool("compress", on: item) } label: {
                 Label(L("Comprimir PDF…"), systemImage: "arrow.down.forward.and.arrow.up.backward")
             }

@@ -10,6 +10,7 @@ enum Route: Hashable {
     case document(String)
     case organize(String)
     case reader(String, mode: ReaderMode = .original)
+    case form(String)
     case settings
     case merge
 }

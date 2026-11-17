@@ -79,6 +79,8 @@ struct RootView: View {
             PageOrganizerScreen(itemID: id)
         case .reader(let id, let mode):
             PDFReaderScreen(itemID: id, initialMode: mode)
+        case .form(let id):
+            FormFillScreen(itemID: id)
         case .settings:
             SettingsScreen()
         case .merge:
@@ -89,7 +91,7 @@ struct RootView: View {
 
 /// Ferramentas da tela inicial: cada uma pergunta o PDF (do app Arquivos ou do Prumo).
 enum HomeTool: String, Identifiable, CaseIterable {
-    case read, ocr, organize, insert, remove, extract, split, crop, number, sign, compress
+    case read, ocr, organize, insert, remove, extract, split, crop, number, sign, compress, fill
     var id: String { rawValue }
 
     var question: String {
@@ -105,6 +107,7 @@ enum HomeTool: String, Identifiable, CaseIterable {
         case .number: return L("Numerar qual PDF?")
         case .sign: return L("Assinar qual PDF?")
         case .compress: return L("Comprimir qual PDF?")
+        case .fill: return L("Preencher qual PDF?")
         }
     }
 }
@@ -183,6 +186,10 @@ struct HomeView: View {
                     signToolTile
                     Tile(title: L("Comprimir PDF"), systemImage: "arrow.down.forward.and.arrow.up.backward",
                          color: Theme.teal, shape: .rounded) { tool = .compress }
+                }
+                WideTile(title: L("Preencher formulário"), systemImage: "pencil.and.list.clipboard", color: Theme.orange,
+                         subtitle: L("Campos do PDF ou texto em qualquer lugar da página")) {
+                    tool = .fill
                 }
                 WideTile(title: L("Converter em PDF"), systemImage: "arrow.triangle.2.circlepath.doc.on.clipboard",
                          color: Theme.teal, subtitle: L("Fotos, imagens, Word, Excel, PowerPoint, Pages, texto")) {
@@ -315,6 +322,8 @@ struct HomeView: View {
             flow.openTool("sign", on: item)
         case .compress:
             flow.openTool("compress", on: item)
+        case .fill:
+            flow.openTool("fill", on: item)
         }
     }
 

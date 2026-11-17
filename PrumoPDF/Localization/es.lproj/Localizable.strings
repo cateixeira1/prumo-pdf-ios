@@ -106,6 +106,8 @@
 "Antes" = "Antes";
 "Ao converter fotos em PDF, corrigir páginas curvas" = "Al convertir fotos en PDF, corregir páginas curvas";
 "Ao escanear e ao converter fotos: páginas de livros e revistas (curvatura perto da lombada) e papel ondulado ficam com o texto reto, e o OCR acerta mais. Em páginas já retas, deixe desligado: a margem pode ser cortada. Também dá para corrigir um PDF pronto, na tela dele. Usa o modelo UVDoc, no próprio iPhone." = "Al escanear y al convertir fotos: las páginas de libros y revistas (curvadas cerca del lomo) y el papel ondulado quedan con el texto recto, y el OCR acierta más. En páginas que ya están rectas, déjalo desactivado: el margen puede recortarse. También puedes corregir un PDF ya hecho, en su pantalla. Usa el modelo UVDoc, en el propio iPhone.";
+"Apagar a caixa escolhida" = "Eliminar el cuadro seleccionado";
+"Apagar a caixa escolhida (Delete)" = "Eliminar el cuadro seleccionado (Supr)";
 "Apagar destaque" = "Borrar resaltado";
 "Apagar este destaque" = "Borrar este resaltado";
 "Apagar o destaque" = "Borrar el resaltado";
@@ -169,6 +171,8 @@
 "Buscar no documento (sem precisar de acentos)" = "Buscar en el documento (sin necesidad de tildes)";
 "Buscar no texto (Ctrl+F)" = "Buscar en el texto (Ctrl+F)";
 "Buscar nome ou texto" = "Buscar nombre o texto";
+"Campos do PDF ou texto em qualquer lugar da página" = "Campos del PDF o texto en cualquier lugar de la página";
+"Campos do PDF ou texto na página" = "Campos del PDF o texto en la página";
 "Cancelar" = "Cancelar";
 "Cancelar OCR" = "Cancelar el OCR";
 "Cancelar o OCR?" = "¿Cancelar el OCR?";
@@ -217,6 +221,7 @@
 "Comprimir PDF" = "Comprimir PDF";
 "Comprimir PDF…" = "Comprimir PDF…";
 "Comprimir qual PDF?" = "¿Qué PDF quiere comprimir?";
+"Concluir" = "Listo";
 "Conectado neste computador" = "Conectado en este equipo";
 "Conferindo o certificado…" = "Comprobando el certificado…";
 "Conferindo o resultado" = "Comprobando el resultado";
@@ -237,6 +242,7 @@
 "Copiar, exportar, Explorador" = "Copiar, exportar, Explorador";
 "Cor" = "Color";
 "Cor do destaque" = "Color del resaltado";
+"Cor do texto" = "Color del texto";
 "Corrigindo 1 página…" = "Corrigiendo 1 página…";
 "Corrigindo as páginas…" = "Corrigiendo las páginas…";
 "Corrigindo {} páginas…" = "Corrigiendo {} páginas…";
@@ -248,6 +254,7 @@
 "Cortar ou girar páginas de qual PDF?" = "¿Recortar o girar páginas de qué PDF?";
 "Cortar ou girar qual PDF?" = "¿Recortar o girar qué PDF?";
 "Corte ou numeração" = "Recorte o numeración";
+"Cria uma cópia em que o preenchimento não pode mais ser alterado" = "Crea una copia en la que lo rellenado ya no se puede cambiar";
 "Cria uma cópia menor: compressão média ou alta" = "Crea una copia más pequeña: compresión media o alta";
 "Cria uma cópia sem senha" = "Crea una copia sin contraseña";
 "Cria uma cópia sem senha, para destacar, fazer OCR, organizar ou dividir. O PDF com senha continua guardado." = "Crea una copia sin contraseña, para resaltar, hacer OCR, organizar o dividir. El PDF con contraseña se conserva.";
@@ -389,6 +396,7 @@
 "Esses PDFs já têm texto selecionável. O OCR não é necessário." = "Esos PDF ya tienen texto seleccionable. El OCR no es necesario.";
 "Esta página não tem texto para selecionar (é imagem). Faça o OCR para poder selecionar, destacar e resumir." = "Esta página no tiene texto para seleccionar (es una imagen). Haz el OCR para poder seleccionar, resaltar y resumir.";
 "Esta página é imagem, sem texto para selecionar. A cópia com OCR tem o texto." = "Esta página es una imagen, sin texto para seleccionar. La copia con OCR tiene el texto.";
+"Estas letras não podem ser gravadas no formulário: {}" = "Estos caracteres no se pueden guardar en el formulario: {}";
 "Este PDF está assinado digitalmente: comprimir regrava o arquivo e a assinatura deixaria de valer. Comprima o original (sem assinatura) e assine depois." = "Este PDF tiene firma digital: comprimir reescribe el archivo y la firma dejaría de ser válida. Comprima el original (sin firma) y fírmelo después.";
 "Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura." = "Este PDF está firmado digitalmente: cualquier cambio invalidaría la firma.";
 "Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura. Dá para ler, buscar, copiar e adicionar trechos ao resumo, mas não destacar, cortar ou mudar páginas." = "Este PDF está firmado digitalmente: cualquier cambio invalidaría la firma. Puedes leer, buscar, copiar y añadir fragmentos al resumen, pero no resaltar, recortar ni cambiar páginas.";
@@ -400,6 +408,8 @@
 "Este PDF já tem senha." = "Este PDF ya tiene contraseña.";
 "Este PDF já tem {} assinaturas. A nova assinatura entra no próprio arquivo, sem mudar o conteúdo: as assinaturas anteriores continuam válidas. Depois, o PDF continua sem poder ser alterado." = "Este PDF ya tiene {} firmas. La nueva firma entra en el propio archivo, sin cambiar el contenido: las firmas anteriores siguen siendo válidas. Después, el PDF sigue sin poder modificarse.";
 "Este PDF já tem {}. A nova assinatura entra no próprio arquivo, sem mudar o conteúdo: as anteriores continuam válidas. O PDF continua sem poder ser alterado." = "Este PDF ya tiene {}. La nueva firma entra en el propio archivo, sin cambiar el contenido: las anteriores siguen siendo válidas. El PDF sigue sin poder modificarse.";
+"Este PDF não tem campos: clique na página para escrever." = "Este PDF no tiene campos: haga clic en la página para escribir.";
+"Este PDF não tem campos: toque na página para escrever." = "Este PDF no tiene campos: toque la página para escribir.";
 "Este PDF não tem texto para o modo leitor: as páginas são imagens. Faça o OCR e abra o modo leitor na cópia com OCR." = "Este PDF no tiene texto para el modo lectura: las páginas son imágenes. Haz el OCR y abre el modo lectura en la copia con OCR.";
 "Este PDF não tem texto pesquisável (é imagem). Faça o OCR para poder buscar." = "Este PDF no tiene texto buscable (es una imagen). Haz el OCR para poder buscar.";
 "Este PDF não tem texto reconhecido. Faça o OCR para usar o modo leitor." = "Este PDF no tiene texto reconocido. Haz el OCR para usar el modo lector.";
@@ -411,8 +421,10 @@
 "Este PDF tem senha. Para destacar, crie antes uma cópia sem senha (Ferramentas › Remover senha)." = "Este PDF tiene contraseña. Para resaltar, crea antes una copia sin contraseña (Herramientas › Quitar contraseña).";
 "Este PDF tem senha. Para fazer OCR, organizar ou dividir, crie antes uma cópia sem senha." = "Este PDF tiene contraseña. Para hacer el OCR, organizarlo o dividirlo, crea antes una copia sin contraseña.";
 "Este PDF tem senha. Para numerar, crie antes uma cópia sem senha." = "Este PDF tiene contraseña. Para numerarlo, crea antes una copia sin contraseña.";
+"Este PDF tem senha. Para preencher, crie antes uma cópia sem senha." = "Este PDF tiene contraseña. Para rellenarlo, cree antes una copia sin contraseña.";
 "Este PDF tem {} campos de assinatura. No nível 1, depois da sua assinatura ninguém mais poderá assinar os outros campos sem invalidar a sua. Para os outros poderem assinar, use o nível 2." = "Este PDF tiene {} campos de firma. En el nivel 1, después de tu firma nadie más podrá firmar los otros campos sin invalidar la tuya. Para que los demás puedan firmar, usa el nivel 2.";
 "Este PDF tem {} campos de assinatura: o Prumo escolheu o nível 2, para os outros signatários ainda poderem assinar. Você pode mudar para o nível 1 ou 3." = "Este PDF tiene {} campos de firma: Prumo eligió el nivel 2 para que los demás firmantes todavía puedan firmar. Puedes cambiar al nivel 1 o 3.";
+"Este PDF usa um tipo de formulário (XFA) que só o Adobe Acrobat preenche. No Prumo, dá para escrever por cima da página com caixas de texto." = "Este PDF usa un tipo de formulario (XFA) que solo Adobe Acrobat puede rellenar. En Prumo, puede escribir sobre la página con cuadros de texto.";
 "Este arquivo já é o resultado de um OCR." = "Este archivo ya es el resultado de un OCR.";
 "Este certificado está vencido: a assinatura não será aceita como válida." = "Este certificado ha caducado: la firma no se aceptará como válida.";
 "Este certificado não serve para assinatura digital." = "Este certificado no sirve para la firma digital.";
@@ -456,12 +468,18 @@
 "Fechar (Esc)" = "Cerrar (Esc)";
 "Fechar dica" = "Cerrar consejo";
 "Fechar o Prumo PDF cancela o OCR. O arquivo original não muda." = "Cerrar Prumo PDF cancela el OCR. El archivo original no cambia.";
+"Fechar teclado" = "Ocultar teclado";
 "Ferramentas" = "Herramientas";
+"Finalizar" = "Finalizar";
+"Finalizar o formulário?" = "¿Finalizar el formulario?";
 "Fonte" = "Fuente";
 "Fonte, fundo e mais opções" = "Fuente, fondo y más opciones";
 "Formato" = "Formato";
 "Formato PAdES, reconhecido pelo Adobe Reader e por outros leitores de PDF. Com certificado ICP-Brasil, a assinatura tem a mesma validade jurídica da assinatura de próprio punho (MP 2.200-2/2001)." = "Formato PAdES, reconocido por Adobe Reader y otros lectores de PDF. Con un certificado ICP-Brasil, la firma tiene la misma validez jurídica que la firma manuscrita en Brasil (MP 2.200-2/2001).";
 "Formato PAdES, reconhecido pelo Adobe Reader e por outros leitores de PDF. O Face ID (ou o código) confirma que é você. Com certificado ICP-Brasil, a assinatura tem a mesma validade jurídica da assinatura de próprio punho (MP 2.200-2/2001)." = "Formato PAdES, reconocido por Adobe Reader y otros lectores de PDF. Face ID (o el código) confirma que eres tú. Con un certificado ICP-Brasil, la firma tiene la misma validez jurídica que la firma manuscrita en Brasil (MP 2.200-2/2001).";
+"Formulário XFA" = "Formulario XFA";
+"Formulário finalizado: cópia criada." = "Formulario finalizado: copia creada.";
+"Formulário salvo no PDF." = "Formulario guardado en el PDF.";
 "Fotos" = "Fotos";
 "Fotos da galeria" = "Fotos de la galería";
 "Fotos de livros, papel ondulado" = "Fotos de libros, papel ondulado";
@@ -478,6 +496,7 @@
 "Giro a aplicar: {}°" = "Giro a aplicar: {}°";
 "Google Drive para computador" = "Google Drive para ordenadores";
 "Grade da página com tamanho inesperado." = "Cuadrícula de la página con un tamaño inesperado.";
+"Gravar no PDF (Ctrl+S)" = "Guardar en el PDF (Ctrl+S)";
 "Guarde a senha num lugar seguro. Se esquecer, dá para desfazer o bloqueio pelos ajustes do Windows (passo a passo no LEIA-ME); os PDFs não são afetados." = "Guarda la contraseña en un lugar seguro. Si la olvidas, puedes quitar el bloqueo desde la configuración de Windows (paso a paso en el LÉEME); los PDF no se ven afectados.";
 "Idioma do aplicativo" = "Idioma de la aplicación";
 "Idiomas dos documentos" = "Idiomas de los documentos";
@@ -538,6 +557,9 @@
 "Mais recentes" = "Más recientes";
 "Mais tarde" = "Más tarde";
 "Mandar o original (sem senha) para a Lixeira" = "Enviar el original (sin contraseña) a la Papelera de reciclaje";
+"Marcar com ●" = "Marcar con ●";
+"Marcar com ✓" = "Marcar con ✓";
+"Marcar com ✗" = "Marcar con ✗";
 "Margens" = "Márgenes";
 "Margens (mm)" = "Márgenes (mm)";
 "Margens automáticas" = "Márgenes automáticos";
@@ -581,6 +603,8 @@
 "Nada recente" = "Nada reciente";
 "Nas páginas {} já havia algo na posição escolhida (por exemplo, um número impresso); o número foi deslocado para não ficar por cima." = "En las páginas {} ya había algo en la posición elegida (por ejemplo, un número impreso); el número se desplazó para no quedar encima.";
 "Nas páginas {} não achei lugar livre perto; o número ficou na posição escolhida." = "En las páginas {} no encontré espacio libre cerca; el número quedó en la posición elegida.";
+"Negrito" = "Negrita";
+"Negrito (Ctrl+B)" = "Negrita (Ctrl+B)";
 "Nenhum PDF" = "Ningún PDF";
 "Nenhum PDF (ou arquivo que dê para converter) para importar." = "Ningún PDF (ni archivo que se pueda convertir) para importar.";
 "Nenhum PDF aqui" = "No hay PDF aquí";
@@ -640,6 +664,8 @@
 "Não foi possível abrir o PDF." = "No se pudo abrir el PDF.";
 "Não foi possível abrir o PDF. O arquivo pode estar corrompido." = "No se pudo abrir el PDF. Puede que el archivo esté dañado.";
 "Não foi possível abrir o documento: {}" = "No se pudo abrir el documento: {}";
+"Não foi possível abrir o formulário" = "No se pudo abrir el formulario";
+"Não foi possível abrir o formulário: {}" = "No se pudo abrir el formulario: {}";
 "Não foi possível abrir o resumo atual." = "No se pudo abrir el resumen actual.";
 "Não foi possível achar o conteúdo da página." = "No se encontró el contenido de la página.";
 "Não foi possível comprimir: {}" = "No se pudo comprimir: {}";
@@ -650,6 +676,7 @@
 "Não foi possível copiar: {}" = "No se pudo copiar: {}";
 "Não foi possível corrigir a imagem." = "No se pudo corregir la imagen.";
 "Não foi possível corrigir: {}" = "No se pudo corregir: {}";
+"Não foi possível finalizar: {}" = "No se pudo finalizar: {}";
 "Não foi possível gerar a prévia: {}" = "No se pudo generar la vista previa: {}";
 "Não foi possível gravar a cópia sem senha." = "No se pudo guardar la copia sin contraseña.";
 "Não foi possível gravar o PDF numerado." = "No se pudo guardar el PDF numerado.";
@@ -732,6 +759,7 @@
 "O PDF volta a ficar como estava antes da última mudança (páginas, destaques, cortes ou numeração)." = "El PDF vuelve a quedar como estaba antes del último cambio (páginas, resaltados, recortes o numeración).";
 "O Prumo aparece em “Abrir com” nos PDFs e, no botão direito de fotos e arquivos do Word, Excel e PowerPoint, em “Converter em PDF com o Prumo”. Para abrir todo PDF no Prumo com dois cliques, escolha o Prumo PDF como aplicativo padrão para .pdf nas configurações do Windows." = "Prumo aparece en «Abrir con» en los PDF y, al hacer clic derecho en fotos y archivos de Word, Excel y PowerPoint, en «Convertir a PDF con Prumo». Para abrir todos los PDF en Prumo con doble clic, elige Prumo PDF como aplicación predeterminada para .pdf en la configuración de Windows.";
 "O Prumo bloqueia ao sair do app e pede {} (ou o código do iPhone) ao voltar. Para proteger um PDF em si, por exemplo antes de enviar, use “Proteger com senha” na tela dele: a senha vai junto com o arquivo e vale em qualquer leitor de PDF." = "Prumo se bloquea al salir de la app y pide {} (o el código del iPhone) al volver. Para proteger un PDF en sí, por ejemplo antes de enviarlo, usa “Proteger con contraseña” en su pantalla: la contraseña va con el archivo y sirve en cualquier lector de PDF.";
+"O Prumo cria uma cópia em que os campos e o texto viram parte da página e não podem mais ser alterados. O original continua editável." = "Prumo crea una copia en la que los campos y el texto pasan a formar parte de la página y ya no se pueden cambiar. El original sigue siendo editable.";
 "O Prumo não consegue gravar nessa pasta. Nem todo app de nuvem deixa outros apps usarem pastas dele; o iCloud Drive deixa." = "Prumo no puede guardar en esa carpeta. No todas las apps de nube dejan que otras apps usen sus carpetas; iCloud Drive sí.";
 "O Prumo pede a senha ao abrir e depois de um tempo sem uso (Ctrl+L bloqueia na hora)." = "Prumo pide la contraseña al abrirse y tras un tiempo sin uso (Ctrl+L bloquea al instante).";
 "O Prumo perdeu a permissão para a pasta da nuvem (Ajustes do iPhone › Privacidade › Arquivos e Pastas). Escolha a pasta de novo em Ajustes › Escolher nuvem." = "Prumo perdió el permiso para la carpeta de la nube (Ajustes del iPhone › Privacidad y seguridad › Archivos y carpetas). Elige la carpeta de nuevo en Ajustes › Elegir nube.";
@@ -781,6 +809,7 @@
 "O original não muda: o Prumo cria uma cópia comprimida na mesma pasta." = "El original no cambia: Prumo crea una copia comprimida en la misma carpeta.";
 "O original não muda: o resultado é um PDF novo, com “- corrigido” no nome. As páginas corrigidas viram imagem; depois, o app oferece o OCR." = "El original no cambia: el resultado es un PDF nuevo, con «- corregido» en el nombre. Las páginas corregidas se convierten en imagen; después, la app ofrece el OCR.";
 "O original não muda: o resultado é um PDF novo, com “- corrigido” no nome. Depois, o app pergunta se você quer fazer o OCR." = "El original no cambia: el resultado es un PDF nuevo, con “- corregido” en el nombre. Después, la app pregunta si quieres hacer el OCR.";
+"O que foi preenchido ainda não foi gravado no PDF." = "Lo que rellenó aún no se ha guardado en el PDF.";
 "O resumo atual tem senha; remova a senha antes." = "El resumen actual tiene contraseña; quita la contraseña antes.";
 "O resumo foi salvo, mas não apareceu na biblioteca." = "El resumen se guardó, pero no apareció en la biblioteca.";
 "O scanner de documentos não está disponível neste aparelho." = "El escáner de documentos no está disponible en este dispositivo.";
@@ -872,12 +901,16 @@
 "Posição" = "Posición";
 "Posição e formato" = "Posición y formato";
 "Precisão máxima (bem mais lento)" = "Máxima precisión (mucho más lento)";
+"Preencher formulário" = "Rellenar formulario";
+"Preencher formulário…" = "Rellenar formulario…";
+"Preencher qual PDF?" = "¿Qué PDF desea rellenar?";
 "Preparando" = "Preparando";
 "Preparando a prévia…" = "Preparando la vista previa…";
 "Preparando as fotos…" = "Preparando las fotos…";
 "Preparando o texto…" = "Preparando el texto…";
 "Preparando…" = "Preparando…";
 "Preserva melhor a qualidade. O arquivo fica menor, mas reduz menos." = "Conserva mejor la calidad. El archivo queda más pequeño, pero se reduce menos.";
+"Preto" = "Negro";
 "Primeira página" = "Primera página";
 "Primeiro número" = "Primer número";
 "Primeiro número: {}" = "Primer número: {}";
@@ -975,11 +1008,14 @@
 "Salvando…" = "Guardando…";
 "Salvar" = "Guardar";
 "Salvar a nova ordem?" = "¿Guardar el nuevo orden?";
+"Salvar o preenchimento?" = "¿Guardar lo rellenado?";
 "Salvar senha" = "Guardar contraseña";
 "Salvar uma cópia em…" = "Guardar una copia en…";
 "Se você esquecer a senha, não haverá outra cópia para abrir." = "Si olvida la contraseña, no habrá otra copia para abrir.";
 "Segurança" = "Seguridad";
 "Selecionar" = "Seleccionar";
+"Selecionar e mover" = "Seleccionar y mover";
+"Selecionar e mover (Esc)" = "Seleccionar y mover (Esc)";
 "Selecionar texto (sem destacar)" = "Seleccionar texto (sin resaltar)";
 "Selecione o texto com o mouse." = "Selecciona el texto con el ratón.";
 "Selecione o trecho (toque e segure no texto) e depois toque em “Resumo”." = "Selecciona el fragmento (mantén pulsado el texto) y después toca “Resumen”.";
@@ -1036,6 +1072,8 @@
 "Texto digital" = "Texto digital";
 "Texto e HTML" = "Texto y HTML";
 "Texto selecionado" = "Texto seleccionado";
+"Texto: clique na página para escrever" = "Texto: haga clic en la página para escribir";
+"Texto: toque na página para escrever" = "Texto: toque la página para escribir";
 "Tipo de chave do certificado não suportado (use RSA ou ECDSA)." = "Tipo de clave del certificado no compatible (usa RSA o ECDSA).";
 "Tira o destaque do texto selecionado" = "Quita el resaltado del texto seleccionado";
 "Tirar" = "Quitar";
@@ -1068,6 +1106,7 @@
 "Uma cópia completa (PDFs, pastas e favoritos) numa pasta comum, onde você escolher: iCloud Drive, Google Drive, OneDrive, pendrive… A cópia abre também no Prumo para Windows. {}" = "Una copia completa (PDF, carpetas y favoritos) en una carpeta normal, donde elijas: iCloud Drive, Google Drive, OneDrive, un pendrive… La copia también se abre en Prumo para Windows. {}";
 "Uma cópia completa (PDFs, pastas e favoritos) numa pasta comum, por exemplo num pendrive ou HD externo." = "Una copia completa (PDF, carpetas y favoritos) en una carpeta normal, por ejemplo en una memoria USB o un disco externo.";
 "Usar OCR agora?" = "¿Hacer el OCR ahora?";
+"Usar caixas de texto" = "Usar cuadros de texto";
 "Usar o iCloud Drive…" = "Usar iCloud Drive…";
 "Usar o {}" = "Usar {}";
 "Usar outra pasta…" = "Usar otra carpeta…";
@@ -1087,6 +1126,7 @@
 "Ver detalhes do PDF" = "Ver detalles del PDF";
 "Verde" = "Verde";
 "Verificando…" = "Comprobando…";
+"Vermelho" = "Rojo";
 "Volta o PDF ao que era antes da última mudança, feita aqui ou em outra tela" = "Devuelve el PDF a como estaba antes del último cambio, hecho aquí o en otra pantalla";
 "Volta o arquivo para como estava antes da última mudança nas páginas" = "Devuelve el archivo a como estaba antes del último cambio en las páginas";
 "Voltar" = "Volver";
@@ -1141,6 +1181,7 @@
 "{} - assinado" = "{} - firmado";
 "{} - comprimido" = "{} - comprimido";
 "{} - corrigido" = "{} - corregido";
+"{} - preenchido" = "{} - rellenado";
 "{} - protegido" = "{} - protegido";
 "{} - págs. {}" = "{} - págs. {}";
 "{} - resumo" = "{} - resumen";
@@ -1171,6 +1212,7 @@
 "{} não foram convertidos." = "{} no se convirtieron.";
 "{} partes de {}" = "{} partes de {}";
 "{} partes: {} páginas" = "{} partes: {} páginas";
+"{} pt" = "{} pt";
 "{} páginas" = "{} páginas";
 "{} páginas alteradas." = "{} páginas modificadas.";
 "{} páginas corrigidas em “{}”." = "{} páginas corregidas en «{}».";

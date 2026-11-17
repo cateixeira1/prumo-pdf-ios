@@ -143,6 +143,10 @@ struct DocumentDetailScreen: View {
                         edit(item) { showProtect = true }
                     }
                 }
+                Tile(title: L("Preencher formulário"), systemImage: "pencil.and.list.clipboard", color: Theme.orange,
+                     shape: .rounded, subtitle: L("Campos do PDF ou texto na página")) {
+                    fill(item)
+                }
                 Tile(title: L("Comprimir PDF"), systemImage: "arrow.down.forward.and.arrow.up.backward", color: Theme.teal,
                      shape: .rounded, subtitle: LF("Média ou alta · {}", item.size.fileSizeText)) {
                     compress(item)
@@ -270,6 +274,7 @@ struct DocumentDetailScreen: View {
             case "protect"?: showProtect = true
             case "sign"?: showSign = true
             case "compress"?: compress(item)
+            case "fill"?: fill(item)
             case "remove"?:
                 pickerRequest = PagePickerRequest(kind: .remove, sourceURL: item.url,
                                                   sourceVersion: item.version, sourceTitle: item.name)
@@ -404,6 +409,15 @@ struct DocumentDetailScreen: View {
             flow.toast(L("Este PDF está assinado digitalmente: comprimir regrava o arquivo e a assinatura deixaria de valer. Comprima o original (sem assinatura) e assine depois."))
         } else {
             showCompress = true
+        }
+    }
+
+    /// Preencher formulário: PDF com senha ou assinado não é preenchido (a assinatura deixaria de valer).
+    private func fill(_ item: PDFItem) {
+        if item.meta.locked == true {
+            flow.toast(L("Este PDF tem senha. Para preencher, crie antes uma cópia sem senha."))
+        } else {
+            edit(item) { flow.open(.form(item.id)) }
         }
     }
 

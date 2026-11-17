@@ -379,7 +379,7 @@ struct PDFKitView: UIViewRepresentable {
 /// Ações do botão "Ferramentas" do leitor (todas as funções do app).
 enum ReaderAction: Identifiable {
     case textMode, pageMode, goToPage, crop, number, sign, ocr, organize, insert, remove, extract, split, merge, dewarp,
-         protect, unprotect, compress, duplicate, favorite, rename, move, details, undo, delete, openSummary
+         protect, unprotect, compress, duplicate, favorite, rename, move, details, undo, delete, openSummary, fill
     var id: String { "\(self)" }
 }
 
@@ -1223,6 +1223,17 @@ struct PDFReaderScreen: View {
                     sheetAction = action
                 }
             }
+        case .fill:
+            if target.meta.isSigned {
+                flow.toast(L("Este PDF está assinado digitalmente: qualquer alteração invalidaria a assinatura."))
+            } else if target.meta.locked == true {
+                flow.toast(L("Este PDF tem senha. Para preencher, crie antes uma cópia sem senha."))
+            } else {
+                Task {
+                    await flushSaves()
+                    flow.open(.form(target.id))
+                }
+            }
         case .compress:
             if target.meta.isSigned {
                 flow.toast(L("Este PDF está assinado digitalmente: comprimir regrava o arquivo e a assinatura deixaria de valer. Comprima o original (sem assinatura) e assine depois."))
@@ -1336,6 +1347,7 @@ struct ReaderToolsSheet: View {
                     if hasSummary { row(L("Abrir o resumo deste PDF"), "doc.text", .openSummary) }
                 }
                 Section("Documento") {
+                    row(L("Preencher formulário"), "pencil.and.list.clipboard", .fill, disabled: locked || signed)
                     row(signed ? L("Assinar de novo (outra assinatura)") : L("Assinar digitalmente"), "signature", .sign,
                         disabled: locked)
                     row(L("Fazer OCR"), "text.viewfinder", .ocr, disabled: locked || signed)
