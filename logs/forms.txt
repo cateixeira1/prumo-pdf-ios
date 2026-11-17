@@ -1,0 +1,21 @@
+campo nome: 'Maria Ação'; aceito: '/Yes'; estado: 'RJ'
+  widget nome: aparência sim
+  widget obs: aparência sim
+  widget cpf: aparência sim
+  widget valor: aparência sim
+  widget aceito: aparência sim
+  widget sexo: aparência sim
+  widget sexo: aparência sim
+  widget estado: aparência sim
+  widget cor: aparência sim
+  caixa prumo-tx-e951078070ff4ce1 /FreeText página 1 rect [300.0, 650.0, 470.8, 687.6] AP=sim contents='Caio Fernandes Teixeira\nOAB/SP 483.995' PrumoStyle=sim DS=sim
+  caixa prumo-mk-824f61f9671b43d4 /Ink página 1 rect [300.0, 600.0, 320.0, 620.0] AP=sim contents='✓' PrumoStyle=sim DS=sim
+  widget cidade: aparência sim
+  caixa prumo-mk-fdf19e629234479e /Ink página 2 rect [100.0, 600.0, 124.0, 624.0] AP=sim contents='✗' PrumoStyle=sim DS=sim
+  caixa prumo-mk-26a65583730242ef /Ink página 2 rect [100.0, 560.0, 116.0, 576.0] AP=sim contents='●' PrumoStyle=sim DS=sim
+finalizado: anotações [(0, '/Highlight')]; AcroForm campos 0
+  desenho de prumo-tx-e951078070ff4ce1: preenchido 4834 px, finalizado 4834 px OK
+  desenho de prumo-mk-824f61f9671b43d4: preenchido 321 px, finalizado 321 px OK
+  desenho de prumo-mk-fdf19e629234479e: preenchido 593 px, finalizado 593 px OK
+  desenho de prumo-mk-26a65583730242ef: preenchido 253 px, finalizado 253 px OK
+OK
