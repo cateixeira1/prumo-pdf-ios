@@ -156,7 +156,22 @@ enum FormBoxes {
 
     static func isBox(_ a: PDFAnnotation) -> Bool {
         let n = name(of: a)
-        return n.hasPrefix(textPrefix) || n.hasPrefix(markPrefix)
+        if n.hasPrefix(textPrefix) || n.hasPrefix(markPrefix) { return true }
+        // Sem identificação (o PDFKit pode não devolver /NM nem /PrumoID): autor "Prumo PDF" e o tipo de caixa
+        return n.isEmpty && a.userName == author && (a.type == "FreeText" || a.type == "Ink")
+    }
+
+    /// Dá nome às caixas reconhecidas só pelo autor (para escolher, mover e desfazer).
+    static func ensureNames(_ doc: PDFDocument) {
+        for i in 0..<doc.pageCount {
+            guard let page = doc.page(at: i) else { continue }
+            for a in page.annotations where isBox(a) && name(of: a).isEmpty {
+                let mark = a.type == "Ink" || marks.values.contains(a.contents ?? "")
+                let id = newName(kind: mark ? "check" : "text")
+                _ = a.setValue(id, forAnnotationKey: .name)
+                _ = a.setValue(id, forAnnotationKey: idKey)
+            }
+        }
     }
 
     static func isSelection(_ a: PDFAnnotation) -> Bool { name(of: a) == selectionName }
@@ -203,12 +218,22 @@ enum FormBoxes {
 
     /// As caixas do Prumo no documento (feitas no iPhone ou no Windows).
     static func read(_ doc: PDFDocument) -> [FormBox] {
+        ensureNames(doc)
         var out: [FormBox] = []
         for i in 0..<doc.pageCount {
             guard let page = doc.page(at: i) else { continue }
             for a in page.annotations where isBox(a) {
                 let n = name(of: a)
                 let raw = (a.value(forAnnotationKey: styleKey) as? String) ?? (a.value(forAnnotationKey: dsKey) as? String) ?? ""
+                if a.type == "Ink", raw.isEmpty || !raw.contains("color") {
+                    // marca sem estilo legível: a cor vem da própria anotação
+                    var st = FormStyle()
+                    st.color = FormColor.nearest(a.color)
+                    let k = marks.first(where: { $0.value == (a.contents ?? "") })?.key ?? "check"
+                    st.size = a.bounds.width
+                    out.append(FormBox(page: i, bounds: a.bounds, kind: k, text: "", style: st, name: name(of: a)))
+                    continue
+                }
                 var (style, kind) = parse(raw)
                 if raw.isEmpty, let f = a.font {
                     style.font = FormFont.from(fontName: f.fontName)

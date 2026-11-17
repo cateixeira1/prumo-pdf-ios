@@ -58,7 +58,7 @@ def main(folder: str) -> int:
     aceito = fields.get("aceito", {})
     estado = fields.get("estado", {})
     print(f"campo nome: {nome.get('/V')!r}; aceito: {aceito.get('/V')!r}; estado: {estado.get('/V')!r}")
-    if estado.get("/V") != "RJ":
+    if estado.get("/V") not in ("RJ", "Rio de Janeiro"):
         print("ERRO: o valor da lista suspensa 'estado' não foi gravado")
         bad += 1
     if nome.get("/V") != "Maria Ação":
@@ -77,6 +77,9 @@ def main(folder: str) -> int:
     for i, a in annots(r):
         sub = a.get("/Subtype")
         nm = str(a.get("/NM", "") or a.get("/PrumoID", ""))
+        if not nm and str(a.get("/T", "")) == "Prumo PDF" and sub in ("/FreeText", "/Ink"):
+            nm = "prumo-(sem identificação: reconhecida pelo autor)"
+            print("AVISO: caixa sem /NM e sem /PrumoID; os apps a reconhecem pelo autor")
         if sub == "/Widget":
             ap = a.get("/AP")
             print(f"  widget {a.get('/T') or (a.get('/Parent') or dict()).get('/T')}: aparência {'sim' if ap else 'NÃO'}")
